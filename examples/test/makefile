@@ -1,6 +1,6 @@
 CC=gcc
 CFLAGS=-Wall -std=c99 -I../../lib
-ABN_LIB_DIR1=../../output/
+ABN_LIB_DIR=../../output/
 ABN_LIB_NAME=libabn.a
 
 all: ./output/example.elf
