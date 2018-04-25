@@ -3,7 +3,7 @@ This library allows simple mathematical operations on big natural numbers like a
 
 ### How to use?
 ##### Compiling library:
-First of all you need the compiled library.
+First of all, you need the compiled library.
 >git clone https://github.com/mgorzkowski/abn.git  
 cd ./abn  
 make
