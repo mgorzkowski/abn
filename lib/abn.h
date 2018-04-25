@@ -6,17 +6,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-// To define byte type
 typedef unsigned char byte;
 
-#ifdef NO_HALF_CALCULATE_UNIT
-	#error "NO_HALF_CALCULATE_UNIT mode is not supported"
-#endif
-
-// Big endian architecture is no supported
-#ifdef BIG_ENDIAN_ARCHITECTURE
-	#error "BIG_ENDIAN_ARCHITECTURE mode is not supported"
-#endif
 
 // The abn_unit is the most basic type of integer the library works on and
 // it should be defined as possible the widest integer type your compiller support.

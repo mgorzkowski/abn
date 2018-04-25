@@ -3,7 +3,7 @@
 #include <string.h>
 #include <time.h>
 
-#include "../lib/abn.h"
+#include "abn.h"
 
 // Unit tests
 void run_tests();
@@ -17,17 +17,15 @@ int main (int argc, char *argv[])
 {
 	run_tests();
 
-	getchar();
 	return 0;
 }
 
 void run_tests()
 {
-	printf("\nTesting example:\n");
+	printf("Testing example:\n");
 	int error_counter = 0;
 	if(!add_test()) error_counter++;
 	if(!mul_test()) error_counter++;
-
 
 	printf("\nEnd of tests:\n%d errors\n", error_counter);
 }
