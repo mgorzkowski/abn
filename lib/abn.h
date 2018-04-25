@@ -10,8 +10,7 @@ typedef unsigned char byte;
 // The abn_unit is the most basic type of integer the library works on and
 // it should be defined as possible the widest integer type your compiller support.
 // The abn_halfunit must be two times shorter.
-// eg.  abn_unit 		-> 	uint32_t
-//      abn_halfunit 	->	uint16_t
+// eg. abn_unit -> uint32_t, abn_halfunit -> uint16_t
 typedef uint64_t abn_unit;
 typedef uint32_t abn_halfunit;
 
@@ -36,7 +35,5 @@ void abn_free(abn_t* op);
 
 bool abn_is_empty(abn_t op);
 bool abn_are_equal(abn_t op1, abn_t op2);
-
-void abn_copy(abn_t* destination, abn_t source);
 
 #endif /* __ABN_H__ */
