@@ -12,9 +12,9 @@ void abn_unit_mul(abn_t* result, abn_unit op1, abn_unit op2)
 	}
 	abn_reset(tmp);
 
-	abn_halfunit op1l = *(&op1);
+	abn_halfunit op1l = op1;
 	abn_halfunit op1h = ((abn_halfunit*)&op1)[1];
-	abn_halfunit op2l = *(&op2);
+	abn_halfunit op2l = op2;
 	abn_halfunit op2h = ((abn_halfunit*)&op2)[1];
 
 	tmp2->chain[0] = (abn_unit)op1l * (abn_unit)op2l;
