@@ -4,7 +4,7 @@
 
 void print_abn(abn_t op, char* name)
 {
-	char* representation = abn_to_string(op);
+	char* representation = abn_to_string(&op);
 	printf("%s = [ 0x%s ]\n", name, representation);
 	fflush(stdout);
 	free(representation);

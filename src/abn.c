@@ -1,4 +1,4 @@
-#include "./../lib/abn.h"
+#include "../lib/abn.h"
 
 abn_t* abn_create(unsigned int volume)
 {

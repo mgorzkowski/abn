@@ -1,4 +1,4 @@
-#include "./../../lib/utilities/string_manipulations.h"
+#include "../../lib/utilities/string_manipulations.h"
 
 char hex_sign_to_char(byte arg)
 {
@@ -33,14 +33,14 @@ char* abn_unit_to_string(abn_unit arg)
 	return result;
 }
 
-char* abn_to_string(abn_t arg)
+char* abn_to_string(abn_t* arg)
 {
-	char* result = (char*)malloc(2 * arg.volume * sizeof(abn_unit) + 1);
+	char* result = (char*)malloc(2 * arg->volume * sizeof(abn_unit) + 1);
 	result[0] = '\0';
 
-	for(int i = 0; i < arg.volume; i++)
+	for(int i = 0; i < arg->volume; i++)
 	{
-		char* tmp = abn_unit_to_string(arg.chain[arg.volume - 1 - i]);
+		char* tmp = abn_unit_to_string(arg->chain[arg->volume - 1 - i]);
 		strcat(result, tmp);
 		free(tmp);
 	}
