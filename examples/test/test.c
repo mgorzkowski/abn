@@ -35,10 +35,10 @@ bool add_test()
 	printf("add_test()\t\t");
 	bool test_result = true;
 
-	abn_t a = abn_create(4);
-	abn_t b = abn_create(4);
-	abn_t e = abn_create(4);
-	abn_t c = abn_create(4);
+	abn_t* a = abn_ptr_create(4);
+	abn_t* b = abn_ptr_create(4);
+	abn_t* e = abn_ptr_create(4);
+	abn_t* c = abn_ptr_create(4);
 
 	srand(time(NULL));
 
@@ -48,15 +48,15 @@ bool add_test()
 		abn_unit carry = 0;
 		for(int i=0; i<4; i++)
 		{
-			a.chain[i] = rand();
-			b.chain[i] = rand();
-			e.chain[i] = a.chain[i] + b.chain[i] + carry;
-			carry = (e.chain[i] < a.chain[i]) ? 1 : 0;
+			a->chain[i] = rand();
+			b->chain[i] = rand();
+			e->chain[i] = a->chain[i] + b->chain[i] + carry;
+			carry = (e->chain[i] < a->chain[i]) ? 1 : 0;
 		}
 
-		abn_add(c, a, b);
+		abn_add(*c, *a, *b);
 
-		if(!abn_are_equal(c, e))
+		if(!abn_are_equal(*c, *e))
 		{
 			test_result = false;
 			break;
@@ -72,10 +72,10 @@ bool add_test()
 		printf("Failed!\n");
 	}
 
-	abn_free(a);
-	abn_free(b);
-	abn_free(e);
-	abn_free(c);
+	abn_ptr_free(a);
+	abn_ptr_free(b);
+	abn_ptr_free(e);
+	abn_ptr_free(c);
 
 	return test_result;
 }
@@ -85,11 +85,11 @@ bool mul_test()
 	printf("mul_test()\t\t");
 	bool test_result = true;
 
-	abn_t a = abn_create(8);
-	abn_t b = abn_create(8);
-	abn_t e = abn_create(16);
-	abn_t c = abn_create(16);
-	abn_t tmp = abn_create(16);
+	abn_t* a = abn_ptr_create(8);
+	abn_t* b = abn_ptr_create(8);
+	abn_t* e = abn_ptr_create(16);
+	abn_t* c = abn_ptr_create(16);
+	abn_t* tmp = abn_ptr_create(16);
 
 	srand(0);
 
@@ -98,23 +98,23 @@ bool mul_test()
 	{
 		for(int i=0; i<8; i++)
 		{
-			a.chain[i] = rand();
-			b.chain[i] = rand();
+			a->chain[i] = rand();
+			b->chain[i] = rand();
 		}
-		abn_reset(e);
+		abn_reset(*e);
 		for(int i=0; i<8; i++)
 		{
 			for (int j = 0; j<8; j++)
 			{
-				abn_reset(tmp);
-				abn_unit_mul(tmp, a.chain[i], b.chain[j]);
-				abn_shift_left(tmp, 8 * sizeof(abn_unit) * (i+j));
-				abn_add(e, e, tmp);
+				abn_reset(*tmp);
+				abn_unit_mul(*tmp, a->chain[i], b->chain[j]);
+				abn_shift_left(*tmp, 8 * sizeof(abn_unit) * (i+j));
+				abn_add(*e, *e, *tmp);
 			}
 		}
-		abn_mul(c, a, b);
+		abn_mul(*c, *a, *b);
 
-		if(!abn_are_equal(c, e))
+		if(!abn_are_equal(*c, *e))
 		{
 			test_result = false;
 			break;
@@ -130,15 +130,15 @@ bool mul_test()
 		printf("Failed!\n");
 	}
 
-	abn_free(a);
-	abn_free(b);
-	abn_free(e);
-	abn_free(c);
+	abn_ptr_free(a);
+	abn_ptr_free(b);
+	abn_ptr_free(e);
+	abn_ptr_free(c);
 
 	return test_result;
 }
 
-void abn_print_var(abn_t op, char* name)
+void print_abn(abn_t op, char* name)
 {
 	char* representation = abn_to_string(op);
 	printf("%s = [ 0x%s ]\n", name, representation);

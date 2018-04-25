@@ -7,8 +7,8 @@ void abn_unit_mul(abn_t result, abn_unit op1, abn_unit op2)
 	static abn_t* tmp2 = NULL;
 	if(tmp == NULL || tmp2 == NULL)
 	{
-		tmp = abn_ptr_create(2);
-		tmp2 = abn_ptr_create(2);
+		tmp = abn_create(2);
+		tmp2 = abn_create(2);
 	}
 	abn_reset(*tmp);
 
@@ -43,14 +43,14 @@ void abn_simple_mul_algorithm(abn_t result, abn_t op1, abn_t op2)
 	static abn_t* tmp = NULL;
 	if(tmp == NULL)
 	{
-		tmp = abn_ptr_create(result.volume);
+		tmp = abn_create(result.volume);
 	}
 	else
 	{
 		if(tmp->volume < result.volume)
 		{
-			abn_ptr_free(tmp);
-			tmp = abn_ptr_create(result.volume);
+			abn_free(tmp);
+			tmp = abn_create(result.volume);
 		}
 	}
 
@@ -71,7 +71,7 @@ void abn_mul(abn_t result, abn_t op1, abn_t op2)
 {
 	if(op1.volume != op2.volume || op1.volume * 2 != result.volume)
 	{
-		abn_free(result);
+		abn_free(&result);
 	}
 	else
 	{

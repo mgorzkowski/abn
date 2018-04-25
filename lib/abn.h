@@ -8,7 +8,6 @@
 
 typedef unsigned char byte;
 
-
 // The abn_unit is the most basic type of integer the library works on and
 // it should be defined as possible the widest integer type your compiller support.
 // The abn_halfunit must be two times shorter.
@@ -29,18 +28,12 @@ typedef struct abn_t {
 #include "operations/shifts.h"
 #include "operations/others.h"
 
-abn_t abn_create(unsigned int volume);
-abn_t abn_create_with_zeros(unsigned int volume);
-abn_t abn_create_with_chain(abn_unit* chain, unsigned int volume);
-abn_t abn_create_empty();
+abn_t* abn_create(unsigned int volume);
+abn_t* abn_create_with_zeros(unsigned int volume);
+abn_t* abn_create_with_chain(abn_unit* chain, unsigned int volume);
+abn_t* abn_create_empty();
 
-abn_t* abn_ptr_create(unsigned int volume);
-abn_t* abn_ptr_create_with_zeros(unsigned int volume);
-abn_t* abn_ptr_create_with_chain(abn_unit* chain, unsigned int volume);
-abn_t* abn_ptr_create_empty();
-
-void abn_free(abn_t op);
-void abn_ptr_free(abn_t* op);
+void abn_free(abn_t* op);
 
 bool abn_is_empty(abn_t op);
 bool abn_are_equal(abn_t op1, abn_t op2);
