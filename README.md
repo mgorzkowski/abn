@@ -4,9 +4,9 @@ This library allows simple mathematical operations on big natural numbers like a
 ### How to use?
 ##### Compiling library:
 First of all you need the compiled library.
->git clone https://github.com/mgorzkowski/abn.git
->cd ./abn
->make
+>git clone https://github.com/mgorzkowski/abn.git  
+cd ./abn  
+make
 
 Now, you can find the libabn.a file in the output directory. This is library that contains all necessary functions.
 
