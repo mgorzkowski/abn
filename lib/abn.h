@@ -33,7 +33,7 @@ abn_t* abn_create_empty();
 
 void abn_free(abn_t* op);
 
-bool abn_is_empty(abn_t op);
-bool abn_are_equal(abn_t op1, abn_t op2);
+bool abn_is_empty(abn_t* op);
+bool abn_are_equal(abn_t* op1, abn_t* op2);
 
 #endif /* __ABN_H__ */

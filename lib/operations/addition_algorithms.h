@@ -3,6 +3,6 @@
 
 #include "../abn.h"
 
-void abn_add(abn_t result, abn_t op1, abn_t op2);
+void abn_add(abn_t* result, abn_t* op1, abn_t* op2);
 
 #endif /* __ADDITION_ALGORITHMS_H__ */

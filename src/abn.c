@@ -49,9 +49,9 @@ void abn_free(abn_t* op)
 	free(op);
 }
 
-bool abn_is_empty(abn_t op)
+bool abn_is_empty(abn_t* op)
 {
-	if(op.chain == NULL && op.volume == 0)
+	if(op->chain == NULL && op->volume == 0)
 	{
 		return false;
 	}
@@ -61,15 +61,15 @@ bool abn_is_empty(abn_t op)
 	}
 }
 
-bool abn_are_equal(abn_t op1, abn_t op2)
+bool abn_are_equal(abn_t* op1, abn_t* op2)
 {
-	if(op1.volume != op2.volume)
+	if(op1->volume != op2->volume)
 	{
 		return false;
 	}
-	for(int i=0; i<op1.volume; i++)
+	for(int i=0; i<op1->volume; i++)
 	{
-		if(op1.chain[i] != op2.chain[i])
+		if(op1->chain[i] != op2->chain[i])
 		{
 			return false;
 		}

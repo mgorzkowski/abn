@@ -11,6 +11,6 @@ run: ./output/test.elf
 clean:
 	rm -rf ./output
 
-./output/example.elf: ./example.c $(ABN_LIB_DIR)$(ABN_LIB_NAME)
+./output/test.elf: ./test.c $(ABN_LIB_DIR)$(ABN_LIB_NAME)
 	mkdir -p output/
 	$(CC) $(CFLAGS) test.c -L$(ABN_LIB_DIR) -labn -o ./output/test.elf

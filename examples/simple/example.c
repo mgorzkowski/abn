@@ -26,42 +26,42 @@ int main()
 	print_abn(*b, "b");
 
 	printf("# a = a + b\n");
-	abn_add(*a, *a, *b);
+	abn_add(a, a, b);
 	print_abn(*a, "a");
 	print_abn(*b, "b");
 
 	printf("# b = a + b\n");
-	abn_add(*b, *a, *b);
+	abn_add(b, a, b);
 	print_abn(*a, "a");
 	print_abn(*b, "b");
 
 	printf("# a = 0\n");
-	abn_reset(*a);
+	abn_reset(a);
 	print_abn(*a, "a");
 	print_abn(*b, "b");
 
 	printf("# a = b\n");
-	abn_copy(a, *b);
+	abn_copy(a, b);
 	print_abn(*a, "a");
 	print_abn(*b, "b");
 
 	printf(" # a = a << 8\n");
-	abn_shift_left(*a, 8);
+	abn_shift_left(a, 8);
 	print_abn(*a, "a");
 	print_abn(*b, "b");
 
 	printf(" # a = a >> 8\n");
-	abn_shift_right(*a, 8);
+	abn_shift_right(a, 8);
 	print_abn(*a, "a");
 	print_abn(*b, "b");
 
 	printf(" # a = a << 4\n");
-	abn_shift_left(*a, 4);
+	abn_shift_left(a, 4);
 	print_abn(*a, "a");
 	print_abn(*b, "b");
 
 	printf(" # a = a >> 4\n");
-	abn_shift_right(*a, 4);
+	abn_shift_right(a, 4);
 	print_abn(*a, "a");
 	print_abn(*b, "b");
 
