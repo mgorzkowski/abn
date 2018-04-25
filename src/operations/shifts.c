@@ -1,4 +1,4 @@
-﻿#include "./../../lib/operations/shifts.h"
+﻿#include "../../lib/operations/shifts.h"
 
 void abn_short_shift_left(abn_t op, unsigned int distance)
 {
@@ -62,7 +62,7 @@ void abn_shift_right(abn_t op, unsigned int distance)
 
 	if(long_distance != 0)
 	{
-			abn_long_shift_right(op, long_distance);
+		abn_long_shift_right(op, long_distance);
 	}
 	if(short_distance != 0)
 	{

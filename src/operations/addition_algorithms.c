@@ -1,4 +1,4 @@
-﻿#include "./../../lib/operations/addition_algorithms.h"
+﻿#include "../../lib/operations/addition_algorithms.h"
 
 void abn_simple_add(abn_t result, abn_t op1, abn_t op2)
 {

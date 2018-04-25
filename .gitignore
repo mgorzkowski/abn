@@ -3,5 +3,5 @@
 *.so
 
 # output directories
-/output/
-*/output/
+/output/*
+*/output/*
