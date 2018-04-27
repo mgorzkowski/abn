@@ -1,7 +1,0 @@
-# Static libraries and shared objects
-*.a
-*.so
-
-# output directories
-/output/*
-*/output/*

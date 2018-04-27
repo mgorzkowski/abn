@@ -12,10 +12,12 @@ void print_abn(abn_t op, char* name)
 
 int main()
 {
+	int volume = 4;
 	srand(0);
-	abn_t* a = abn_create(4);
-	abn_t* b = abn_create(4);
-	for(int i=0; i<4; i++)
+	abn_t* a = abn_create(volume);
+	abn_t* b = abn_create(volume);
+	abn_t* c = abn_create(2*volume);
+	for(int i=0; i<volume; i++)
 	{
 		a->chain[i] = rand();
 		b->chain[i] = rand();
@@ -60,11 +62,13 @@ int main()
 	print_abn(*a, "a");
 	print_abn(*b, "b");
 
-	printf(" # a = a >> 4\n");
-	abn_shift_right(a, 4);
+	printf(" # c = a * b\n");
+	abn_mul(c, a, b);
 	print_abn(*a, "a");
 	print_abn(*b, "b");
+	print_abn(*c, "c");
 
 	abn_free(a);
 	abn_free(b);
+	abn_free(c);
 }
