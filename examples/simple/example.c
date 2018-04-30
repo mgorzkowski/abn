@@ -12,17 +12,17 @@ void print_abn(abn_t op, char* name)
 
 int main()
 {
-	int volume = 4;
+	int size = 16;
 	srand(0);
-	abn_t* a = abn_create(volume);
-	abn_t* b = abn_create(volume);
-	abn_t* c = abn_create(2*volume);
-	for(int i=0; i<volume; i++)
+	abn_t* a = abn_create(size);
+	abn_t* b = abn_create(size);
+	abn_t* c = abn_create(2*size);
+	for(int i=0; i<size; i++)
 	{
 		a->chain[i] = rand();
 		b->chain[i] = rand();
 	}
-
+	
 	printf("# Created variables:\n");
 	print_abn(*a, "a");
 	print_abn(*b, "b");
