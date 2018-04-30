@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-Wall -std=c99 -I../../lib
+CFLAGS=-Wall -std=c99
 ABN_LIB_DIR=../../output/
 ABN_LIB_NAME=libabn.a
 
@@ -13,4 +13,4 @@ clean:
 
 ./output/example.elf: ./example.c $(ABN_LIB_DIR)$(ABN_LIB_NAME)
 	mkdir -p output/
-	$(CC) $(CFLAGS) example.c -L$(ABN_LIB_DIR) -labn -o ./output/example.elf
+	$(CC) $(CFLAGS) example.c -I../../include -L$(ABN_LIB_DIR) -labn -o ./output/example.elf

@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <string.h>
 
 typedef unsigned char byte;
 
@@ -20,20 +21,23 @@ typedef struct abn_t {
 	unsigned int volume;	// in abn_units (in general not in bytes!)
 } abn_t;
 
-#include "utilities/string_manipulations.h"
-#include "operations/addition_algorithms.h"
-#include "operations/multiplication_algorithms.h"
-#include "operations/shifts.h"
-#include "operations/others.h"
-
 abn_t* abn_create(unsigned int volume);
 abn_t* abn_create_with_zeros(unsigned int volume);
 abn_t* abn_create_with_chain(abn_unit* chain, unsigned int volume);
 abn_t* abn_create_empty();
-
 void abn_free(abn_t* op);
 
 bool abn_is_empty(abn_t* op);
 bool abn_are_equal(abn_t* op1, abn_t* op2);
+char* abn_to_string(abn_t* arg);
+
+// Operations
+void abn_add(abn_t* result, abn_t* op1, abn_t* op2);
+void abn_mul(abn_t* result, abn_t* op1, abn_t* op2);
+void abn_reset(abn_t* op1);
+void abn_copy(abn_t* destination, abn_t* source);
+void abn_shift_left(abn_t* op, unsigned int distance);
+void abn_shift_right(abn_t* op, unsigned int distance);
+
 
 #endif /* __ABN_H__ */
