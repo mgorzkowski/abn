@@ -1,4 +1,4 @@
-﻿#include "../../lib/operations/multiplication_algorithms.h"
+#include "../../include/abn.h"
 
 //It was assumed that volumes of both operands are equal to the volume of the result divided by 2.
 void abn_unit_mul(abn_t* result, abn_unit op1, abn_unit op2)
