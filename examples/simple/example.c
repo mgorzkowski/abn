@@ -22,7 +22,7 @@ int main()
 		a->chain[i] = rand();
 		b->chain[i] = rand();
 	}
-	
+
 	printf("# Created variables:\n");
 	print_abn(*a, "a");
 	print_abn(*b, "b");
@@ -30,43 +30,59 @@ int main()
 	printf("# a = a + b\n");
 	abn_add(a, a, b);
 	print_abn(*a, "a");
-	print_abn(*b, "b");
 
 	printf("# b = a + b\n");
 	abn_add(b, a, b);
-	print_abn(*a, "a");
 	print_abn(*b, "b");
 
 	printf("# a = 0\n");
 	abn_reset(a);
 	print_abn(*a, "a");
-	print_abn(*b, "b");
 
 	printf("# a = b\n");
 	abn_copy(a, b);
 	print_abn(*a, "a");
-	print_abn(*b, "b");
 
 	printf(" # a = a << 8\n");
 	abn_shift_left(a, 8);
 	print_abn(*a, "a");
-	print_abn(*b, "b");
-
-	printf(" # a = a >> 8\n");
-	abn_shift_right(a, 8);
-	print_abn(*a, "a");
-	print_abn(*b, "b");
 
 	printf(" # a = a << 4\n");
 	abn_shift_left(a, 4);
 	print_abn(*a, "a");
-	print_abn(*b, "b");
+
+	printf(" # a = a >> 12\n");
+	abn_shift_right(a, 12);
+	print_abn(*a, "a");
 
 	printf(" # c = a * b\n");
 	abn_mul(c, a, b);
-	print_abn(*a, "a");
-	print_abn(*b, "b");
 	print_abn(*c, "c");
+
+	printf("# a = 0\n");
+	abn_reset(a);
+	print_abn(*a, "a");
+
+	printf("# a--\n");
+	abn_dec(a);
+	print_abn(*a, "a");
+
+	printf("# a = -a\n");
+	abn_neg(a);
+	print_abn(*a, "a");
+
+	printf("# a--\n");
+	abn_dec(a);
+	print_abn(*a, "a");
+
+	printf("# a = a or b\n");
+	abn_or(a, a, b);
+	print_abn(*a, "a");
+
+	printf("# a = a and b<<1\n");
+	abn_shift_left(b, 1);
+	abn_and(a, a, b);
+	print_abn(*a, "a");
 
 	abn_free(a);
 	abn_free(b);

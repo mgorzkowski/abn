@@ -15,6 +15,8 @@ typedef unsigned char byte;
 typedef uint64_t abn_unit;
 typedef uint32_t abn_halfunit;
 
+extern const abn_unit ABN_UNIT_MAX;
+
 // Main type of abn library
 typedef struct abn_t {
 	abn_unit* chain;
@@ -31,13 +33,23 @@ bool abn_is_empty(abn_t* op);
 bool abn_are_equal(abn_t* op1, abn_t* op2);
 char* abn_to_string(abn_t* arg);
 
-// Operations
+// Arithmetic operations
 void abn_add(abn_t* result, abn_t* op1, abn_t* op2);
+void abn_inc(abn_t* op);
+void abn_dec(abn_t* op);
+void abn_neg(abn_t* op);
 void abn_mul(abn_t* result, abn_t* op1, abn_t* op2);
+
+// Bit operations
+void abn_not(abn_t* op);
+void abn_and(abn_t* result, abn_t* op1, abn_t* op2);
+void abn_or(abn_t* result, abn_t* op1, abn_t* op2);
+void abn_xor(abn_t* result, abn_t* op1, abn_t* op2);
+
+// Other operations
 void abn_reset(abn_t* op1);
 void abn_copy(abn_t* destination, abn_t* source);
 void abn_shift_left(abn_t* op, unsigned int distance);
 void abn_shift_right(abn_t* op, unsigned int distance);
-
 
 #endif /* __ABN_H__ */

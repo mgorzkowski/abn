@@ -1,5 +1,7 @@
 #include "../include/abn.h"
 
+const abn_unit ABN_UNIT_MAX = (abn_unit)0 - 1;
+
 abn_t* abn_create(unsigned int volume)
 {
 	abn_t* result = (abn_t*)malloc(sizeof(abn_t));
