@@ -5,7 +5,6 @@ OBJS= \
 $(OUTDIR)/abn.o \
 $(OUTDIR)/arithmetic.o \
 $(OUTDIR)/logic.o \
-$(OUTDIR)/others.o \
 $(OUTDIR)/string_manipulations.o
 
 all: create_outdir $(OUTDIR)/libabn.a
@@ -29,9 +28,6 @@ $(OUTDIR)/arithmetic.o: ./src/operations/arithmetic.c ./include/abn.h
 
 $(OUTDIR)/logic.o: ./src/operations/logic.c ./include/abn.h
 	$(CC) $(CFLAGS) ./src/operations/logic.c -o $(OUTDIR)/logic.o
-
-$(OUTDIR)/others.o: ./src/operations/others.c ./include/abn.h
-	$(CC) $(CFLAGS) ./src/operations/others.c -o $(OUTDIR)/others.o
 
 $(OUTDIR)/string_manipulations.o: ./src/utilities/string_manipulations.c ./include/abn.h
 	$(CC) $(CFLAGS) ./src/utilities/string_manipulations.c -o $(OUTDIR)/string_manipulations.o
