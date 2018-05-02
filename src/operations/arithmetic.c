@@ -26,38 +26,38 @@ void abn_add(abn_t* result, abn_t* op1, abn_t* op2)
 }
 
 // Incrementation
-void abn_inc(abn_t* op)
+void abn_inc(abn_t* arg)
 {
-	for(int i = 0; i<op->volume; i++)
+	for(int i = 0; i<arg->volume; i++)
 	{
-		if(op->chain[i] != ABN_UNIT_MAX)
+		if(arg->chain[i] != ABN_UNIT_MAX)
 		{
-			op->chain[i]++;
+			arg->chain[i]++;
 			break;
 		}
-		op->chain[i] = 0;
+		arg->chain[i] = 0;
 	}
 }
 
 // Decrementation
-void abn_dec(abn_t* op)
+void abn_dec(abn_t* arg)
 {
-	for(int i = 0; i<op->volume; i++)
+	for(int i = 0; i<arg->volume; i++)
 	{
-		if(op->chain[i] != 0)
+		if(arg->chain[i] != 0)
 		{
-			op->chain[i]--;
+			arg->chain[i]--;
 			break;
 		}
-		op->chain[i] = ABN_UNIT_MAX;
+		arg->chain[i] = ABN_UNIT_MAX;
 	}
 }
 
 // Addition inverse
-void abn_neg(abn_t* op)
+void abn_neg(abn_t* arg)
 {
-	abn_not(op);
-	abn_inc(op);
+	abn_not(arg);
+	abn_inc(arg);
 }
 
 // It was assumed that volumes of both operands are equal to the volume of the result divided by 2.
@@ -127,6 +127,7 @@ void abn_simple_mul_algorithm(abn_t* result, abn_t* op1, abn_t* op2)
 	}
 }
 
+// Multiplication of two unsigned numbers
 void abn_mul(abn_t* result, abn_t* op1, abn_t* op2)
 {
 	if(op1->volume != op2->volume || op1->volume * 2 != result->volume)
@@ -139,20 +140,63 @@ void abn_mul(abn_t* result, abn_t* op1, abn_t* op2)
 	}
 }
 
-bool abn_is_positive(abn_t* op)
+// Multiplication of two signed numbers
+void abn_smul(abn_t* result, abn_t* op1, abn_t* op2)
 {
-	if( op->chain[op->volume-1] > ( ((abn_unit)1) << ( (8*sizeof(abn_unit)) - 1 ) ) )
+	if(op1->volume != op2->volume || op1->volume * 2 != result->volume)
+	{
+		abn_free(result);
+	}
+	else
+	{
+		bool sign1 = abn_is_positive(op1);
+		bool sign2 = abn_is_positive(op2);
+		if(!sign1)
+		{
+			abn_neg(op1);
+		}
+		if(!sign2)
+		{
+			abn_neg(op2);
+		}
+		abn_mul(result, op1, op2);
+		if((sign1 && !sign2) || (!sign1 && sign2))
+		{
+			abn_neg(result);
+		}
+		if(!sign1)
+		{
+			abn_neg(op1);
+		}
+		if(!sign2)
+		{
+			abn_neg(op2);
+		}
+	}
+}
+
+bool abn_is_positive(abn_t* arg)
+{
+	if( arg->chain[arg->volume-1] > ( ((abn_unit)1) << ( (8*sizeof(abn_unit)) - 1 ) ) )
 	{
 		return false;
 	}
 	return true;
 }
 
-bool abn_is_negative(abn_t* op)
+bool abn_is_negative(abn_t* arg)
 {
-	if(abn_is_positive(op))
+	if(abn_is_positive(arg))
 	{
 		return false;
 	}
 	return true;
+}
+
+void abn_absolute_value(abn_t* arg)
+{
+	if(abn_is_negative(arg))
+	{
+		abn_neg(arg);
+	}
 }

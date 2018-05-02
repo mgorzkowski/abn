@@ -102,6 +102,24 @@ int main()
 	abn_and(a, a, b);
 	print_abn(*a, "a");
 
+	printf("# a = -a\n");
+	abn_neg(a);
+	print_abn(*a, "\na");
+	print_abn(*b, "b");
+
+	printf("# c = a * b\n");
+	abn_mul(c, a, b);
+	print_abn(*c, "c");
+
+	printf("# c = a (signed)* b\n");
+	abn_smul(c, a, b);
+	print_abn(*c, "c");
+
+	printf("# c = -c\n");
+	abn_neg(c);
+	print_abn(*c, "c");
+
+
 	abn_free(a);
 	abn_free(b);
 	abn_free(c);

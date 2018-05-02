@@ -29,21 +29,23 @@ abn_t* abn_create(unsigned int volume);
 abn_t* abn_create_with_zeros(unsigned int volume);
 abn_t* abn_create_with_chain(abn_unit* chain, unsigned int volume);
 abn_t* abn_create_empty();
-void abn_free(abn_t* number);
-void abn_reset(abn_t* op1);
+void abn_free(abn_t* arg);
+void abn_reset(abn_t* arg);
 void abn_copy(abn_t* destination, abn_t* source);
-bool abn_is_empty(abn_t* op);
+bool abn_is_empty(abn_t* arg);
 bool abn_are_equal(abn_t* op1, abn_t* op2);
 char* abn_to_string(abn_t* arg);
 
 // Arithmetic operations
 void abn_add(abn_t* result, abn_t* op1, abn_t* op2);
-void abn_inc(abn_t* op);
-void abn_dec(abn_t* op);
-void abn_neg(abn_t* op);
+void abn_inc(abn_t* arg);
+void abn_dec(abn_t* arg);
+void abn_neg(abn_t* arg);
 void abn_mul(abn_t* result, abn_t* op1, abn_t* op2);
-bool abn_is_negative(abn_t* op);
-bool abn_is_positive(abn_t* op);
+void abn_smul(abn_t* result, abn_t* op1, abn_t* op2);
+bool abn_is_negative(abn_t* arg);
+bool abn_is_positive(abn_t* arg);
+void abn_absolute_value(abn_t* arg);
 
 // Bit operations
 void abn_not(abn_t* op);

@@ -43,18 +43,18 @@ abn_t* abn_create_empty()
 	return result;
 }
 
-void abn_free(abn_t* number)
+void abn_free(abn_t* arg)
 {
-	if(number->chain != NULL)
+	if(arg->chain != NULL)
 	{
-		free(number->chain);
+		free(arg->chain);
 	}
-	free(number);
+	free(arg);
 }
 
-bool abn_is_empty(abn_t* op)
+bool abn_is_empty(abn_t* arg)
 {
-	if(op->chain == NULL && op->volume == 0)
+	if(arg->chain == NULL && arg->volume == 0)
 	{
 		return false;
 	}
@@ -80,11 +80,11 @@ bool abn_are_equal(abn_t* op1, abn_t* op2)
 	return true;
 }
 
-void abn_reset(abn_t* op)
+void abn_reset(abn_t* arg)
 {
-	for(int i=0; i<op->volume; i++)
+	for(int i=0; i<arg->volume; i++)
 	{
-		op->chain[i] = 0;
+		arg->chain[i] = 0;
 	}
 }
 

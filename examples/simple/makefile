@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-Wall -std=c99
+CFLAGS=-Wall -std=c99 -g
 ABN_LIB_DIR=../../output/
 ABN_INCLUDE_DIR=../../include
 ABN_LIB_NAME=libabn.a

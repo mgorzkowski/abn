@@ -1,10 +1,10 @@
 #include "../../include/abn.h"
 
-void abn_not(abn_t* op)
+void abn_not(abn_t* arg)
 {
-	for(int i = 0; i<op->volume; i++)
+	for(int i = 0; i<arg->volume; i++)
 	{
-		op->chain[i] = ~op->chain[i];
+		arg->chain[i] = ~arg->chain[i];
 	}
 }
 
@@ -53,72 +53,72 @@ void abn_xor(abn_t* result, abn_t* op1, abn_t* op2)
 	}
 }
 
-void abn_short_shift_left(abn_t* op, unsigned int distance)
+void abn_short_shift_left(abn_t* arg, unsigned int distance)
 {
 	abn_unit carry = 0;
-	for(int i=0; i<op->volume; i++)
+	for(int i=0; i<arg->volume; i++)
 	{
-		abn_unit tmp = op->chain[i] >> (8*sizeof(abn_unit) - distance);
-		op->chain[i] <<= distance;
-		op->chain[i] += carry;
+		abn_unit tmp = arg->chain[i] >> (8*sizeof(abn_unit) - distance);
+		arg->chain[i] <<= distance;
+		arg->chain[i] += carry;
 		carry = tmp;
 	}
 }
 
-void abn_short_shift_right(abn_t* op, unsigned int distance)
+void abn_short_shift_right(abn_t* arg, unsigned int distance)
 {
 	abn_unit carry = 0;
-	for(int i=op->volume-1; i>=0; i--)
+	for(int i=arg->volume-1; i>=0; i--)
 	{
-		abn_unit tmp = op->chain[i] << (8*sizeof(abn_unit) - distance);
-		op->chain[i] >>= distance;
-		op->chain[i] += carry;
+		abn_unit tmp = arg->chain[i] << (8*sizeof(abn_unit) - distance);
+		arg->chain[i] >>= distance;
+		arg->chain[i] += carry;
 		carry = tmp;
 	}
 }
 
-void abn_long_shift_left(abn_t* op, unsigned int distance)
+void abn_long_shift_left(abn_t* arg, unsigned int distance)
 {
-	for(int i = op->volume-1; i>=0; i--)
+	for(int i = arg->volume-1; i>=0; i--)
 	{
-		op->chain[i] = (i >= distance ? op->chain[i-distance] : 0);
+		arg->chain[i] = (i >= distance ? arg->chain[i-distance] : 0);
 	}
 }
 
-void abn_long_shift_right(abn_t* op, unsigned int distance)
+void abn_long_shift_right(abn_t* arg, unsigned int distance)
 {
-	for(int i = 0; i<op->volume; i++)
+	for(int i = 0; i<arg->volume; i++)
 	{
-		op->chain[i] = ((i+distance < op->volume) ? op->chain[i+distance] : 0);
+		arg->chain[i] = ((i+distance < arg->volume) ? arg->chain[i+distance] : 0);
 	}
 }
 
-void abn_shift_left(abn_t* op, unsigned int distance)
+void abn_shift_left(abn_t* arg, unsigned int distance)
 {
 	int long_distance = distance / (8*sizeof(abn_unit));
 	int short_distance = distance % (8*sizeof(abn_unit));
 
 	if(long_distance != 0)
 	{
-		abn_long_shift_left(op, long_distance);
+		abn_long_shift_left(arg, long_distance);
 	}
 	if(short_distance != 0)
 	{
-		abn_short_shift_left(op, short_distance);
+		abn_short_shift_left(arg, short_distance);
 	}
 }
 
-void abn_shift_right(abn_t* op, unsigned int distance)
+void abn_shift_right(abn_t* arg, unsigned int distance)
 {
 	int long_distance = distance / (8*sizeof(abn_unit));
 	int short_distance = distance % (8*sizeof(abn_unit));
 
 	if(long_distance != 0)
 	{
-		abn_long_shift_right(op, long_distance);
+		abn_long_shift_right(arg, long_distance);
 	}
 	if(short_distance != 0)
 	{
-		abn_short_shift_right(op, short_distance);
+		abn_short_shift_right(arg, short_distance);
 	}
 }
