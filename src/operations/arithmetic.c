@@ -15,7 +15,7 @@ void abn_simple_add(abn_t* result, abn_t* op1, abn_t* op2)
 // Addition
 void abn_add(abn_t* result, abn_t* op1, abn_t* op2)
 {
-	if(op1->volume != op2->volume)
+	if(op1->volume != op2->volume || result->volume < op1->volume)
 	{
 		abn_free(result);
 	}
@@ -60,7 +60,7 @@ void abn_neg(abn_t* op)
 	abn_inc(op);
 }
 
-//It was assumed that volumes of both operands are equal to the volume of the result divided by 2.
+// It was assumed that volumes of both operands are equal to the volume of the result divided by 2.
 void abn_unit_mul(abn_t* result, abn_unit op1, abn_unit op2)
 {
 	static abn_t* tmp = NULL;
@@ -97,7 +97,7 @@ void abn_unit_mul(abn_t* result, abn_unit op1, abn_unit op2)
 	abn_add(result, tmp, tmp2);
 }
 
-// It was assumed that volumes both operands are equal, and the result volume is 2 time bigger than the operand
+// It was assumed that volumes of both operands are equal to the volume of the result divided by 2.
 void abn_simple_mul_algorithm(abn_t* result, abn_t* op1, abn_t* op2)
 {
 	static abn_t* tmp = NULL;
@@ -137,4 +137,22 @@ void abn_mul(abn_t* result, abn_t* op1, abn_t* op2)
 	{
 		abn_simple_mul_algorithm(result, op1, op2);
 	}
+}
+
+bool abn_is_positive(abn_t* op)
+{
+	if( op->chain[op->volume-1] < ( ((abn_unit)1) << ( (8*sizeof(abn_unit)) - 1 ) ) )
+	{
+		return false;
+	}
+	return true;
+}
+
+bool abn_is_negative(abn_t* op)
+{
+	if(abn_is_positive(op))
+	{
+		return false;
+	}
+	return true;
 }

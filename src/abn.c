@@ -1,6 +1,6 @@
 #include "../include/abn.h"
 
-const abn_unit ABN_UNIT_MAX = (abn_unit)0 - 1;
+const abn_unit ABN_UNIT_MAX = ((abn_unit)0) - 1;
 
 abn_t* abn_create(unsigned int volume)
 {
@@ -26,6 +26,7 @@ abn_t* abn_create_with_zeros(unsigned int volume)
 	return result;
 }
 
+// It's not safe. You should be completly certain that the chain contains appropriate amount of abn_units.
 abn_t* abn_create_with_chain(abn_unit* chain, unsigned int volume)
 {
 	abn_t* result = (abn_t*)malloc(sizeof(abn_t));
@@ -42,13 +43,13 @@ abn_t* abn_create_empty()
 	return result;
 }
 
-void abn_free(abn_t* op)
+void abn_free(abn_t* number)
 {
-	if(op->chain != NULL)
+	if(number->chain != NULL)
 	{
-		free(op->chain);
+		free(number->chain);
 	}
-	free(op);
+	free(number);
 }
 
 bool abn_is_empty(abn_t* op)
