@@ -67,13 +67,31 @@ int main()
 	abn_dec(a);
 	print_abn(*a, "a");
 
+	printf("# a is negative\n");
+	if(abn_is_negative(a))
+		printf("true\n");
+	else
+		printf("false\n");
+
 	printf("# a = -a\n");
 	abn_neg(a);
 	print_abn(*a, "a");
 
+	printf("# a is negative\n");
+	if(abn_is_negative(a))
+		printf("true\n");
+	else
+		printf("false\n");
+
 	printf("# a--\n");
 	abn_dec(a);
 	print_abn(*a, "a");
+
+	printf("# a is negative\n");
+	if(abn_is_negative(a))
+		printf("true\n");
+	else
+		printf("false\n");
 
 	printf("# a = a or b\n");
 	abn_or(a, a, b);

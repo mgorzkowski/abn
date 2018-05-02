@@ -141,7 +141,7 @@ void abn_mul(abn_t* result, abn_t* op1, abn_t* op2)
 
 bool abn_is_positive(abn_t* op)
 {
-	if( op->chain[op->volume-1] < ( ((abn_unit)1) << ( (8*sizeof(abn_unit)) - 1 ) ) )
+	if( op->chain[op->volume-1] > ( ((abn_unit)1) << ( (8*sizeof(abn_unit)) - 1 ) ) )
 	{
 		return false;
 	}

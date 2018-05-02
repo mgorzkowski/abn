@@ -2,6 +2,7 @@
 #define __ABN_H__
 
 #include <stdlib.h>
+#include <stdio.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
@@ -41,6 +42,8 @@ void abn_inc(abn_t* op);
 void abn_dec(abn_t* op);
 void abn_neg(abn_t* op);
 void abn_mul(abn_t* result, abn_t* op1, abn_t* op2);
+bool abn_is_negative(abn_t* op);
+bool abn_is_positive(abn_t* op);
 
 // Bit operations
 void abn_not(abn_t* op);
