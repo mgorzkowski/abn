@@ -1,64 +1,5 @@
 #include "../../include/abn.h"
 
-// It was assumed that volumes of both operands are equal
-void abn_simple_add(abn_t* result, abn_t* op1, abn_t* op2)
-{
-	int carry = 0;
-	for(int i = 0; i < op1->volume; i++)
-	{
-		abn_unit tmp = op1->chain[i];
-		result->chain[i] = op1->chain[i] + op2->chain[i] + carry;
-		carry = (result->chain[i] < tmp) ? 1 : 0;
-	}
-}
-
-// Addition
-void abn_add(abn_t* result, abn_t* op1, abn_t* op2)
-{
-	if(op1->volume != op2->volume || result->volume < op1->volume)
-	{
-		abn_free(result);
-	}
-	else
-	{
-		abn_simple_add(result, op1, op2);
-	}
-}
-
-// Incrementation
-void abn_inc(abn_t* arg)
-{
-	for(int i = 0; i<arg->volume; i++)
-	{
-		if(arg->chain[i] != ABN_UNIT_MAX)
-		{
-			arg->chain[i]++;
-			break;
-		}
-		arg->chain[i] = 0;
-	}
-}
-
-// Decrementation
-void abn_dec(abn_t* arg)
-{
-	for(int i = 0; i<arg->volume; i++)
-	{
-		if(arg->chain[i] != 0)
-		{
-			arg->chain[i]--;
-			break;
-		}
-		arg->chain[i] = ABN_UNIT_MAX;
-	}
-}
-
-// Addition inverse
-void abn_neg(abn_t* arg)
-{
-	abn_not(arg);
-	abn_inc(arg);
-}
 
 // It was assumed that volumes of both operands are equal to the volume of the result divided by 2.
 void abn_unit_mul(abn_t* result, abn_unit op1, abn_unit op2)
@@ -113,7 +54,6 @@ void abn_simple_mul_algorithm(abn_t* result, abn_t* op1, abn_t* op2)
 			tmp = abn_create(result->volume);
 		}
 	}
-
 	abn_reset(result);
 	for (int i = 0; i < op1->volume; i++)
 	{
@@ -149,54 +89,34 @@ void abn_smul(abn_t* result, abn_t* op1, abn_t* op2)
 	}
 	else
 	{
-		bool sign1 = abn_is_positive(op1);
-		bool sign2 = abn_is_positive(op2);
-		if(!sign1)
+		bool operands_are_the_same = false;
+		if(op1 == op2)
 		{
-			abn_neg(op1);
+			op2 = abn_create_copy(op1);
+			operands_are_the_same = true;
 		}
-		if(!sign2)
-		{
-			abn_neg(op2);
-		}
+		bool sign1 = abn_absolute_value(op1);
+		bool sign2 = abn_absolute_value(op2);
+
 		abn_mul(result, op1, op2);
 		if((sign1 && !sign2) || (!sign1 && sign2))
 		{
 			abn_neg(result);
 		}
-		if(!sign1)
+		if(sign1)
 		{
 			abn_neg(op1);
 		}
-		if(!sign2)
+		if(operands_are_the_same)
 		{
-			abn_neg(op2);
+			abn_free(op2);
 		}
-	}
-}
-
-bool abn_is_positive(abn_t* arg)
-{
-	if( arg->chain[arg->volume-1] > ( ((abn_unit)1) << ( (8*sizeof(abn_unit)) - 1 ) ) )
-	{
-		return false;
-	}
-	return true;
-}
-
-bool abn_is_negative(abn_t* arg)
-{
-	if(abn_is_positive(arg))
-	{
-		return false;
-	}
-	return true;
-}
-
-void abn_absolute_value(abn_t* arg)
-{
-	if(abn_is_negative(arg))
-	{
-		abn_neg(arg);
+		else
+		{
+			if(sign2)
+			{
+				abn_neg(op2);
+			}
+		}
 	}
 }

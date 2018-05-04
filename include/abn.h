@@ -1,3 +1,10 @@
+//
+// Copyright (c) 2018 Maciej Gorzkowski
+//
+// This file is licensed under the MIT License.
+// Full license text is available in 'licenses/MIT.txt'.
+//
+
 #ifndef __ABN_H__
 #define __ABN_H__
 
@@ -26,8 +33,7 @@ typedef struct abn_t {
 
 // Basic operations
 abn_t* abn_create(unsigned int volume);
-abn_t* abn_create_with_zeros(unsigned int volume);
-abn_t* abn_create_with_chain(abn_unit* chain, unsigned int volume);
+abn_t* abn_create_copy(abn_t* arg);
 abn_t* abn_create_empty();
 void abn_free(abn_t* arg);
 void abn_reset(abn_t* arg);
@@ -45,13 +51,15 @@ void abn_mul(abn_t* result, abn_t* op1, abn_t* op2);
 void abn_smul(abn_t* result, abn_t* op1, abn_t* op2);
 bool abn_is_negative(abn_t* arg);
 bool abn_is_positive(abn_t* arg);
-void abn_absolute_value(abn_t* arg);
+bool abn_absolute_value(abn_t* arg);
 
 // Bit operations
 void abn_not(abn_t* op);
 void abn_and(abn_t* result, abn_t* op1, abn_t* op2);
 void abn_or(abn_t* result, abn_t* op1, abn_t* op2);
 void abn_xor(abn_t* result, abn_t* op1, abn_t* op2);
+void abn_nand(abn_t* result, abn_t* op1, abn_t* op2);
+void abn_nor(abn_t* result, abn_t* op1, abn_t* op2);
 void abn_shift_left(abn_t* op, unsigned int distance);
 void abn_shift_right(abn_t* op, unsigned int distance);
 

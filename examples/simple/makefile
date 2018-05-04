@@ -1,17 +1,17 @@
 CC=gcc
-CFLAGS=-Wall -std=c99 -g
-ABN_LIB_DIR=../../output/
+CFLAGS=-Wall -std=c99
+ABN_LIB_DIR=../../bin/
 ABN_INCLUDE_DIR=../../include
 ABN_LIB_NAME=libabn.a
 
-all: ./output/example.elf
+all: ./bin/example.elf
 
-run: ./output/example.elf
-	./output/example.elf
+run: ./bin/example.elf
+	./bin/example.elf
 
 clean:
-	rm -rf ./output
+	rm -rf ./bin
 
-./output/example.elf: ./example.c $(ABN_LIB_DIR)$(ABN_LIB_NAME)
-	mkdir -p output/
-	$(CC) $(CFLAGS) example.c -I$(ABN_INCLUDE_DIR) -L$(ABN_LIB_DIR) -labn -o ./output/example.elf
+./bin/example.elf: ./example.c $(ABN_LIB_DIR)$(ABN_LIB_NAME)
+	mkdir -p bin/
+	$(CC) $(CFLAGS) example.c -I$(ABN_INCLUDE_DIR) -L$(ABN_LIB_DIR) -labn -o ./bin/example.elf

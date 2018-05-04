@@ -102,7 +102,7 @@ int main()
 	abn_and(a, a, b);
 	print_abn(*a, "a");
 
-	printf("# a = -a\n");
+	printf("# a = -a");
 	abn_neg(a);
 	print_abn(*a, "\na");
 	print_abn(*b, "b");
@@ -118,7 +118,6 @@ int main()
 	printf("# c = -c\n");
 	abn_neg(c);
 	print_abn(*c, "c");
-
 
 	abn_free(a);
 	abn_free(b);

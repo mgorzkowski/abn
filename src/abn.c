@@ -14,24 +14,10 @@ abn_t* abn_create(unsigned int volume)
 	return result;
 }
 
-abn_t* abn_create_with_zeros(unsigned int volume)
+abn_t* abn_create_copy(abn_t* arg)
 {
-	abn_t* result = (abn_t*)malloc(sizeof(abn_t));
-	result->volume = 0;
-	result->chain = (abn_unit*)calloc(volume, sizeof(abn_unit));
-	if(result->chain != NULL)
-	{
-		result->volume = volume;
-	}
-	return result;
-}
-
-// It's not safe. You should be completly certain that the chain contains appropriate amount of abn_units.
-abn_t* abn_create_with_chain(abn_unit* chain, unsigned int volume)
-{
-	abn_t* result = (abn_t*)malloc(sizeof(abn_t));
-	result->chain = chain;
-	result->volume = volume;
+	abn_t* result = abn_create(arg->volume);
+	abn_copy(result, arg);
 	return result;
 }
 
