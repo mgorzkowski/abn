@@ -1,3 +1,10 @@
+//
+// Copyright (c) 2018 Maciej Gorzkowski
+//
+// This file is licensed under the MIT License.
+// Full license text is available in 'LICENSE'.
+//
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "abn.h"
@@ -23,7 +30,7 @@ int main()
 		b->chain[i] = rand();
 	}
 
-	printf("# Created variables:\n");
+	printf("# Create variables:\n");
 	print_abn(*a, "a");
 	print_abn(*b, "b");
 

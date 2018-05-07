@@ -1,7 +1,15 @@
+//
+// Copyright (c) 2018 Maciej Gorzkowski
+//
+// This file is licensed under the MIT License.
+// Full license text is available in 'LICENSE'.
+//
+
 #include "../include/abn.h"
 
 const abn_unit ABN_UNIT_MAX = ((abn_unit)0) - 1;
 
+// Creates abn_t
 abn_t* abn_create(unsigned int volume)
 {
 	abn_t* result = (abn_t*)malloc(sizeof(abn_t));
@@ -14,6 +22,7 @@ abn_t* abn_create(unsigned int volume)
 	return result;
 }
 
+// Creates abn_t based on antoher abn_t
 abn_t* abn_create_copy(abn_t* arg)
 {
 	abn_t* result = abn_create(arg->volume);
@@ -21,6 +30,7 @@ abn_t* abn_create_copy(abn_t* arg)
 	return result;
 }
 
+// Creates an empty abn_t number
 abn_t* abn_create_empty()
 {
 	abn_t* result = (abn_t*)malloc(sizeof(abn_t));
@@ -29,6 +39,7 @@ abn_t* abn_create_empty()
 	return result;
 }
 
+// Terminates the abn_t number
 void abn_free(abn_t* arg)
 {
 	if(arg->chain != NULL)
@@ -38,6 +49,7 @@ void abn_free(abn_t* arg)
 	free(arg);
 }
 
+// Return true if the abn_t number is empty
 bool abn_is_empty(abn_t* arg)
 {
 	if(arg->chain == NULL && arg->volume == 0)
@@ -50,6 +62,7 @@ bool abn_is_empty(abn_t* arg)
 	}
 }
 
+// Return true if abn_t numbers are equal
 bool abn_are_equal(abn_t* op1, abn_t* op2)
 {
 	if(op1->volume != op2->volume)
@@ -66,6 +79,7 @@ bool abn_are_equal(abn_t* op1, abn_t* op2)
 	return true;
 }
 
+// Resets the abn_t number
 void abn_reset(abn_t* arg)
 {
 	for(int i=0; i<arg->volume; i++)
@@ -74,7 +88,7 @@ void abn_reset(abn_t* arg)
 	}
 }
 
-// It creates a deep copy
+// Creates a deep copy of abn_t number
 void abn_copy(abn_t* destination, abn_t* source)
 {
 	if(destination->volume != source->volume)

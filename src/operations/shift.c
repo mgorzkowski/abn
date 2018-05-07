@@ -1,45 +1,21 @@
+//
+// Copyright (c) 2018 Maciej Gorzkowski
+//
+// This file is licensed under the MIT License.
+// Full license text is available in 'LICENSE'.
+//
+
 #include "../../include/abn.h"
 
-void abn_short_shift_left(abn_t* arg, unsigned int distance)
-{
-	abn_unit carry = 0;
-	for(int i=0; i<arg->volume; i++)
-	{
-		abn_unit tmp = arg->chain[i] >> (8*sizeof(abn_unit) - distance);
-		arg->chain[i] <<= distance;
-		arg->chain[i] += carry;
-		carry = tmp;
-	}
-}
+// Private functions prototypes
+void abn_short_shift_left(abn_t* arg, unsigned int distance);
+void abn_short_shift_right(abn_t* arg, unsigned int distance);
+void abn_long_shift_left(abn_t* arg, unsigned int distance);
+void abn_long_shift_right(abn_t* arg, unsigned int distance);
 
-void abn_short_shift_right(abn_t* arg, unsigned int distance)
-{
-	abn_unit carry = 0;
-	for(int i=arg->volume-1; i>=0; i--)
-	{
-		abn_unit tmp = arg->chain[i] << (8*sizeof(abn_unit) - distance);
-		arg->chain[i] >>= distance;
-		arg->chain[i] += carry;
-		carry = tmp;
-	}
-}
+// Public functions
 
-void abn_long_shift_left(abn_t* arg, unsigned int distance)
-{
-	for(int i = arg->volume-1; i>=0; i--)
-	{
-		arg->chain[i] = (i >= distance ? arg->chain[i-distance] : 0);
-	}
-}
-
-void abn_long_shift_right(abn_t* arg, unsigned int distance)
-{
-	for(int i = 0; i<arg->volume; i++)
-	{
-		arg->chain[i] = ((i+distance < arg->volume) ? arg->chain[i+distance] : 0);
-	}
-}
-
+// Bit shift left
 void abn_shift_left(abn_t* arg, unsigned int distance)
 {
 	int long_distance = distance / (8*sizeof(abn_unit));
@@ -55,6 +31,7 @@ void abn_shift_left(abn_t* arg, unsigned int distance)
 	}
 }
 
+// Bit shift left
 void abn_shift_right(abn_t* arg, unsigned int distance)
 {
 	int long_distance = distance / (8*sizeof(abn_unit));
@@ -67,5 +44,51 @@ void abn_shift_right(abn_t* arg, unsigned int distance)
 	if(short_distance != 0)
 	{
 		abn_short_shift_right(arg, short_distance);
+	}
+}
+
+// Private functions
+
+// Shifts left integer number of bits up to 8*sizeof(abn_unit) bits
+void abn_short_shift_left(abn_t* arg, unsigned int distance)
+{
+	abn_unit carry = 0;
+	for(int i=0; i<arg->volume; i++)
+	{
+		abn_unit tmp = arg->chain[i] >> (8*sizeof(abn_unit) - distance);
+		arg->chain[i] <<= distance;
+		arg->chain[i] += carry;
+		carry = tmp;
+	}
+}
+
+// Shifts right integer number of bits up to 8*sizeof(abn_unit) bits
+void abn_short_shift_right(abn_t* arg, unsigned int distance)
+{
+	abn_unit carry = 0;
+	for(int i=arg->volume-1; i>=0; i--)
+	{
+		abn_unit tmp = arg->chain[i] << (8*sizeof(abn_unit) - distance);
+		arg->chain[i] >>= distance;
+		arg->chain[i] += carry;
+		carry = tmp;
+	}
+}
+
+// Shifts left integer number of bytes
+void abn_long_shift_left(abn_t* arg, unsigned int distance)
+{
+	for(int i = arg->volume-1; i>=0; i--)
+	{
+		arg->chain[i] = (i >= distance ? arg->chain[i-distance] : 0);
+	}
+}
+
+// Shifts right integer number of bytes
+void abn_long_shift_right(abn_t* arg, unsigned int distance)
+{
+	for(int i = 0; i<arg->volume; i++)
+	{
+		arg->chain[i] = ((i+distance < arg->volume) ? arg->chain[i+distance] : 0);
 	}
 }

@@ -2,7 +2,7 @@
 // Copyright (c) 2018 Maciej Gorzkowski
 //
 // This file is licensed under the MIT License.
-// Full license text is available in 'licenses/MIT.txt'.
+// Full license text is available in 'LICENSE'.
 //
 
 #ifndef __ABN_H__
@@ -41,6 +41,7 @@ void abn_copy(abn_t* destination, abn_t* source);
 bool abn_is_empty(abn_t* arg);
 bool abn_are_equal(abn_t* op1, abn_t* op2);
 char* abn_to_string(abn_t* arg);
+char* abn_unit_to_string(abn_unit arg);
 
 // Arithmetic operations
 void abn_add(abn_t* result, abn_t* op1, abn_t* op2);
@@ -51,7 +52,7 @@ void abn_mul(abn_t* result, abn_t* op1, abn_t* op2);
 void abn_smul(abn_t* result, abn_t* op1, abn_t* op2);
 bool abn_is_negative(abn_t* arg);
 bool abn_is_positive(abn_t* arg);
-bool abn_absolute_value(abn_t* arg);
+bool abn_abs(abn_t* arg);
 
 // Bit operations
 void abn_not(abn_t* op);

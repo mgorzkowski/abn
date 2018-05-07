@@ -1,48 +1,47 @@
 CC=gcc
+AR=ar
 CFLAGS=-c -Wall -std=c99
-
-OUTDIR=./bin
+BINDIR=./bin
 OBJS= \
-$(OUTDIR)/abn.o \
-$(OUTDIR)/additive.o \
-$(OUTDIR)/multiplicative.o \
-$(OUTDIR)/bit.o \
-$(OUTDIR)/shift.o \
-$(OUTDIR)/string.o
+$(BINDIR)/abn.o \
+$(BINDIR)/additive.o \
+$(BINDIR)/multiplicative.o \
+$(BINDIR)/bit.o \
+$(BINDIR)/shift.o \
+$(BINDIR)/string.o
 
-all: create_outdir $(OUTDIR)/libabn.a
+all: create-bindir $(BINDIR)/libabn.a
 	rm $(OBJS)
 
 clean:
-	rm -rf $(OUTDIR)
+	rm -rf $(BINDIR)
 
 clean-all: clean-examples
-	rm -rf $(OUTDIR)
+	rm -rf $(BINDIR)
 
+$(BINDIR)/libabn.a: $(OBJS)
+	$(AR) rcsv $@ $?
 
-$(OUTDIR)/libabn.a: $(OBJS)
-	ar rcsv $(OUTDIR)/libabn.a $(OBJS)
+$(BINDIR)/abn.o: ./src/abn.c
+	$(CC) $(CFLAGS) $? -o $@
 
-$(OUTDIR)/abn.o: ./src/abn.c ./include/abn.h
-	$(CC) $(CFLAGS) ./src/abn.c -o $(OUTDIR)/abn.o
+$(BINDIR)/additive.o: ./src/operations/additive.c
+	$(CC) $(CFLAGS) $? -o $@
 
-$(OUTDIR)/additive.o: ./src/operations/additive.c ./include/abn.h
-	$(CC) $(CFLAGS) ./src/operations/additive.c -o $(OUTDIR)/additive.o
+$(BINDIR)/multiplicative.o: ./src/operations/multiplicative.c
+	$(CC) $(CFLAGS) $? -o $@
 
-$(OUTDIR)/multiplicative.o: ./src/operations/multiplicative.c ./include/abn.h
-	$(CC) $(CFLAGS) ./src/operations/multiplicative.c -o $(OUTDIR)/multiplicative.o
+$(BINDIR)/bit.o: ./src/operations/bit.c
+	$(CC) $(CFLAGS) $? -o $@
 
-$(OUTDIR)/bit.o: ./src/operations/bit.c ./include/abn.h
-	$(CC) $(CFLAGS) ./src/operations/bit.c -o $(OUTDIR)/bit.o
+$(BINDIR)/shift.o: ./src/operations/shift.c
+	$(CC) $(CFLAGS) $? -o $@
 
-$(OUTDIR)/shift.o: ./src/operations/shift.c ./include/abn.h
-	$(CC) $(CFLAGS) ./src/operations/shift.c -o $(OUTDIR)/shift.o
+$(BINDIR)/string.o: ./src/utilities/string.c
+	$(CC) $(CFLAGS) $? -o $@
 
-$(OUTDIR)/string.o: ./src/utilities/string.c ./include/abn.h
-	$(CC) $(CFLAGS) ./src/utilities/string.c -o $(OUTDIR)/string.o
-
-create_outdir:
-	mkdir -p $(OUTDIR)
+create-bindir:
+	mkdir -p $(BINDIR)
 
 clean-examples:
 	rm -rf examples/*/bin

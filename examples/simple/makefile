@@ -1,3 +1,10 @@
+#
+# Copyright (c) 2018 Maciej Gorzkowski
+#
+# This file is licensed under the MIT License.
+# Full license text is available in 'LICENSE'.
+#
+
 CC=gcc
 CFLAGS=-Wall -std=c99
 ABN_LIB_DIR=../../bin/
@@ -12,6 +19,6 @@ run: ./bin/example.elf
 clean:
 	rm -rf ./bin
 
-./bin/example.elf: ./example.c $(ABN_LIB_DIR)$(ABN_LIB_NAME)
+./bin/example.elf: ./example.c
 	mkdir -p bin/
-	$(CC) $(CFLAGS) example.c -I$(ABN_INCLUDE_DIR) -L$(ABN_LIB_DIR) -labn -o ./bin/example.elf
+	$(CC) $(CFLAGS) $? -I$(ABN_INCLUDE_DIR) -L$(ABN_LIB_DIR) -labn -o $@
