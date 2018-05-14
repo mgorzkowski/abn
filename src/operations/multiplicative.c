@@ -93,7 +93,7 @@ void abn_unit_mul(abn_t* result, abn_unit op1, abn_unit op2)
 
 	tmp2->chain[0] = (abn_unit)op1h * (abn_unit)op2l;
 	tmp2->chain[1] = 0;
-	abn_shift_left(tmp2,  8*sizeof(abn_halfunit));
+	abn_shift_left(tmp2, 8*sizeof(abn_halfunit));
 	abn_add(tmp, tmp, tmp2);
 
 	tmp2->chain[0] = (abn_unit)op1l * (abn_unit)op2h;
