@@ -8,8 +8,8 @@
 CC=gcc
 CFLAGS=-Wall -std=c99
 ABN_LIB_DIR=../../bin/
-ABN_INCLUDE_DIR=../../include
 ABN_LIB_NAME=libabn.a
+ABN_INCLUDE_DIR=../../include
 
 all: ./bin/example.elf
 

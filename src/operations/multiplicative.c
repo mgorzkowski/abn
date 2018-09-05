@@ -10,6 +10,7 @@
 // Private functions prototypes
 void abn_unit_mul(abn_t* result, abn_unit op1, abn_unit op2);
 void abn_simple_mul_algorithm(abn_t* result, abn_t* op1, abn_t* op2);
+void abn_div_doubleunit_by_unit(abn_unit result, abn_unit rest, abn_t op1, abn_unit op2);
 
 // Public functions
 
@@ -66,6 +67,34 @@ void abn_smul(abn_t* result, abn_t* op1, abn_t* op2)
 		}
 	}
 }
+
+void abn_div(abn_t* result, abn_t* rest, abn_t* op1, abn_t** op2)
+{
+	//TODO: zrobić!!
+}
+
+// Divides abn_t number by abn_unit
+// It was assumed that volumes of op1 is equal to the volume of the result.
+// void abn_div_by_halfunit(abn_t* result, abn_unit* rest, abn_t* op1, abn_halfunit* op2)
+// {
+// 	static abn_t* tmp = NULL;
+// 	if(tmp == NULL)
+// 	{
+// 		tmp = abn_create(2);
+// 	}
+// 	abn_reset(tmp);
+// 	abn_unit small_result, small_rest;
+// 	for (int i = 0; i < op1->volume; i++)
+// 	{
+// 		int operand_index = op1->volume - 1 - i;
+// 		tmp->chain[1] = tmp->chain[0];
+// 		tmp->chain[0] = op1->chain[operand_index];
+// 		abn_div_doubleunit_by_unit(&small_result, &small_rest, tmp, op2);
+// 		result->chain[operand_index] = small_result;
+// 		tmp->chain[0] = small_rest;
+// 	}
+// 	*rest = small_rest;
+// }
 
 // Private functions
 
@@ -125,9 +154,9 @@ void abn_simple_mul_algorithm(abn_t* result, abn_t* op1, abn_t* op2)
 		}
 	}
 	abn_reset(result);
-	for (int i = 0; i < op1->volume; i++)
+	for (unsigned int i = 0; i < op1->volume; i++)
 	{
-		for (int j = 0; j < op1->volume; j++)
+		for (unsigned int j = 0; j < op1->volume; j++)
 		{
 			abn_reset(tmp);
 			abn_unit_mul(tmp, op1->chain[i], op2->chain[j]);
@@ -135,4 +164,9 @@ void abn_simple_mul_algorithm(abn_t* result, abn_t* op1, abn_t* op2)
 			abn_add(result, result, tmp);
 		}
 	}
+}
+
+void abn_div_doubleunit_by_unit(abn_unit result, abn_unit rest, abn_t op1, abn_unit op2)
+{
+
 }
