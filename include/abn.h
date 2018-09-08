@@ -42,6 +42,7 @@ bool abn_is_empty(abn_t* arg);
 bool abn_are_equal(abn_t* op1, abn_t* op2);
 char* abn_to_string(abn_t* arg);
 char* abn_unit_to_string(abn_unit arg);
+void abn_print(FILE* file, abn_t* number, char* name);
 
 // Arithmetic operations
 void abn_add(abn_t* result, abn_t* op1, abn_t* op2);
