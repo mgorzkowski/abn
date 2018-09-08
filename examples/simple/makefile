@@ -21,3 +21,4 @@ clean:
 
 ./bin/example.elf: ./example.c
 	mkdir -p bin/
+	$(CC) $(CFLAGS) $? -I$(ABN_INCLUDE_DIR) -L$(ABN_LIB_DIR) -$(ABN_LIB) -o $@
