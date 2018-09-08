@@ -64,5 +64,7 @@ void abn_nand(abn_t* result, abn_t* op1, abn_t* op2);
 void abn_nor(abn_t* result, abn_t* op1, abn_t* op2);
 void abn_shift_left(abn_t* op, unsigned int distance);
 void abn_shift_right(abn_t* op, unsigned int distance);
+void abn_rotate_left(abn_t* arg, unsigned int distance);
+void abn_rotate_right(abn_t* arg, unsigned int distance);
 
 #endif /* __ABN_H__ */

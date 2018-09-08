@@ -1,3 +1,10 @@
+#
+# Copyright (c) 2018 Maciej Gorzkowski
+#
+# This file is licensed under the MIT License.
+# Full license text is available in 'LICENSE'.
+#
+
 CC=gcc
 AR=ar
 CFLAGS=-c -Wall -std=c99
@@ -18,6 +25,7 @@ clean:
 
 clean-all: clean-examples
 	rm -rf $(BINDIR)
+	rm include/*.h.gch
 
 $(BINDIR)/libabn.a: $(OBJS)
 	$(AR) rcsv $@ $?

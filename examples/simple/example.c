@@ -11,7 +11,7 @@
 
 int main()
 {
-	int size = 16;
+	int size = 4;
 	srand(0);
 	abn_t* a = abn_create(size);
 	abn_t* b = abn_create(size);
@@ -116,6 +116,22 @@ int main()
 
 	printf("# c = -c\n");
 	abn_neg(c);
+	abn_print(stdout, c, "c");
+
+	printf("# c = ror(c, 8)");
+	abn_rotate_right(c, 8);
+	abn_print(stdout, c, "c");
+
+	printf("# c = ror(c, 1)");
+	abn_rotate_right(c, 1);
+	abn_print(stdout, c, "c");
+
+	printf("# c = rol(c, 8)");
+	abn_rotate_left(c, 8);
+	abn_print(stdout, c, "c");
+
+	printf("# c = rol(c, 1)");
+	abn_rotate_left(c, 1);
 	abn_print(stdout, c, "c");
 
 	abn_free(a);

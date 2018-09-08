@@ -8,7 +8,7 @@
 CC=gcc
 CFLAGS=-Wall -std=c99
 ABN_LIB_DIR=../../bin/
-ABN_LIB_NAME=libabn.a
+ABN_LIB=labn
 ABN_INCLUDE_DIR=../../include
 
 all: ./bin/example.elf
@@ -21,4 +21,3 @@ clean:
 
 ./bin/example.elf: ./example.c
 	mkdir -p bin/
-	$(CC) $(CFLAGS) $? -I$(ABN_INCLUDE_DIR) -L$(ABN_LIB_DIR) -labn -o $@
