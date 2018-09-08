@@ -118,20 +118,49 @@ int main()
 	abn_neg(c);
 	abn_print(stdout, c, "c");
 
-	printf("# c = ror(c, 8)");
+	printf("# c = ror(c, 8)\n");
 	abn_rotate_right(c, 8);
 	abn_print(stdout, c, "c");
 
-	printf("# c = ror(c, 1)");
+	printf("# c = ror(c, 1)\n");
 	abn_rotate_right(c, 1);
 	abn_print(stdout, c, "c");
 
-	printf("# c = rol(c, 8)");
+	printf("# c = rol(c, 8)\n");
 	abn_rotate_left(c, 8);
 	abn_print(stdout, c, "c");
 
-	printf("# c = rol(c, 1)");
+	printf("# c = rol(c, 1)\n");
 	abn_rotate_left(c, 1);
+	abn_print(stdout, c, "c");
+
+	byte bt;
+
+	printf("# c[byte:3]\n");
+	bt = abn_get_byte(c, 3);
+	printf("c[byte:3] = %x\n", bt);
+
+	printf("# c[byte:4]\n");
+	bt = abn_get_byte(c, 4);
+	printf("c[byte:4] = %x\n", bt);
+
+	printf("# c[byte:5]\n");
+	bt = abn_get_byte(c, 5);
+	printf("c[byte:5] = %x\n", bt);
+
+	bt = 0x4A;
+	printf("# c[byte:3] = 0x%x\n", bt);
+	abn_set_byte(c, bt, 3);
+	abn_print(stdout, c, "c");
+
+	bt = 0x8F;
+	printf("# c[byte:4] = 0x%x\n", bt);
+	abn_set_byte(c, bt, 4);
+	abn_print(stdout, c, "c");
+
+	bt = 0x81;
+	printf("# c[byte:5] = 0x%x\n", bt);
+	abn_set_byte(c, bt, 5);
 	abn_print(stdout, c, "c");
 
 	abn_free(a);
