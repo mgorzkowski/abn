@@ -1,47 +1,42 @@
+#
+# Copyright (c) 2018 Maciej Gorzkowski
+#
+# This file is licensed under the MIT License.
+# Full license text is available in 'LICENSE'.
+#
+
 CC=gcc
 AR=ar
 CFLAGS=-c -Wall -std=c99
-BINDIR=./bin
-OBJS= \
-$(BINDIR)/abn.o \
-$(BINDIR)/additive.o \
-$(BINDIR)/multiplicative.o \
-$(BINDIR)/bit.o \
-$(BINDIR)/shift.o \
-$(BINDIR)/string.o
 
-all: create-bindir $(BINDIR)/libabn.a
-	rm $(OBJS)
+bindir=./bin
+src=\
+	$(wildcard src/*.c) \
+	$(wildcard src/operations/*.c) \
+	$(wildcard src/utilities/*.c)
+objs=$(src:.c=.o)
 
+.PHOENY: all
+all: create-bindir $(bindir)/libabn.a
+	rm $(objs)
+	@echo 'Build done'
+
+.PHONEY: clean
 clean:
-	rm -rf $(BINDIR)
+	rm -rf $(objs)
+	rm -rf $(bindir)
+	@echo 'Clean done'
 
-clean-all: clean-examples
-	rm -rf $(BINDIR)
-
-$(BINDIR)/libabn.a: $(OBJS)
+$(bindir)/libabn.a: $(objs)
 	$(AR) rcsv $@ $?
 
-$(BINDIR)/abn.o: ./src/abn.c
-	$(CC) $(CFLAGS) $? -o $@
+%.o: %.c
+	$(CC) $(CFLAGS) $< -o $@
 
-$(BINDIR)/additive.o: ./src/operations/additive.c
-	$(CC) $(CFLAGS) $? -o $@
-
-$(BINDIR)/multiplicative.o: ./src/operations/multiplicative.c
-	$(CC) $(CFLAGS) $? -o $@
-
-$(BINDIR)/bit.o: ./src/operations/bit.c
-	$(CC) $(CFLAGS) $? -o $@
-
-$(BINDIR)/shift.o: ./src/operations/shift.c
-	$(CC) $(CFLAGS) $? -o $@
-
-$(BINDIR)/string.o: ./src/utilities/string.c
-	$(CC) $(CFLAGS) $? -o $@
-
+.PHONEY: create-bindir
 create-bindir:
-	mkdir -p $(BINDIR)
+	mkdir -p $(bindir)
 
+.PHONEY: clean-examples
 clean-examples:
-	rm -rf examples/*/bin
+	make clean -C examples/*

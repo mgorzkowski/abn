@@ -31,7 +31,7 @@ abn_t* abn_create_copy(abn_t* arg)
 }
 
 // Creates an empty abn_t number
-abn_t* abn_create_empty()
+abn_t* abn_create_empty(void)
 {
 	abn_t* result = (abn_t*)malloc(sizeof(abn_t));
 	result->chain = NULL;

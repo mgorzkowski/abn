@@ -5,8 +5,8 @@
 // Full license text is available in 'LICENSE'.
 //
 
-#ifndef __ABN_H__
-#define __ABN_H__
+#ifndef ABN_H
+#define ABN_H
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -34,7 +34,7 @@ typedef struct abn_t {
 // Basic operations
 abn_t* abn_create(unsigned int volume);
 abn_t* abn_create_copy(abn_t* arg);
-abn_t* abn_create_empty();
+abn_t* abn_create_empty(void);
 void abn_free(abn_t* arg);
 void abn_reset(abn_t* arg);
 void abn_copy(abn_t* destination, abn_t* source);
@@ -64,4 +64,4 @@ void abn_nor(abn_t* result, abn_t* op1, abn_t* op2);
 void abn_shift_left(abn_t* op, unsigned int distance);
 void abn_shift_right(abn_t* op, unsigned int distance);
 
-#endif /* __ABN_H__ */
+#endif /* ABN_H */
