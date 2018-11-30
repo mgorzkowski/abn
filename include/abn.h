@@ -8,6 +8,7 @@
 #ifndef ABN_H
 #define ABN_H
 
+//TODO: Delete this includes to the source code files
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
@@ -40,8 +41,11 @@ void abn_reset(abn_t* arg);
 void abn_copy(abn_t* destination, abn_t* source);
 bool abn_is_empty(abn_t* arg);
 bool abn_are_equal(abn_t* op1, abn_t* op2);
+byte abn_get_byte(abn_t* arg, unsigned int whichOne);
+void abn_set_byte(abn_t* arg, byte value, unsigned int whichOne);
 char* abn_to_string(abn_t* arg);
 char* abn_unit_to_string(abn_unit arg);
+void abn_print(FILE* file, abn_t* number, char* name);
 
 // Arithmetic operations
 void abn_add(abn_t* result, abn_t* op1, abn_t* op2);
@@ -63,5 +67,7 @@ void abn_nand(abn_t* result, abn_t* op1, abn_t* op2);
 void abn_nor(abn_t* result, abn_t* op1, abn_t* op2);
 void abn_shift_left(abn_t* op, unsigned int distance);
 void abn_shift_right(abn_t* op, unsigned int distance);
+void abn_rotate_left(abn_t* arg, unsigned int distance);
+void abn_rotate_right(abn_t* arg, unsigned int distance);
 
 #endif /* ABN_H */

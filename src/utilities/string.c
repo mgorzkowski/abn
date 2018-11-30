@@ -21,7 +21,7 @@ char* abn_unit_to_string(abn_unit arg)
 	abn_unit* unit_ptr = &arg;
 	byte* byte_ptr = (byte*)unit_ptr;
 
-	for(int i = 0; i < sizeof(abn_unit); i++)
+	for(unsigned int i = 0; i < sizeof(abn_unit); i++)
 	{
 		char* tmp = byte_to_string(byte_ptr[sizeof(abn_unit) - 1 - i]);
 		strcat(result, tmp);
@@ -36,13 +36,22 @@ char* abn_to_string(abn_t* arg)
 	char* result = (char*)malloc(2 * arg->volume * sizeof(abn_unit) + 1);
 	result[0] = '\0';
 
-	for(int i = 0; i < arg->volume; i++)
+	for(unsigned int i = 0; i < arg->volume; i++)
 	{
 		char* tmp = abn_unit_to_string(arg->chain[arg->volume - 1 - i]);
 		strcat(result, tmp);
 		free(tmp);
 	}
 	return result;
+}
+
+// Writes abn_t to the file (format: 'name = [0xnumber]\n')
+void abn_print(FILE* file, abn_t* number, char* name)
+{
+	char* representation = abn_to_string(number);
+	fprintf(file, "%s = [ 0x%s ]\n", name, representation);
+	fflush(file);
+	free(representation);
 }
 
 // Private functions

@@ -101,3 +101,20 @@ void abn_copy(abn_t* destination, abn_t* source)
 		destination->chain[i] = source->chain[i];
 	}
 }
+
+// Setting particular byte
+void abn_set_byte(abn_t* arg, byte value, unsigned int whichOne)
+{
+	unsigned int whichUnit = whichOne / sizeof(abn_unit);
+	unsigned int whichByteInUnit = whichOne % sizeof(abn_unit);
+	arg->chain[whichUnit] &= ~((abn_unit)0xFF << 8 * whichByteInUnit);
+	arg->chain[whichUnit] |= value << 8 * whichByteInUnit;
+}
+
+// Getting particular byte
+byte abn_get_byte(abn_t* arg, unsigned int whichOne)
+{
+	unsigned int whichUnit = whichOne / sizeof(abn_unit);
+	unsigned int whichByteInUnit = whichOne % sizeof(abn_unit);
+	return (arg->chain[whichUnit] >> (8 * whichByteInUnit)) & 0xFF;
+}
