@@ -1,4 +1,3 @@
-
 # ABN
 
 ABN - Arbitrary-Bit Number. This library allows simple mathematical operations (like addition, multiplication, bit operations etc) on big natural numbers. ABN library is designed with multiplatform in mind. ABN library can be used with architectures like: x86, ARM, AVR (Arduino) and more.
@@ -35,5 +34,5 @@ The widest type, the shortest execution time. :)
 ### Non portable header file:
 ABN library contains non-portable functions also. (abn/nonportable.h) Functions from this header file are unnecessary to perform calculations. Non-portable header file contains functions that are specific only for part of systems (e.g. they allows file operations). This can help you read or write your number to the file. You can use non-portable header file functions when you use system that supports standard I/O. This kind of functions are used in example/simple too.
 
-### Have fun! :smile:
+#### Have fun! :smile:
 If you have noticed something inappropriate or something what I can improve please send to me a message. :mailbox: dhmaciek@gmail.com
