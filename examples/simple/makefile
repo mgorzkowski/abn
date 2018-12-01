@@ -20,10 +20,10 @@ run: ./bin/example
 	./bin/example
 
 ./bin/example: ./example.c
-	mkdir -p bin/
+	@mkdir -p bin/
 	$(CC) $(CFLAGS) $? $(ABN_INCLUDE_DIR) $(ABN_LIB_DIR) $(LIBS) -o $@
 
 .PHONEY: clean
 clean:
-	rm -rf ./bin
+	@rm -rf ./bin
 	@echo 'Clean done'

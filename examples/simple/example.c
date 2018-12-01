@@ -8,7 +8,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "abn.h"
-#include "abn/nonportable.h"
+#include "nonportable/fileoperations.h"
+
+void print_abn_number(FILE* file, abn_t* number, char* name)
+{
+	fprintf(file, "%s = [", name);
+	abn_write_to_file(file, number);
+	fprintf(file, "]\n");	
+}
 
 int main()
 {
@@ -24,48 +31,48 @@ int main()
 	}
 
 	printf("# Create variables:\n");
-	abn_print(stdout, a, "a");
-	abn_print(stdout, b, "b");
+	print_abn_number(stdout, a, "a");
+	print_abn_number(stdout, b, "b");
 
 	printf("# a = a + b\n");
 	abn_add(a, a, b);
-	abn_print(stdout, a, "a");
+	print_abn_number(stdout, a, "a");
 
 	printf("# b = a + b\n");
 	abn_add(b, a, b);
-	abn_print(stdout, b, "b");
+	print_abn_number(stdout, b, "b");
 
 	printf("# a = 0\n");
 	abn_reset(a);
-	abn_print(stdout, a, "a");
+	print_abn_number(stdout, a, "a");
 
 	printf("# a = b\n");
 	abn_copy(a, b);
-	abn_print(stdout, a, "a");
+	print_abn_number(stdout, a, "a");
 
 	printf(" # a = a << 8\n");
 	abn_shift_left(a, 8);
-	abn_print(stdout, a, "a");
+	print_abn_number(stdout, a, "a");
 
 	printf(" # a = a << 4\n");
 	abn_shift_left(a, 4);
-	abn_print(stdout, a, "a");
+	print_abn_number(stdout, a, "a");
 
 	printf(" # a = a >> 12\n");
 	abn_shift_right(a, 12);
-	abn_print(stdout, a, "a");
+	print_abn_number(stdout, a, "a");
 
 	printf(" # c = a * b\n");
 	abn_mul(c, a, b);
-	abn_print(stdout, c, "c");
+	print_abn_number(stdout, c, "c");
 
 	printf("# a = 0\n");
 	abn_reset(a);
-	abn_print(stdout, a, "a");
+	print_abn_number(stdout, a, "a");
 
 	printf("# a--\n");
 	abn_dec(a);
-	abn_print(stdout, a, "a");
+	print_abn_number(stdout, a, "a");
 
 	printf("# a is negative\n");
 	if(abn_is_negative(a))
@@ -75,7 +82,7 @@ int main()
 
 	printf("# a = -a\n");
 	abn_neg(a);
-	abn_print(stdout, a, "a");
+	print_abn_number(stdout, a, "a");
 
 	printf("# a is negative\n");
 	if(abn_is_negative(a))
@@ -85,7 +92,7 @@ int main()
 
 	printf("# a--\n");
 	abn_dec(a);
-	abn_print(stdout, a, "a");
+	print_abn_number(stdout, a, "a");
 
 	printf("# a is negative\n");
 	if(abn_is_negative(a))
@@ -95,45 +102,45 @@ int main()
 
 	printf("# a = a or b\n");
 	abn_or(a, a, b);
-	abn_print(stdout, a, "a");
+	print_abn_number(stdout, a, "a");
 
 	printf("# a = a and b<<1\n");
 	abn_shift_left(b, 1);
 	abn_and(a, a, b);
-	abn_print(stdout, a, "a");
+	print_abn_number(stdout, a, "a");
 
 	printf("# a = -a");
 	abn_neg(a);
-	abn_print(stdout, a, "\na");
-	abn_print(stdout, b, "b");
+	print_abn_number(stdout, a, "\na");
+	print_abn_number(stdout, b, "b");
 
 	printf("# c = a * b\n");
 	abn_mul(c, a, b);
-	abn_print(stdout, c, "c");
+	print_abn_number(stdout, c, "c");
 
 	printf("# c = a (signed)* b\n");
 	abn_smul(c, a, b);
-	abn_print(stdout, c, "c");
+	print_abn_number(stdout, c, "c");
 
 	printf("# c = -c\n");
 	abn_neg(c);
-	abn_print(stdout, c, "c");
+	print_abn_number(stdout, c, "c");
 
 	printf("# c = ror(c, 8)\n");
 	abn_rotate_right(c, 8);
-	abn_print(stdout, c, "c");
+	print_abn_number(stdout, c, "c");
 
 	printf("# c = ror(c, 1)\n");
 	abn_rotate_right(c, 1);
-	abn_print(stdout, c, "c");
+	print_abn_number(stdout, c, "c");
 
 	printf("# c = rol(c, 8)\n");
 	abn_rotate_left(c, 8);
-	abn_print(stdout, c, "c");
+	print_abn_number(stdout, c, "c");
 
 	printf("# c = rol(c, 1)\n");
 	abn_rotate_left(c, 1);
-	abn_print(stdout, c, "c");
+	print_abn_number(stdout, c, "c");
 
 	byte bt;
 
@@ -152,17 +159,17 @@ int main()
 	bt = 0x4A;
 	printf("# c[byte:3] = 0x%x\n", bt);
 	abn_set_byte(c, bt, 3);
-	abn_print(stdout, c, "c");
+	print_abn_number(stdout, c, "c");
 
 	bt = 0x8F;
 	printf("# c[byte:4] = 0x%x\n", bt);
 	abn_set_byte(c, bt, 4);
-	abn_print(stdout, c, "c");
+	print_abn_number(stdout, c, "c");
 
 	bt = 0x81;
 	printf("# c[byte:5] = 0x%x\n", bt);
 	abn_set_byte(c, bt, 5);
-	abn_print(stdout, c, "c");
+	print_abn_number(stdout, c, "c");
 
 	abn_free(a);
 	abn_free(b);

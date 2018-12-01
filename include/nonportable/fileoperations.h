@@ -14,6 +14,7 @@
 #include "../abn.h"
 #include <stdio.h>
 
-void abn_print(FILE* file, abn_t* number, char* name);
+void abn_write_to_file(FILE* file, abn_t* number);
+abn_unit abn_read_from_file(FILE* file, abn_t* number);
 
 #endif /* ABN_MISC_H */

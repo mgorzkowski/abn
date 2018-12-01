@@ -11,11 +11,18 @@
 
 // Public functions
 
-// Writes abn_t to the file (format: 'name = [0xnumber]\n')
-void abn_print(FILE* file, abn_t* number, char* name)
+// Writes abn_t number to the file (hexadecimal format)
+void abn_write_to_file(FILE* file, abn_t* number)
 {
 	char* representation = abn_to_string(number);
-	fprintf(file, "%s = [ 0x%s ]\n", name, representation);
+	fprintf(file, "%s", representation);
 	fflush(file);
 	free(representation);
+}
+
+// Reads abn_t number from the file (hexadecimal format)
+abn_unit abn_read_from_file(FILE* file, abn_t* number)
+{
+	return -1;
+	// TODO: implement this function
 }

@@ -19,14 +19,14 @@ objs=$(src:.c=.o)
 
 .PHOENY: all
 all: create-bindir $(bindir)/libabn.a
-	rm $(objs)
+	@rm -fr $(objs)
 	@echo 'Build done'
 
 .PHONEY: clean
 clean:
-	rm -rf $(objs)
-	rm -rf $(bindir)
-	make clean -C examples/*
+	@rm -rf $(objs)
+	@rm -rf $(bindir)
+	@make clean -C examples/*
 	@echo 'Clean done'
 
 $(bindir)/libabn.a: $(objs)
@@ -37,8 +37,12 @@ $(bindir)/libabn.a: $(objs)
 
 .PHONEY: create-bindir
 create-bindir:
-	mkdir -p $(bindir)
+	@mkdir -p $(bindir)
+
+.PHONEY: build-examples
+build-examples:
+	@make -C examples/*
 
 .PHONEY: clean-examples
 clean-examples:
-	make clean -C examples/*
+	@make clean -C examples/*
