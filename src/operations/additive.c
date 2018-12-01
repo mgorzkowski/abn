@@ -7,8 +7,8 @@
 
 #include "../../include/abn.h"
 
-// Private functions prototypes
-void abn_simple_add(abn_t* result, abn_t* op1, abn_t* op2);
+// Functions prototypes
+static void abn_simple_add(abn_t* result, abn_t* op1, abn_t* op2);
 
 // Public functions
 
@@ -95,7 +95,7 @@ bool abn_abs(abn_t* arg)
 
 // Simple add algorithm
 // It was assumed that volumes of both operands are equal
-void abn_simple_add(abn_t* result, abn_t* op1, abn_t* op2)
+static void abn_simple_add(abn_t* result, abn_t* op1, abn_t* op2)
 {
 	int carry = 0;
 	for(int i = 0; i < op1->volume; i++)

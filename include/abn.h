@@ -8,12 +8,8 @@
 #ifndef ABN_H
 #define ABN_H
 
-//TODO: Delete this includes to the source code files
-#include <stdlib.h>
-#include <stdio.h>
 #include <stdint.h>
 #include <stdbool.h>
-#include <string.h>
 
 typedef unsigned char byte;
 
@@ -25,11 +21,12 @@ typedef uint32_t abn_unit;
 typedef uint16_t abn_halfunit;
 
 extern const abn_unit ABN_UNIT_MAX;
+extern const abn_unit ABN_UNIT_MIN;
 
 // Main type of abn library
 typedef struct abn_t {
 	abn_unit* chain;
-	unsigned int volume;	// in abn_units (in general not in bytes!)
+	unsigned int volume;	// size in abn_units (in general not in bytes!)
 } abn_t;
 
 // Basic operations
@@ -45,7 +42,6 @@ byte abn_get_byte(abn_t* arg, unsigned int whichOne);
 void abn_set_byte(abn_t* arg, byte value, unsigned int whichOne);
 char* abn_to_string(abn_t* arg);
 char* abn_unit_to_string(abn_unit arg);
-void abn_print(FILE* file, abn_t* number, char* name);
 
 // Arithmetic operations
 void abn_add(abn_t* result, abn_t* op1, abn_t* op2);

@@ -6,8 +6,12 @@
 //
 
 #include "../include/abn.h"
+#include <stdlib.h>
 
 const abn_unit ABN_UNIT_MAX = ((abn_unit)0) - 1;
+const abn_unit ABN_UNIT_MIN = (abn_unit)0;
+
+// Public functions
 
 // Creates abn_t
 abn_t* abn_create(unsigned int volume)

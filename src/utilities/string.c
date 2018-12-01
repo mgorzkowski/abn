@@ -6,10 +6,12 @@
 //
 
 #include "../../include/abn.h"
+#include <stdlib.h>
+#include <string.h>
 
-// Private functions prototypes
-char hex_sign_to_char(byte arg);
-char* byte_to_string(byte arg);
+// Functions prototypes
+static char hex_sign_to_char(byte arg);
+static char* byte_to_string(byte arg);
 
 // Public functions
 
@@ -45,25 +47,16 @@ char* abn_to_string(abn_t* arg)
 	return result;
 }
 
-// Writes abn_t to the file (format: 'name = [0xnumber]\n')
-void abn_print(FILE* file, abn_t* number, char* name)
-{
-	char* representation = abn_to_string(number);
-	fprintf(file, "%s = [ 0x%s ]\n", name, representation);
-	fflush(file);
-	free(representation);
-}
-
 // Private functions
 
 // Returns char '0'-'F' for a nibble
-char hex_sign_to_char(byte arg)
+static char hex_sign_to_char(byte arg)
 {
 	return arg<10?arg+'0':arg+'A'-10;
 }
 
 // Returns string in hexadecimal form for the byte
-char* byte_to_string(byte arg)
+static char* byte_to_string(byte arg)
 {
 	char* result = (char*)malloc(3 * sizeof(char));
 	if(result != NULL)

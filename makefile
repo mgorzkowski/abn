@@ -13,7 +13,8 @@ bindir=./bin
 src=\
 	$(wildcard src/*.c) \
 	$(wildcard src/operations/*.c) \
-	$(wildcard src/utilities/*.c)
+	$(wildcard src/utilities/*.c) \
+	$(wildcard src/nonportable/*.c)
 objs=$(src:.c=.o)
 
 .PHOENY: all

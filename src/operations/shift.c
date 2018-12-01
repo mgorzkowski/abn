@@ -7,11 +7,11 @@
 
 #include "../../include/abn.h"
 
-// Private functions prototypes
-void abn_short_shift_left(abn_t* arg, unsigned int distance);
-void abn_short_shift_right(abn_t* arg, unsigned int distance);
-void abn_long_shift_left(abn_t* arg, unsigned int distance);
-void abn_long_shift_right(abn_t* arg, unsigned int distance);
+// Functions prototypes
+static void abn_short_shift_left(abn_t* arg, unsigned int distance);
+static void abn_short_shift_right(abn_t* arg, unsigned int distance);
+static void abn_long_shift_left(abn_t* arg, unsigned int distance);
+static void abn_long_shift_right(abn_t* arg, unsigned int distance);
 
 // Public functions
 
@@ -70,7 +70,7 @@ void abn_rotate_right(abn_t* arg, unsigned int distance)
 // Private functions
 
 // Shifts left integer number of bits up to 8*sizeof(abn_unit) bits
-void abn_short_shift_left(abn_t* arg, unsigned int distance)
+static void abn_short_shift_left(abn_t* arg, unsigned int distance)
 {
 	abn_unit carry = 0;
 	for(int i=0; i<arg->volume; i++)
@@ -83,7 +83,7 @@ void abn_short_shift_left(abn_t* arg, unsigned int distance)
 }
 
 // Shifts right integer number of bits up to 8*sizeof(abn_unit) bits
-void abn_short_shift_right(abn_t* arg, unsigned int distance)
+static void abn_short_shift_right(abn_t* arg, unsigned int distance)
 {
 	abn_unit carry = 0;
 	for(int i=arg->volume-1; i>=0; i--)
@@ -96,7 +96,7 @@ void abn_short_shift_right(abn_t* arg, unsigned int distance)
 }
 
 // Shifts left integer number of bytes
-void abn_long_shift_left(abn_t* arg, unsigned int distance)
+static void abn_long_shift_left(abn_t* arg, unsigned int distance)
 {
 	for(int i = arg->volume-1; i>=0; i--)
 	{
@@ -105,7 +105,7 @@ void abn_long_shift_left(abn_t* arg, unsigned int distance)
 }
 
 // Shifts right integer number of bytes
-void abn_long_shift_right(abn_t* arg, unsigned int distance)
+static void abn_long_shift_right(abn_t* arg, unsigned int distance)
 {
 	for(int i = 0; i<arg->volume; i++)
 	{
