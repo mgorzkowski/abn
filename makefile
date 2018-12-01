@@ -7,7 +7,7 @@
 
 CC=gcc
 AR=ar
-CFLAGS=-c -Wall -std=c99
+CFLAGS=-c -Wall
 
 bindir=./bin
 src=\
@@ -26,6 +26,7 @@ all: create-bindir $(bindir)/libabn.a
 clean:
 	rm -rf $(objs)
 	rm -rf $(bindir)
+	make clean -C examples/*
 	@echo 'Clean done'
 
 $(bindir)/libabn.a: $(objs)
