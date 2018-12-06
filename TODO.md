@@ -9,4 +9,3 @@
 ##### Feature issues:
     1) Add div and mod operations,
     2) Add assembly support for few architectures (x86, x64, ARM, maybe more) for few functions (for those what time or memory occupation aren't satisfying for me.) (?),
-    3)

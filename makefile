@@ -31,7 +31,8 @@ shared-lib: create-bindir $(bindir)/libabn.so
 clean:
 	@rm -rf $(objs)
 	@rm -rf $(bindir)
-	@make clean -C examples/*
+	@rm -fr ./wrappers/*.pyc
+	@make clean -C examples/simple_c_example
 	@echo 'Clean done'
 
 $(bindir)/libabn.a: $(objs)
@@ -49,10 +50,10 @@ $(bindir)/libabn.so: $(objs)
 create-bindir:
 	@mkdir -p $(bindir)
 
-.PHONEY: build-examples
-build-examples:
-	@make -C examples/*
+.PHONEY: build-example
+build-example:
+	@make -C examples/simple_c_example
 
-.PHONEY: clean-examples
-clean-examples:
-	@make clean -C examples/*
+.PHONEY: clean-example
+clean-example:
+	@make clean -C examples/simple_c_example
