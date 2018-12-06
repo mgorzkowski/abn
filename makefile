@@ -19,7 +19,12 @@ objs=$(src:.c=.o)
 
 .PHOENY: all
 all: create-bindir $(bindir)/libabn.a
-	@rm -fr $(objs)
+	@rm -rf $(objs)
+	@echo 'Build done'
+
+.PHONEY: shared-lib
+shared-lib: create-bindir $(bindir)/libabn.so
+	@rm -rf $(objs)
 	@echo 'Build done'
 
 .PHONEY: clean
@@ -31,6 +36,11 @@ clean:
 
 $(bindir)/libabn.a: $(objs)
 	$(AR) rcsv $@ $?
+
+$(bindir)/libabn.so: CFLAGS += -fpic
+$(bindir)/libabn.so: $(objs)
+	$(CC) -shared $? -o $@
+	@rm -rf $(objs)
 
 %.o: %.c
 	$(CC) $(CFLAGS) $< -o $@
