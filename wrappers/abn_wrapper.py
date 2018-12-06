@@ -20,14 +20,9 @@ class ABN:
 	"""This class wraps ABN library"""
 
 	def __init__(self, file):
-		if not type(file) is str:
-			raise TypeError('Argument should be path (string) to the libabn.so')
 
 		# Library loading
-		try:
-			self.lib = CDLL(file)
-		except:
-			raise Exception('Library is corrupted or does not exists')
+		self.lib = CDLL(file)
 
 		self.abn_unit = _abn_unit
 		self.abn_t = _abn_t

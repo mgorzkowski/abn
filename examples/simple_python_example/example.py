@@ -11,7 +11,7 @@ def example_func():
         abn = ABN('../../bin/libabn.so')
     except:
         print traceback.format_exc()
-        raise Exception('Your libabn.so does not exist or is corrupted')
+        raise Exception('Your libabn.so is corrupted or does not exist')
 
     number = abn.create(c_uint(int(4)))
     abn.reset(number)
