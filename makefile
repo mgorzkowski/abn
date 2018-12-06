@@ -31,6 +31,7 @@ shared-lib: create-bindir $(bindir)/libabn.so
 clean:
 	@rm -rf $(objs)
 	@rm -rf $(bindir)
+	@rm -fr ./wrappers/*.pyc
 	@make clean -C examples/simple_c_example
 	@echo 'Clean done'
 
