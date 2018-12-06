@@ -4,14 +4,14 @@ from ctypes import *
 
 # Type definitions
 
-# abn_unit must be the same type like abn_unit in abn/include/abn.h file one
-abn_unit = c_uint32
+# _abn_unit must be the same type like abn_unit in abn/include/abn.h file one
+_abn_unit = c_uint32
 
-class abn_t(Structure):
-	_fields_ = [("chain", POINTER(abn_unit)),
+class _abn_t(Structure):
+	_fields_ = [("chain", POINTER(_abn_unit)),
 				("volume", c_uint)]
 
-abn_t_p = POINTER(abn_t)
+_abn_t_p = POINTER(_abn_t)
 
 
 # ABN Wrapper
@@ -19,90 +19,86 @@ abn_t_p = POINTER(abn_t)
 class ABN:
 	"""This class wraps ABN library"""
 
-	# self.abn_unit = c_uint32
-
-	# class abn_t(Structure):
-	# 	_fields_ = [("chain", POINTER(abn_unit)),
-	# 				("volume", c_uint)]
-	
-	# 	def __str__(self):
-	# 		return 
-
-	# self.abn_t_p = POINTER(abn_t)
-
 	def __init__(self, file):
 		if not type(file) is str:
-			raise TypeError('file should be str (path to the libabn.so)')
+			raise TypeError('Argument should be path (string) to the libabn.so')
 
 		# Library loading
-		self.lib = CDLL(file)
+		try:
+			self.lib = CDLL(file)
+		except:
+			raise Exception('Library is corrupted or does not exists')
+
+		self.abn_unit = _abn_unit
+		self.abn_t = _abn_t
+		self.abn_t_p = _abn_t_p
 
 		# Basic operations type settings
 		self.lib.abn_create.argtypes = [c_uint]
-		self.lib.abn_create.restype = abn_t_p
-		self.lib.abn_create_copy.argtypes = [abn_t_p]
-		self.lib.abn_create_copy.restype = abn_t_p
+		self.lib.abn_create.restype = self.abn_t_p
+		self.lib.abn_create_copy.argtypes = [self.abn_t_p]
+		self.lib.abn_create_copy.restype = self.abn_t_p
 		self.lib.abn_create_empty.argtypes = None
-		self.lib.abn_create_empty.restype = abn_t_p
-		self.lib.abn_free.argtypes = [abn_t_p]
+		self.lib.abn_create_empty.restype = self.abn_t_p
+		self.lib.abn_free.argtypes = [self.abn_t_p]
 		self.lib.abn_free.restype = None
-		self.lib.abn_reset.argtypes = [abn_t_p]
+		self.lib.abn_reset.argtypes = [self.abn_t_p]
 		self.lib.abn_reset.restype = None
-		self.lib.abn_copy.argtypes = [abn_t_p, abn_t_p]
+		self.lib.abn_copy.argtypes = [self.abn_t_p, self.abn_t_p]
 		self.lib.abn_copy.restype = None
-		self.lib.abn_is_empty.argtypes = [abn_t_p]
+		self.lib.abn_is_empty.argtypes = [self.abn_t_p]
 		self.lib.abn_is_empty.restype = c_bool
-		self.lib.abn_are_equal.argtypes = [abn_t_p, abn_t_p]
+		self.lib.abn_are_equal.argtypes = [self.abn_t_p, self.abn_t_p]
 		self.lib.abn_are_equal.restype = c_bool
-		self.lib.abn_get_byte.argtypes = [abn_t_p, c_uint]
+		self.lib.abn_get_byte.argtypes = [self.abn_t_p, c_uint]
 		self.lib.abn_get_byte.restype = c_byte
-		self.lib.abn_set_byte.argtypes = [abn_t_p, c_byte, c_uint]
+		self.lib.abn_set_byte.argtypes = [self.abn_t_p, c_byte, c_uint]
 		self.lib.abn_set_byte.restype = None
-		self.lib.abn_to_string.argtypes = [abn_t_p]
+		self.lib.abn_to_string.argtypes = [self.abn_t_p]
 		self.lib.abn_to_string.restype = c_char_p
-		self.lib.abn_unit_to_string.argtypes = [abn_unit]
+		self.lib.abn_unit_to_string.argtypes = [self.abn_unit]
 		self.lib.abn_unit_to_string.restype = c_char_p
 
 		# Arithmetic operations type settings
-		self.lib.abn_add.argtypes = [abn_t_p, abn_t_p, abn_t_p]
+		self.lib.abn_add.argtypes = [self.abn_t_p, self.abn_t_p, self.abn_t_p]
 		self.lib.abn_add.restype = None
-		self.lib.abn_inc.argtypes = [abn_t_p]
+		self.lib.abn_inc.argtypes = [self.abn_t_p]
 		self.lib.abn_inc.restype = None
-		self.lib.abn_dec.argtypes = [abn_t_p]
+		self.lib.abn_dec.argtypes = [self.abn_t_p]
 		self.lib.abn_dec.restype = None
-		self.lib.abn_neg.argtypes = [abn_t_p]
+		self.lib.abn_neg.argtypes = [self.abn_t_p]
 		self.lib.abn_neg.restype = None
-		self.lib.abn_mul.argtypes = [abn_t_p, abn_t_p, abn_t_p]
+		self.lib.abn_mul.argtypes = [self.abn_t_p, self.abn_t_p, self.abn_t_p]
 		self.lib.abn_mul.restype = None
-		self.lib.abn_smul.argtypes = [abn_t_p, abn_t_p, abn_t_p]
+		self.lib.abn_smul.argtypes = [self.abn_t_p, self.abn_t_p, self.abn_t_p]
 		self.lib.abn_smul.restype = None
-		self.lib.abn_is_negative.argtypes = [abn_t_p]
+		self.lib.abn_is_negative.argtypes = [self.abn_t_p]
 		self.lib.abn_is_negative.restype = c_bool
-		self.lib.abn_is_positive.argtypes = [abn_t_p]
+		self.lib.abn_is_positive.argtypes = [self.abn_t_p]
 		self.lib.abn_is_positive.restype = c_bool
-		self.lib.abn_abs.argtypes = [abn_t_p]
+		self.lib.abn_abs.argtypes = [self.abn_t_p]
 		self.lib.abn_abs.restype = c_bool
 
 		# Bit operations type settings
-		self.lib.abn_not.argtypes = [abn_t_p]
+		self.lib.abn_not.argtypes = [self.abn_t_p]
 		self.lib.abn_not.restype = None
-		self.lib.abn_and.argtypes = [abn_t_p, abn_t_p, abn_t_p]
+		self.lib.abn_and.argtypes = [self.abn_t_p, self.abn_t_p, self.abn_t_p]
 		self.lib.abn_and.restype = None
-		self.lib.abn_or.argtypes = [abn_t_p, abn_t_p, abn_t_p]
+		self.lib.abn_or.argtypes = [self.abn_t_p, self.abn_t_p, self.abn_t_p]
 		self.lib.abn_or.restype = None
-		self.lib.abn_xor.argtypes = [abn_t_p, abn_t_p, abn_t_p]
+		self.lib.abn_xor.argtypes = [self.abn_t_p, self.abn_t_p, self.abn_t_p]
 		self.lib.abn_xor.restype = None
-		self.lib.abn_nand.argtypes = [abn_t_p, abn_t_p, abn_t_p]
+		self.lib.abn_nand.argtypes = [self.abn_t_p, self.abn_t_p, self.abn_t_p]
 		self.lib.abn_nand.restype = None
-		self.lib.abn_nor.argtypes = [abn_t_p, abn_t_p, abn_t_p]
+		self.lib.abn_nor.argtypes = [self.abn_t_p, self.abn_t_p, self.abn_t_p]
 		self.lib.abn_nor.restype = None
-		self.lib.abn_shift_left.argtypes = [abn_t_p, c_uint]
+		self.lib.abn_shift_left.argtypes = [self.abn_t_p, c_uint]
 		self.lib.abn_shift_left.restype = None
-		self.lib.abn_shift_right.argtypes = [abn_t_p, c_uint]
+		self.lib.abn_shift_right.argtypes = [self.abn_t_p, c_uint]
 		self.lib.abn_shift_right.restype = None
-		self.lib.abn_rotate_left.argtypes = [abn_t_p, c_uint]
+		self.lib.abn_rotate_left.argtypes = [self.abn_t_p, c_uint]
 		self.lib.abn_rotate_left.restype = None
-		self.lib.abn_rotate_right.argtypes = [abn_t_p, c_uint]
+		self.lib.abn_rotate_right.argtypes = [self.abn_t_p, c_uint]
 		self.lib.abn_rotate_right.restype = None
 
 	# Wrap functions of basic operations

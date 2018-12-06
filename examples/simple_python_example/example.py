@@ -1,12 +1,16 @@
 #!/usr/bin/env python
-import traceback
+import sys
+sys.path.append('../../wrappers')
 
-from abn_wrapper import *
+import traceback
+from ctypes import *
+from abn_wrapper import ABN
 
 def example_func():
     try:
-        abn = ABN('../bin/libabn.so')
+        abn = ABN('../../bin/libabn.so')
     except:
+        print traceback.format_exc()
         raise Exception('Your libabn.so does not exist or is corrupted')
 
     number = abn.create(c_uint(int(4)))
