@@ -14,7 +14,7 @@ Now, in the 'bin/' directory you can find the libabn.a file that contains all ne
 
 ### Example project:
 In the 'example' directory there is a 'simple_c_example' example of ABN usage. This is a series of various operations. Firstly, make sure that your ABN library are built, which means 'libabn.a' file exists in 'bin/libabn.a' - see 'Building library' paragraph. To build and run example project type:
->cd examples/simple_c_example
+>cd examples/simple_c_example  
 >make run
 
 ### Using ABN with own project:

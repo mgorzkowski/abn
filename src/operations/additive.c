@@ -104,4 +104,8 @@ static void abn_simple_add(abn_t* result, abn_t* op1, abn_t* op2)
 		result->chain[i] = op1->chain[i] + op2->chain[i] + carry;
 		carry = (result->chain[i] < tmp) ? 1 : 0;
 	}
+	if(1 == carry && result->volume > op1->volume)
+	{
+		result->chain[op1->volume] = 1;
+	}
 }
