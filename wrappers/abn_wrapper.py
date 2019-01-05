@@ -27,6 +27,7 @@ class ABN:
 		self.abn_unit = _abn_unit
 		self.abn_t = _abn_t
 		self.abn_t_p = _abn_t_p
+		self.size_of_abn_unit = sizeof(_abn_unit)
 
 		# Basic operations type settings
 		self.lib.abn_create.argtypes = [c_uint]
