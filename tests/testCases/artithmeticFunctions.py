@@ -23,14 +23,11 @@ class ArithmeticFunctions(unittest.TestCase):
         a = self.abn.create_copy(self.numbers[0])
         b = self.abn.create_copy(self.numbers[1])
         c = self.abn.create(self.utilities.volume_of_test_numbers+1)
+        self.abn.reset(c)
         self.abn.add(c, a, b)
         a = self.utilities.abn_to_long(a)
         b = self.utilities.abn_to_long(b)
         c = self.utilities.abn_to_long(c)
-        print "\na = " + hex(a)
-        print "b = " + hex(b)
-        print "c = " + hex(c)
-        print "d = " + hex(a+b)
         self.assertEqual(a+b, c)
 
     def test_simple_incrementation(self):
@@ -80,10 +77,10 @@ class ArithmeticFunctions(unittest.TestCase):
         b = self.abn.create_copy(self.numbers[1])
         c = self.abn.create(2*self.utilities.volume_of_test_numbers)
         self.abn.mul(c, a, b)
-        pa = self.utilities.abn_to_long(a)
-        pb = self.utilities.abn_to_long(b)
-        pc = self.utilities.abn_to_long(c)
-        self.assertEqual(pc, pa*pb)
+        a = self.utilities.abn_to_long(a)
+        b = self.utilities.abn_to_long(b)
+        c = self.utilities.abn_to_long(c)
+        self.assertEqual(a*b, c)
 
     def test_simple_sign_multipication(self):
         """ Try to change it """
