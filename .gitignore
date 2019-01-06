@@ -1,0 +1,12 @@
+# Compiled code
+*.o
+*.so
+*.a
+*.exe
+*.elf
+
+# Unusefull files
+*.gch
+*.pyc
+*.project
+*.cproject
