@@ -21,7 +21,6 @@ void abn_add(abn_t* result, abn_t* op1, abn_t* op2)
 	}
 	else
 	{
-		abn_reset(result);
 		abn_simple_add(result, op1, op2);
 	}
 }
