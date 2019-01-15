@@ -35,11 +35,11 @@ int main()
 	print_abn_number(stdout, b, "b");
 
 	printf("# a = a + b\n");
-	abn_add(a, a, b);
+	abn_sum(a, a, b);
 	print_abn_number(stdout, a, "a");
 
 	printf("# b = a + b\n");
-	abn_add(b, a, b);
+	abn_sum(b, a, b);
 	print_abn_number(stdout, b, "b");
 
 	printf("# a = 0\n");
@@ -169,6 +169,16 @@ int main()
 	bt = 0x81;
 	printf("# c[byte:5] = 0x%x\n", bt);
 	abn_set_byte(c, bt, 5);
+	print_abn_number(stdout, c, "c");
+
+	abn_reset(a);
+	abn_dec(a);
+	abn_reset(b);
+	abn_dec(b);
+	abn_reset(c);
+	print_abn_number(stdout, a, "a");
+	print_abn_number(stdout, b, "b");
+	abn_sum(c, b, a);
 	print_abn_number(stdout, c, "c");
 
 	abn_free(a);

@@ -1,1 +1,1 @@
-from artithmeticFunctions import *
+from artithmeticOperations import *

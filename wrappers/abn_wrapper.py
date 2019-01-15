@@ -56,8 +56,10 @@ class ABN:
 		self.lib.abn_unit_to_string.restype = c_char_p
 
 		# Arithmetic operations type settings
-		self.lib.abn_add.argtypes = [self.abn_t_p, self.abn_t_p, self.abn_t_p]
+		self.lib.abn_add.argtypes = [self.abn_t_p, self.abn_t_p]
 		self.lib.abn_add.restype = None
+		self.lib.abn_sum.argtypes = [self.abn_t_p, self.abn_t_p, self.abn_t_p]
+		self.lib.abn_sum.restype = None
 		self.lib.abn_inc.argtypes = [self.abn_t_p]
 		self.lib.abn_inc.restype = None
 		self.lib.abn_dec.argtypes = [self.abn_t_p]
@@ -139,6 +141,9 @@ class ABN:
 
 	def add(self, *params):
 		return self.lib.abn_add(*params)
+
+	def sum(self, *params):
+		return self.lib.abn_sum(*params)
 
 	def inc(self, *params):
 		return self.lib.abn_inc(*params)

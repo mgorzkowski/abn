@@ -90,22 +90,22 @@ static void abn_unit_mul(abn_t* result, abn_unit op1, abn_unit op2)
 
 	tmp2->chain[0] = (abn_unit)op1l * (abn_unit)op2l;
 	tmp2->chain[1] = 0;
-	abn_add(tmp, tmp, tmp2);
+	abn_add(tmp, tmp2);
 
 	tmp2->chain[0] = (abn_unit)op1h * (abn_unit)op2l;
 	tmp2->chain[1] = 0;
 	abn_shift_left(tmp2, 8*sizeof(abn_halfunit));
-	abn_add(tmp, tmp, tmp2);
+	abn_add(tmp, tmp2);
 
 	tmp2->chain[0] = (abn_unit)op1l * (abn_unit)op2h;
 	tmp2->chain[1] = 0;
 	abn_shift_left(tmp2, 8*sizeof(abn_halfunit));
-	abn_add(tmp, tmp, tmp2);
+	abn_add(tmp, tmp2);
 
 	tmp2->chain[0] = (abn_unit)op1h * (abn_unit)op2h;
 	tmp2->chain[1] = 0;
 	abn_shift_left(tmp2, 8*sizeof(abn_unit));
-	abn_add(result, tmp, tmp2);
+	abn_sum(result, tmp, tmp2);
 }
 
 // Simple multiplication algorithm
@@ -133,7 +133,7 @@ static void abn_simple_mul_algorithm(abn_t* result, abn_t* op1, abn_t* op2)
 			abn_reset(tmp);
 			abn_unit_mul(tmp, op1->chain[i], op2->chain[j]);
 			abn_shift_left(tmp, (i + j) * 8 * sizeof(abn_unit));
-			abn_add(result, result, tmp);
+			abn_add(result, tmp);
 		}
 	}
 }

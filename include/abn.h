@@ -44,7 +44,8 @@ char* abn_to_string(abn_t* arg);
 char* abn_unit_to_string(abn_unit arg);
 
 // Arithmetic operations
-void abn_add(abn_t* result, abn_t* op1, abn_t* op2);
+void abn_add(abn_t* op1, abn_t* op2);
+void abn_sum(abn_t* result, abn_t* op1, abn_t* op2);
 void abn_inc(abn_t* arg);
 void abn_dec(abn_t* arg);
 void abn_neg(abn_t* arg);

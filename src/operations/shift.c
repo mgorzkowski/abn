@@ -54,7 +54,7 @@ void abn_rotate_left(abn_t* arg, unsigned int distance)
 	unsigned int max_rotate = 8 * sizeof(abn_unit) * arg->volume;
 	abn_shift_left(arg, distance);
 	abn_shift_right(tmp, max_rotate - distance);
-	abn_add(arg, arg, tmp);
+	abn_add(arg, tmp);
 }
 
 // Bit rotate right
@@ -64,7 +64,7 @@ void abn_rotate_right(abn_t* arg, unsigned int distance)
 	unsigned int max_rotate = 8 * sizeof(abn_unit) * arg->volume;
 	abn_shift_right(arg, distance);
 	abn_shift_left(tmp, max_rotate - distance);
-	abn_add(arg, arg, tmp);
+	abn_add(arg, tmp);
 }
 
 // Private functions

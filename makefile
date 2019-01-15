@@ -7,7 +7,7 @@
 
 CC=gcc
 AR=ar
-CFLAGS=-c -Wall
+CFLAGS=-c -Wall -g
 
 bindir=./bin
 src=\
