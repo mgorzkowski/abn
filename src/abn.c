@@ -30,7 +30,7 @@ abn_t* abn_create(unsigned int volume)
 abn_t* abn_create_copy(abn_t* arg)
 {
 	abn_t* result = abn_create(arg->volume);
-	abn_copy(result, arg);
+	abn_clone(result, arg);
 	return result;
 }
 
@@ -92,8 +92,8 @@ void abn_reset(abn_t* arg)
 	}
 }
 
-// Creates a deep copy of abn_t number
-void abn_copy(abn_t* destination, abn_t* source)
+// Creates a clone of abn_t number
+void abn_clone(abn_t* destination, abn_t* source)
 {
 	if(destination->volume != source->volume)
 	{
@@ -103,6 +103,24 @@ void abn_copy(abn_t* destination, abn_t* source)
 	for(int i=0; i<source->volume; i++)
 	{
 		destination->chain[i] = source->chain[i];
+	}
+}
+
+// Copies value from source to destination
+void abn_copy(abn_t* destination, abn_t* source)
+{
+	if(destination->volume < source->volume)
+	{
+		abn_free(destination);
+		destination = abn_create(source->volume);
+	}
+	for(int i=0; i<source->volume; i++)
+	{
+		destination->chain[i] = source->chain[i];
+	}
+	for(int i=source->volume; i<destination->volume; i++)
+	{
+		destination->chain[i] = 0;
 	}
 }
 

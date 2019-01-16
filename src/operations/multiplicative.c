@@ -30,6 +30,7 @@ void abn_mul(abn_t* result, abn_t* op1, abn_t* op2)
 // Multiplies two signed numbers
 void abn_smul(abn_t* result, abn_t* op1, abn_t* op2)
 {
+	// TODO: powinno być '<= result->volume'
 	if(op1->volume != op2->volume || op1->volume * 2 != result->volume)
 	{
 		abn_free(result);

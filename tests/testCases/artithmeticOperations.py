@@ -14,7 +14,7 @@ class ArithmeticOperations(unittest.TestCase):
         try:
             self.abn = ABN('../bin/libabn.so')
         except:
-            print "Cannot load share object. Make sure that libabn.so exists in the porper place"
+            print "Cannot load share object. Make sure that libabn.so exists in the porper place and API is the same"
             sys.exit(-1)
         self.utilities = Utilities(self.abn)
         self.numbers = tuple(self.utilities.get_test_numbers())
@@ -26,19 +26,24 @@ class ArithmeticOperations(unittest.TestCase):
         for i in a:
             print str(self.utilities.abn_to_long(i))
     
-    def compare(self, a, b, sign_position='default', signed=False):
-        return self.assertEqual(self.utilities.normalize_to_compare(a, sign_position), self.utilities.normalize_to_compare(b, sign_position))
+    def get_default_bit_number(self):
+        return 8 * self.abn.size_of_abn_unit * self.utilities.volume_of_test_numbers
+
+    def normalize(self, a, bits):
+        return a % (1<<bits)
 
     # test frames
 
     def add_testframe(self, a, b):
-        a = self.abn.create_copy(a)
+        temp = self.abn.create_copy(a)
+        a = self.abn.create(self.utilities.volume_of_test_numbers + 1)
         b = self.abn.create_copy(b)
+        self.abn.copy(a, temp)
         pa = self.utilities.abn_to_long(a)
         self.abn.add(a, b)
         a = self.utilities.abn_to_long(a)
         b = self.utilities.abn_to_long(b)
-        self.compare(pa+b, a)
+        self.assertEqual(pa+b, a)
 
     def sum_testframe(self, a, b):
         a = self.abn.create_copy(a)
@@ -49,29 +54,33 @@ class ArithmeticOperations(unittest.TestCase):
         a = self.utilities.abn_to_long(a)
         b = self.utilities.abn_to_long(b)
         c = self.utilities.abn_to_long(c)
-        self.compare(a+b, c, sign_position=160)
+        self.assertEqual(a+b, c)
 
     def incrementation_testframe(self, a):
         a = self.abn.create_copy(a)
         b = self.utilities.abn_to_long(a)
         self.abn.inc(a)
         a = self.utilities.abn_to_long(a)
-        self.compare(a, b+1)
+        b = self.normalize(b+1, self.get_default_bit_number())
+        self.assertEqual(a, b)
 
     def decrementation_testframe(self, a):
         a = self.abn.create_copy(a)
         b = self.utilities.abn_to_long(a)
         self.abn.dec(a)
         a = self.utilities.abn_to_long(a)
-        self.compare(a, b-1, sign_position=128)
+        b = self.normalize(b-1, self.get_default_bit_number())
+        self.assertEqual(a, b)
 
     def negation_testframe(self, a):
         a = self.abn.create_copy(a)
-        pa = self.utilities.abn_to_signed_long(a)
+        pa = - self.utilities.abn_to_signed_long(a, self.get_default_bit_number())
         self.abn.neg(a)
-        pa = -pa
-        a = self.utilities.abn_to_signed_long(a)
-        self.compare(a, pa)
+        a = self.utilities.abn_to_signed_long(a, self.get_default_bit_number())
+        if pa == 1<<(self.get_default_bit_number() - 1):
+            pass
+        else:
+            self.assertEqual(a, pa)
 
     def multiplication_testframe(self, a, b):
         a = self.abn.create_copy(a)
@@ -82,46 +91,44 @@ class ArithmeticOperations(unittest.TestCase):
         a = self.utilities.abn_to_long(a)
         b = self.utilities.abn_to_long(b)
         c = self.utilities.abn_to_long(c)
-        sign_position = 2 * 8 * self.abn.size_of_abn_unit * self.utilities.volume_of_test_numbers
-        self.compare(a*b, c, sign_position=sign_position)
+        self.assertEqual(a*b, c)
 
+    # tu jest problem z implementajcja mnozenia w bibliotece bo jak operandem 
+    # jest 0x800000 to po negacji w implementaji daje dokladnie to samo
     def sign_multiplication_testframe(self, a, b):
         a = self.abn.create_copy(a)
         b = self.abn.create_copy(b)
         c = self.abn.create(2*self.utilities.volume_of_test_numbers)
         self.abn.reset(c)
         self.abn.smul(c, a, b)
-        a = self.utilities.abn_to_signed_long(a)
-        b = self.utilities.abn_to_signed_long(b)
-        print "\n\n\n\n"
-        print "a = " + str(a)
-        print "b = " + str(b)
-        sign_position = 2 * 8 * self.abn.size_of_abn_unit * self.utilities.volume_of_test_numbers - 1
-        c = self.utilities.abn_to_signed_long(c, sign_position=sign_position)
-        d = self.utilities.normalize_to_compare(a*b, 255)
-        #@c = self.utilities.normalize_to_compare(c, 255)
-        print "\n"
-        print "a*b " + str(a*b) + "   -   " +  hex(a*b)
-        print "c " + str(c) + "   -   " + hex(c)
-        print "d " + str(d) + "   -   " + hex(d)
-        self.compare(a*b, c, sign_position=sign_position, signed=True)
+        a = self.utilities.abn_to_signed_long(a, self.get_default_bit_number())
+        b = self.utilities.abn_to_signed_long(b, self.get_default_bit_number())
+        c = self.utilities.abn_to_signed_long(c, 2*self.get_default_bit_number())
+        temp = self.normalize(a*b, 2*self.get_default_bit_number())
+        c = self.normalize(c, 2*self.get_default_bit_number())
+        self.assertEqual(temp, c)
 
     def is_positive_testframe(self, a):
         a = self.abn.create_copy(a)
         result = self.abn.is_positive(a)
-        self.compare(result, True)
+        a = self.utilities.abn_to_signed_long(a, self.get_default_bit_number())
+        self.assertEqual(result, a>=0)
 
     def is_negative_testframe(self, a):
         a = self.abn.create_copy(a)
         result = self.abn.is_negative(a)
-        self.compare(result, True)
+        a = self.utilities.abn_to_signed_long(a, self.get_default_bit_number())
+        self.assertEqual(result, a<0)
 
     def absolute_value_testframe(self, a):
         a = self.abn.create_copy(a)
-        pa = abs(self.utilities.abn_to_signed_long(a))
+        pa = abs(self.utilities.abn_to_signed_long(a, self.get_default_bit_number()))
         self.abn.abs(a)
-        a = self.utilities.abn_to_signed_long(a)
-        self.compare(a,pa)
+        a = self.utilities.abn_to_signed_long(a, self.get_default_bit_number())
+        if pa == 1<<(self.get_default_bit_number() - 1):
+            pass
+        else:
+            self.assertEqual(a,pa)
 
     # Test Cases
 
@@ -160,18 +167,16 @@ class ArithmeticOperations(unittest.TestCase):
     def test_sign_multipication(self):
         for i in range(0, len(self.numbers)):
             for j in range(0, len(self.numbers)):
-                try:
-                    self.sign_multiplication_testframe(self.numbers[i], self.numbers[j])
-                except:
-                    #print ">>> i = 0x" +  self.abn.to_string(self.numbers[i])
-                    #print ">>> j = 0x" +  self.abn.to_string(self.numbers[j])
-                    raise
-    def etest_is_positive(self):
-        self.is_positive_testframe(self.numbers[0])
+                self.sign_multiplication_testframe(self.numbers[i], self.numbers[j])
+
+    def test_is_positive(self):
+        for i in range(0, len(self.numbers)):
+            self.is_positive_testframe(self.numbers[i])
 
     def etest_in_negative(self):
-        self.is_negative_testframe(self.numbers[1])
+        for i in range(0, len(self.numbers)):
+            self.is_negative_testframe(self.numbers[i])
 
-    def etest_absolute_value(self):
-        self.absolute_value_testframe(self.numbers[0])
-        self.absolute_value_testframe(self.numbers[1])
+    def test_absolute_value(self):
+        for i in range(0, len(self.numbers)):
+            self.absolute_value_testframe(self.numbers[i])

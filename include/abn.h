@@ -35,6 +35,7 @@ abn_t* abn_create_copy(abn_t* arg);
 abn_t* abn_create_empty(void);
 void abn_free(abn_t* arg);
 void abn_reset(abn_t* arg);
+void abn_clone(abn_t* destination, abn_t* source);
 void abn_copy(abn_t* destination, abn_t* source);
 bool abn_is_empty(abn_t* arg);
 bool abn_are_equal(abn_t* op1, abn_t* op2);

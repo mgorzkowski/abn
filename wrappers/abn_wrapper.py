@@ -40,6 +40,8 @@ class ABN:
 		self.lib.abn_free.restype = None
 		self.lib.abn_reset.argtypes = [self.abn_t_p]
 		self.lib.abn_reset.restype = None
+		self.lib.abn_clone.argtypes = [self.abn_t_p, self.abn_t_p]
+		self.lib.abn_clone.restype = None
 		self.lib.abn_copy.argtypes = [self.abn_t_p, self.abn_t_p]
 		self.lib.abn_copy.restype = None
 		self.lib.abn_is_empty.argtypes = [self.abn_t_p]
@@ -115,6 +117,9 @@ class ABN:
 
 	def reset(self, *params):
 		return self.lib.abn_reset(*params)
+
+	def clone(self, *params):
+		return self.lib.abn_clone(*params)
 
 	def copy(self, *params):
 		return self.lib.abn_copy(*params)

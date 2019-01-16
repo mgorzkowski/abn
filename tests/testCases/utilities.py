@@ -11,35 +11,14 @@ class Utilities:
         self.max_abn_value = (1 << (8 * self.abn.size_of_abn_unit * self.volume_of_test_numbers)) - 1
         self.max_abn_value_signed = (1 << (8 * self.abn.size_of_abn_unit * self.volume_of_test_numbers - 1)) - 1
 
-    def normalize_to_compare(self, a, sign_position='default', signed = False):
-        if sign_position == 'default':
-            threshold = self.max_abn_value + 1
-        else:
-            threshold = 1 << sign_position
-        if signed == False:
-            min = 0
-            max = threshold
-        else:
-            min = - threshold
-            max = threshold
-        if a < min:
-            return (threshold + a % threshold) % threshold
-        elif a >= max:
-            return a % threshold
-        else:
-            return a
-
     def abn_to_long(self, a):
         return int('0x' + self.abn.to_string(a), base=16)
     
-    def abn_to_signed_long(self, a, sign_position='default'):
-        if sign_position == 'default':
-            threshold = self.max_abn_value_signed + 1
-        else:
-            threshold = 1 << sign_position
+    def abn_to_signed_long(self, a, bits):
         a = self.abn_to_long(a)
-        if a >= threshold:
-            a = - (2*threshold - a)
+        threshold = 1<<bits
+        if a >= threshold>>1:
+            a = -(threshold - a)
         return a
 
     def hex_to_long(self, a):
