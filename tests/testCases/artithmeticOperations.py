@@ -93,8 +93,6 @@ class ArithmeticOperations(unittest.TestCase):
         c = self.utilities.abn_to_long(c)
         self.assertEqual(a*b, c)
 
-    # tu jest problem z implementajcja mnozenia w bibliotece bo jak operandem 
-    # jest 0x800000 to po negacji w implementaji daje dokladnie to samo
     def sign_multiplication_testframe(self, a, b):
         a = self.abn.create_copy(a)
         b = self.abn.create_copy(b)
@@ -126,7 +124,7 @@ class ArithmeticOperations(unittest.TestCase):
         self.abn.abs(a)
         a = self.utilities.abn_to_signed_long(a, self.get_default_bit_number())
         if pa == 1<<(self.get_default_bit_number() - 1):
-            pass
+            self.assertEqual(a,-pa)
         else:
             self.assertEqual(a,pa)
 
@@ -173,7 +171,7 @@ class ArithmeticOperations(unittest.TestCase):
         for i in range(0, len(self.numbers)):
             self.is_positive_testframe(self.numbers[i])
 
-    def etest_in_negative(self):
+    def test_in_negative(self):
         for i in range(0, len(self.numbers)):
             self.is_negative_testframe(self.numbers[i])
 
