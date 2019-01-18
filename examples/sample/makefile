@@ -6,8 +6,8 @@
 #
 
 CC=gcc
-CFLAGS=-Wall -g
-ABN_LIB_DIR= -L../../bin/
+CFLAGS=-Wall
+ABN_LIB_DIR= -L../../bin/static/
 ABN_INCLUDE_DIR= -I../../include
 LIBS= -labn
 

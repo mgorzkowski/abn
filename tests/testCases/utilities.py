@@ -36,16 +36,6 @@ class Utilities:
             a = - (2*threshold - a)
         return a
 
-    def shex(self, a):
-        threshold =  self.max_abn_value + 1
-        if a >= threshold:
-            raise Exception('Sign is not in proper place')
-        if a >= threshold/2:
-            a = threshold - a
-            return '-' + hex(a)
-        else:
-            return hex(a)
-
     def get_test_numbers(self):
         test_numbers = []
 

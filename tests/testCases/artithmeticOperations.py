@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import sys
-sys.path.append('../wrappers')
+sys.path.append('../wrappers/python')
 
 import unittest
 import ctypes
@@ -12,7 +12,7 @@ class ArithmeticOperations(unittest.TestCase):
 
     def setUp(self):
         try:
-            self.abn = ABN('../bin/libabn.so')
+            self.abn = ABN('../bin/shared/libabn.so')
         except:
             print "Cannot load share object. Make sure that libabn.so exists in the porper place and API is the same"
             sys.exit(-1)
@@ -129,11 +129,6 @@ class ArithmeticOperations(unittest.TestCase):
             self.assertEqual(a,pa)
 
     # Test Cases
-
-    def test_show_numbers(self):
-        print "\n"
-        for i in range(0, len(self.numbers)):
-            print str(i) + ') 0x' + str(self.abn.to_string(self.numbers[i]))
 
     def test_addition(self):
         for i in range(0, len(self.numbers)):

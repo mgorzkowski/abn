@@ -5,55 +5,54 @@
 # Full license text is available in 'LICENSE'.
 #
 
+NAME=libabn
+SNAME=$(NAME).a
+DNAME=$(NAME).so
 CC=gcc
 AR=ar
-CFLAGS=-c -Wall -g
-
-bindir=./bin
-src=\
+CFLAGS=-c -Wall -g -fPIC
+BINDIR=./bin
+STATIC_BINDIR=$(BINDIR)/static
+SHARED_BINDIR=$(BINDIR)/shared
+SRC=\
 	$(wildcard src/*.c) \
 	$(wildcard src/operations/*.c) \
 	$(wildcard src/utilities/*.c) \
 	$(wildcard src/nonportable/*.c)
-objs=$(src:.c=.o)
+OBJ=$(SRC:.c=.o)
 
-.PHOENY: all
-all: create-bindir $(bindir)/libabn.a
-	@rm -rf $(objs)
+.PHOENY: all shared static clean test
+
+all: $(STATIC_BINDIR)/$(SNAME) $(SHARED_BINDIR)/$(DNAME)
+	@rm -rf $(OBJ)
 	@echo 'Build done'
 
-.PHONEY: shared-lib
-shared-lib: create-bindir $(bindir)/libabn.so
-	@rm -rf $(objs)
+static: $(STATIC_BINDIR)/$(SNAME)
+	@rm -rf $(OBJ)
 	@echo 'Build done'
 
-.PHONEY: clean
+shared: $(SHARED_BINDIR)/$(DNAME)
+	@rm -rf $(OBJ)
+	@echo 'Build done'
+
 clean:
-	@rm -rf $(objs)
-	@rm -rf $(bindir)
-	@rm -fr ./wrappers/*.pyc
-	@make clean -C examples/simple_c_example
+	@rm -rf $(OBJ)
+	@rm -rf $(BINDIR)
+	@rm -rf ./wrappers/*.pyc
 	@echo 'Clean done'
 
-$(bindir)/libabn.a: $(objs)
+test: $(SHARED_BINDIR)/$(DNAME)
+	chmod +x ./tests/run.py
+	cd ./tests && ./run.py -vv
+
+$(STATIC_BINDIR)/$(SNAME): $(OBJ)
+	mkdir -p $(STATIC_BINDIR)
 	$(AR) rcsv $@ $?
 
-$(bindir)/libabn.so: CFLAGS += -fpic
-$(bindir)/libabn.so: $(objs)
-	$(CC) -shared $? -o $@
-	@rm -rf $(objs)
+$(SHARED_BINDIR)/$(DNAME): LDFLAGS += -shared
+$(SHARED_BINDIR)/$(DNAME): $(OBJ)
+	mkdir -p $(SHARED_BINDIR)
+	$(CC) $(LDFLAGS) $? -o $@
 
 %.o: %.c
 	$(CC) $(CFLAGS) $< -o $@
-
-.PHONEY: create-bindir
-create-bindir:
-	@mkdir -p $(bindir)
-
-.PHONEY: build-example
-build-example:
-	@make -C examples/simple_c_example
-
-.PHONEY: clean-example
-clean-example:
-	@make clean -C examples/simple_c_example
