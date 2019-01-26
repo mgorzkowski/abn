@@ -22,10 +22,12 @@ class ArithmeticOperations(unittest.TestCase):
     def tearDown(self):
         self.utilities.free_test_numbers(self.numbers)
 
+    # move this methods to utilities
+
     def print_numbers(self, a):
         for i in a:
             print str(self.utilities.abn_to_long(i))
-    
+
     def get_default_bit_number(self):
         return 8 * self.abn.size_of_abn_unit * self.utilities.volume_of_test_numbers
 
@@ -166,7 +168,7 @@ class ArithmeticOperations(unittest.TestCase):
         for i in range(0, len(self.numbers)):
             self.is_positive_testframe(self.numbers[i])
 
-    def test_in_negative(self):
+    def test_is_negative(self):
         for i in range(0, len(self.numbers)):
             self.is_negative_testframe(self.numbers[i])
 

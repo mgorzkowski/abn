@@ -2,6 +2,8 @@
 
 ABN - Arbitrary-Bit Number. This library allows simple mathematical operations (like addition, multiplication, bit operations etc) on big natural numbers. ABN library is designed with multiplatform in mind. ABN library can be used with architectures like: x86, ARM, AVR (Arduino) and more.
 
+# Warning! this library works but it is under develop
+
 ## How to use?
 
 ### Building library:
