@@ -47,6 +47,15 @@ class ArithmeticOperations(unittest.TestCase):
         b = self.utilities.abn_to_long(b)
         self.assertEqual(pa+b, a)
 
+    def add_unit_testframe(self, a, b):
+        temp = self.abn.create_copy(a)
+        a = self.abn.create(self.utilities.volume_of_test_numbers + 1)
+        self.abn.copy(a, temp)
+        pa = self.utilities.abn_to_long(a)
+        self.abn.adu(a, b)
+        a = self.utilities.abn_to_long(a)
+        self.assertEqual(pa+b, a)
+
     def sum_testframe(self, a, b):
         a = self.abn.create_copy(a)
         b = self.abn.create_copy(b)
@@ -136,6 +145,11 @@ class ArithmeticOperations(unittest.TestCase):
         for i in range(0, len(self.numbers)):
             for j in range(0, len(self.numbers)):
                 self.add_testframe(self.numbers[i], self.numbers[j])
+
+    def test_unit_addition(self):
+        for i in range(0, len(self.numbers)):
+            for j in [0, 1, 2, (1<<self.abn.size_of_abn_unit)-2, (1<<self.abn.size_of_abn_unit)-1]:
+                self.add_unit_testframe(self.numbers[i], j)
 
     def test_summation(self):
         for i in range(0, len(self.numbers)):

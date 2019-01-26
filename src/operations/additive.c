@@ -10,10 +10,11 @@
 // Functions prototypes
 static void abn_simple_sum(abn_t* result, abn_t* op1, abn_t* op2);
 static void abn_simple_add(abn_t* op1, abn_t* op2);
+static void abn_simple_add_abn_unit(abn_t* op1, abn_unit value);
 
 // Public functions
 
-// Adds second operand to first operand
+// Adds op2 to op1 (op1 as a result)
 void abn_add(abn_t* op1, abn_t* op2)
 {
 	if(op1->volume < op2->volume)
@@ -27,7 +28,13 @@ void abn_add(abn_t* op1, abn_t* op2)
 	return;
 }
 
-// Sums two abn_t numbers and writes result
+// Adds abn_unit (integer) to abn_t number
+void abn_adu(abn_t* op1, abn_unit value)
+{
+	abn_simple_add_abn_unit(op1, value);
+}
+
+// Sums two abn_t numbers and writes to result
 void abn_sum(abn_t* result, abn_t* op1, abn_t* op2)
 {
 	if(op1->volume != op2->volume || result->volume < op1->volume)
@@ -136,7 +143,7 @@ static void abn_simple_sum(abn_t* result, abn_t* op1, abn_t* op2)
 	}
 }
 
-// It was asssumded that volume of op1 is grater or equal to volume of op2
+// It was assumed that volume of op1 is grater or equal to volume of op2
 static void abn_simple_add(abn_t* op1, abn_t* op2)
 {
 	int carry = 0;
@@ -149,5 +156,17 @@ static void abn_simple_add(abn_t* op1, abn_t* op2)
 	{
 		op1->chain[i] += carry;
 		carry = (0 == op1->chain[i] && 1 == carry) ? 1 : 0;
+	}
+}
+
+static void abn_simple_add_abn_unit(abn_t* op1, abn_unit value)
+{
+	
+	op1->chain[0] += value;
+	int carry = (op1->chain[0] < value) ? 1 : 0;
+	for(int i = 1; 1 == carry && i < op1->volume; i++)
+	{
+		op1->chain[i] += carry;
+		carry = (0 == op1->chain[i]) ? 1 : 0;
 	}
 }
