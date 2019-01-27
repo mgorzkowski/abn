@@ -67,6 +67,17 @@ class ArithmeticOperations(unittest.TestCase):
         c = self.utilities.abn_to_long(c)
         self.assertEqual(a+b, c)
 
+    def sub_testframe(self, a, b):
+        temp = self.abn.create_copy(a)
+        a = self.abn.create(self.utilities.volume_of_test_numbers)
+        b = self.abn.create_copy(b)
+        self.abn.copy(a, temp)
+        pa = self.utilities.abn_to_long(a)
+        self.abn.sub(a, b)
+        a = self.utilities.abn_to_long(a)
+        b = self.utilities.abn_to_long(b)
+        self.assertEqual(self.normalize(pa-b, self.get_default_bit_number()), a)
+
     def incrementation_testframe(self, a):
         a = self.abn.create_copy(a)
         b = self.utilities.abn_to_long(a)
@@ -155,6 +166,11 @@ class ArithmeticOperations(unittest.TestCase):
         for i in range(0, len(self.numbers)):
             for j in range(0, len(self.numbers)):
                 self.sum_testframe(self.numbers[i], self.numbers[j])
+
+    def test_subtraction(self):
+        for i in range(0, len(self.numbers)):
+            for j in range(0, len(self.numbers)):
+                self.sub_testframe(self.numbers[i], self.numbers[j])
 
     def test_incrementation(self):
         for i in range(0, len(self.numbers)):

@@ -10,6 +10,7 @@
 // Functions prototypes
 static void abn_simple_sum(abn_t* result, abn_t* op1, abn_t* op2);
 static void abn_simple_add(abn_t* op1, abn_t* op2);
+static void abn_simple_sub(abn_t* op1, abn_t* op2);
 static void abn_simple_add_abn_unit(abn_t* op1, abn_unit value);
 
 // Public functions
@@ -19,13 +20,14 @@ void abn_add(abn_t* op1, abn_t* op2)
 {
 	if(op1->volume < op2->volume)
 	{
+		// should be complition code!
 		abn_free(op1);
+		return;
 	}
 	else
 	{
 		abn_simple_add(op1, op2);
 	}
-	return;
 }
 
 // Adds abn_unit (integer) to abn_t number
@@ -52,6 +54,21 @@ void abn_sum(abn_t* result, abn_t* op1, abn_t* op2)
 		{
 			(result == op1) ? abn_add(result, op2) : abn_add(result, op1);
 		}
+	}
+}
+
+// Subtraction op1 = op1 - op2
+void abn_sub(abn_t* op1, abn_t* op2)
+{
+	if(op1->volume < op2->volume)
+	{
+		// require compition code;
+		abn_free(op1);
+		return;
+	}
+	else
+	{
+		abn_simple_sub(op1, op2);
 	}
 }
 
@@ -150,6 +167,8 @@ static void abn_simple_add(abn_t* op1, abn_t* op2)
 	for(int i = 0; i < op2->volume; i++)
 	{
 		op1->chain[i] += op2->chain[i] + carry;
+		// maybe somethon like this (but be carefull because integer overflow)
+		//carry = (op1->chain[i] < op2->chain[i] + carry) ? 1 : 0;  
 		carry = ((0 == carry && op1->chain[i] < op2->chain[i]) || (1 == carry && op1->chain[i] <= op2->chain[i])) ? 1 : 0;
 	}
 	for(int i = op2->volume; i < op1->volume; i++)
@@ -157,6 +176,15 @@ static void abn_simple_add(abn_t* op1, abn_t* op2)
 		op1->chain[i] += carry;
 		carry = (0 == op1->chain[i] && 1 == carry) ? 1 : 0;
 	}
+}
+
+// It was assumed that volume of op1 is grater or equal to volume of op2
+static void abn_simple_sub(abn_t* op1, abn_t* op2)
+{
+	// make something like is in abn_simple_add.
+	abn_neg(op2);
+	abn_add(op1, op2);
+	abn_neg(op2);
 }
 
 static void abn_simple_add_abn_unit(abn_t* op1, abn_unit value)

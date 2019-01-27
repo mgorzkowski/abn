@@ -42,6 +42,7 @@ clean:
 	@echo 'Clean done'
 
 test: $(SHARED_BINDIR)/$(DNAME)
+	@rm -rf $(OBJ)
 	chmod +x ./tests/run.py
 	cd ./tests && ./run.py -vv
 

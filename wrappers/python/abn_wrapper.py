@@ -64,6 +64,8 @@ class ABN:
 		self.lib.abn_adu.restype = None
 		self.lib.abn_sum.argtypes = [self.abn_t_p, self.abn_t_p, self.abn_t_p]
 		self.lib.abn_sum.restype = None
+		self.lib.abn_sub.argtypes = [self.abn_t_p, self.abn_t_p]
+		self.lib.abn_sub.restype = None
 		self.lib.abn_inc.argtypes = [self.abn_t_p]
 		self.lib.abn_inc.restype = None
 		self.lib.abn_dec.argtypes = [self.abn_t_p]
@@ -154,6 +156,9 @@ class ABN:
 
 	def sum(self, *params):
 		return self.lib.abn_sum(*params)
+
+	def sub(self, *params):
+		return self.lib.abn_sub(*params)
 
 	def inc(self, *params):
 		return self.lib.abn_inc(*params)

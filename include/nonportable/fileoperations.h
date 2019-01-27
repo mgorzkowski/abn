@@ -6,7 +6,7 @@
 //
 
 // THIS FILE CONSTIANS NON FULLY PORTABLE CODE
-// You can have big problem with using this header file if you work without operation system
+// You may have problems with using this header file on every platform.
 
 #ifndef ABN_MISC_H
 #define ABN_MISC_H
