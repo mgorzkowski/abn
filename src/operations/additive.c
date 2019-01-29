@@ -167,9 +167,7 @@ static void abn_simple_add(abn_t* op1, abn_t* op2)
 	for(int i = 0; i < op2->volume; i++)
 	{
 		op1->chain[i] += op2->chain[i] + carry;
-		// maybe somethon like this (but be carefull because integer overflow)
-		//carry = (op1->chain[i] < op2->chain[i] + carry) ? 1 : 0;  
-		carry = ((0 == carry && op1->chain[i] < op2->chain[i]) || (1 == carry && op1->chain[i] <= op2->chain[i])) ? 1 : 0;
+		carry = (op1->chain[i] < (op2->chain[i] + carry) || 1 == carry && 0 == (op2->chain[i] + carry)) ? 1 : 0;  
 	}
 	for(int i = op2->volume; i < op1->volume; i++)
 	{
@@ -181,7 +179,7 @@ static void abn_simple_add(abn_t* op1, abn_t* op2)
 // It was assumed that volume of op1 is grater or equal to volume of op2
 static void abn_simple_sub(abn_t* op1, abn_t* op2)
 {
-	// make something like is in abn_simple_add.
+	// TODO: something similar to abn_simple_add
 	abn_neg(op2);
 	abn_add(op1, op2);
 	abn_neg(op2);
