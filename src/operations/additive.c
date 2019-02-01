@@ -179,10 +179,18 @@ static void abn_simple_add(abn_t* op1, abn_t* op2)
 // It was assumed that volume of op1 is grater or equal to volume of op2
 static void abn_simple_sub(abn_t* op1, abn_t* op2)
 {
-	// TODO: something similar to abn_simple_add
-	abn_neg(op2);
-	abn_add(op1, op2);
-	abn_neg(op2);
+	int carry = 0;
+	for(int i = 0; i < op2->volume; i++)
+	{
+		abn_unit tmp = op1->chain[i];
+		op1->chain[i] -= op2->chain[i] + carry;
+		carry = (0 == tmp && 1 == carry || tmp - carry < op2->chain[i]) ? 1 : 0;
+	}
+	for(int i = op2->volume; i < op1->volume && 1 == carry; i++)
+	{
+		op1->chain[i] -= carry;
+		carry = (ABN_UNIT_MAX == op1->chain[i]) ? 1 : 0;
+	}
 }
 
 static void abn_simple_add_abn_unit(abn_t* op1, abn_unit value)
