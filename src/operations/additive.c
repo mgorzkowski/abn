@@ -167,7 +167,7 @@ static void abn_simple_add(abn_t* op1, abn_t* op2)
 	for(int i = 0; i < op2->volume; i++)
 	{
 		op1->chain[i] += op2->chain[i] + carry;
-		carry = (op1->chain[i] < (op2->chain[i] + carry) || 1 == carry && 0 == (op2->chain[i] + carry)) ? 1 : 0;  
+		carry = (op1->chain[i] < (op2->chain[i] + carry) || (1 == carry && 0 == (op2->chain[i] + carry))) ? 1 : 0;  
 	}
 	for(int i = op2->volume; i < op1->volume; i++)
 	{
@@ -184,7 +184,7 @@ static void abn_simple_sub(abn_t* op1, abn_t* op2)
 	{
 		abn_unit tmp = op1->chain[i];
 		op1->chain[i] -= op2->chain[i] + carry;
-		carry = (0 == tmp && 1 == carry || tmp - carry < op2->chain[i]) ? 1 : 0;
+		carry = ((0 == tmp && 1 == carry) || tmp - carry < op2->chain[i]) ? 1 : 0;
 	}
 	for(int i = op2->volume; i < op1->volume && 1 == carry; i++)
 	{
