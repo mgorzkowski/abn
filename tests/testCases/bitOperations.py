@@ -22,15 +22,6 @@ class BitOperations(unittest.TestCase):
     def tearDown(self):
         self.utilities.free_test_numbers(self.numbers)
 
-    def get_default_bit_number(self):
-        return 8 * self.abn.size_of_abn_unit * self.utilities.volume_of_test_numbers
-
-    def bit_not(self, n):
-        return (1 << self.get_default_bit_number()) - 1 - n
-
-    def normalize(self, a, bits):
-        return a % (1<<bits)
-
     # test frames
 
     def and_testframe(self, a, b):
@@ -61,7 +52,7 @@ class BitOperations(unittest.TestCase):
         self.abn.bit_not(b)
         pa = self.utilities.abn_to_long(a)
         pb = self.utilities.abn_to_long(b)
-        self.assertEqual(self.bit_not(pa), pb)
+        self.assertEqual(self.utilities.bit_not(pa), pb)
 
     def xor_testframe(self, a, b):
         a = self.abn.create_copy(a)
@@ -83,7 +74,7 @@ class BitOperations(unittest.TestCase):
         pa = self.utilities.abn_to_long(a)
         pb = self.utilities.abn_to_long(b)
         pc = self.utilities.abn_to_long(c)
-        self.assertEqual(self.bit_not(pa & pb), pc)
+        self.assertEqual(self.utilities.bit_not(pa & pb), pc)
 
     def nor_testframe(self, a, b):
         a = self.abn.create_copy(a)
@@ -94,7 +85,7 @@ class BitOperations(unittest.TestCase):
         pa = self.utilities.abn_to_long(a)
         pb = self.utilities.abn_to_long(b)
         pc = self.utilities.abn_to_long(c)
-        self.assertEqual(self.bit_not(pa | pb), pc)
+        self.assertEqual(self.utilities.bit_not(pa | pb), pc)
 
     def shift_left_testframe(self, a, shift):
         a = self.abn.create_copy(a)
@@ -102,7 +93,7 @@ class BitOperations(unittest.TestCase):
         self.abn.shift_left(a, shift)
         pa = self.utilities.abn_to_long(a)
         pb = self.utilities.abn_to_long(b)
-        self.assertEqual(pa, self.normalize(pb<<shift, self.get_default_bit_number()))
+        self.assertEqual(pa, self.utilities.normalize(pb<<shift, self.utilities.get_default_bit_number()))
 
     def shift_right_testframe(self, a, shift):
         a = self.abn.create_copy(a)
@@ -110,7 +101,7 @@ class BitOperations(unittest.TestCase):
         self.abn.shift_right(a, shift)
         pa = self.utilities.abn_to_long(a)
         pb = self.utilities.abn_to_long(b)
-        self.assertEqual(pa, self.normalize(pb>>shift, self.get_default_bit_number()))
+        self.assertEqual(pa, self.utilities.normalize(pb>>shift, self.utilities.get_default_bit_number()))
 
     def rotate_left_testframe(self, a, shift):
         a = self.abn.create_copy(a)
@@ -118,7 +109,7 @@ class BitOperations(unittest.TestCase):
         self.abn.rotate_left(a, shift)
         pa = self.utilities.abn_to_long(a)
         pb = self.utilities.abn_to_long(b)
-        pb = self.normalize(pb<<shift, self.get_default_bit_number()) + self.normalize(pb>>(self.get_default_bit_number() - shift), self.get_default_bit_number())
+        pb = self.utilities.normalize(pb<<shift, self.utilities.get_default_bit_number()) + self.utilities.normalize(pb>>(self.utilities.get_default_bit_number() - shift), self.utilities.get_default_bit_number())
         self.assertEqual(pa, pb)
 
     def rotate_right_testframe(self, a, shift):
@@ -127,7 +118,7 @@ class BitOperations(unittest.TestCase):
         self.abn.rotate_right(a, shift)
         pa = self.utilities.abn_to_long(a)
         pb = self.utilities.abn_to_long(b)
-        pb = self.normalize(pb>>shift, self.get_default_bit_number()) + self.normalize(pb<<(self.get_default_bit_number() - shift), self.get_default_bit_number())        
+        pb = self.utilities.normalize(pb>>shift, self.utilities.get_default_bit_number()) + self.utilities.normalize(pb<<(self.utilities.get_default_bit_number() - shift), self.utilities.get_default_bit_number())        
         self.assertEqual(pa, pb)
 
     # Test Cases
@@ -163,20 +154,20 @@ class BitOperations(unittest.TestCase):
 
     def test_bitwise_shift_left(self):
         for i in range(0, len(self.numbers)):
-            for j in range(0, self.get_default_bit_number()):
+            for j in range(0, self.utilities.get_default_bit_number()):
                 self.shift_left_testframe(self.numbers[i], j)
 
     def test_bitwise_shift_right(self):
         for i in range(0, len(self.numbers)):
-            for j in range(0, self.get_default_bit_number()):
+            for j in range(0, self.utilities.get_default_bit_number()):
                 self.shift_right_testframe(self.numbers[i], j)
 
     def test_bitwise_rotate_left(self):
         for i in range(0, len(self.numbers)):
-            for j in range(0, self.get_default_bit_number()):
+            for j in range(0, self.utilities.get_default_bit_number()):
                 self.rotate_left_testframe(self.numbers[i], j)
 
     def test_bitwise_rotate_right(self):
         for i in range(0, len(self.numbers)):
-            for j in range(0, self.get_default_bit_number()):
+            for j in range(0, self.utilities.get_default_bit_number()):
                 self.rotate_right_testframe(self.numbers[i], j)

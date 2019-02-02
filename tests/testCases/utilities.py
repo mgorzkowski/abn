@@ -36,6 +36,19 @@ class Utilities:
             a = - (2*threshold - a)
         return a
 
+    def print_numbers(self, numberSet):
+        for i in numberSet:
+            print str(self.abn_to_long(i))
+
+    def get_default_bit_number(self):
+        return 8 * self.abn.size_of_abn_unit * self.volume_of_test_numbers
+
+    def normalize(self, number, bits):
+        return number % (1<<bits)
+
+    def bit_not(self, n):
+        return (1 << self.get_default_bit_number()) - 1 - n
+
     def get_test_numbers(self):
         test_numbers = []
 

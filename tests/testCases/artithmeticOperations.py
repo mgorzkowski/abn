@@ -22,18 +22,6 @@ class ArithmeticOperations(unittest.TestCase):
     def tearDown(self):
         self.utilities.free_test_numbers(self.numbers)
 
-    # move this methods to utilities
-
-    def print_numbers(self, a):
-        for i in a:
-            print str(self.utilities.abn_to_long(i))
-
-    def get_default_bit_number(self):
-        return 8 * self.abn.size_of_abn_unit * self.utilities.volume_of_test_numbers
-
-    def normalize(self, a, bits):
-        return a % (1<<bits)
-
     # test frames
 
     def add_testframe(self, a, b):
@@ -76,14 +64,14 @@ class ArithmeticOperations(unittest.TestCase):
         self.abn.sub(a, b)
         a = self.utilities.abn_to_long(a)
         b = self.utilities.abn_to_long(b)
-        self.assertEqual(self.normalize(pa-b, self.get_default_bit_number()), a)
+        self.assertEqual(self.utilities.normalize(pa-b, self.utilities.get_default_bit_number()), a)
 
     def incrementation_testframe(self, a):
         a = self.abn.create_copy(a)
         b = self.utilities.abn_to_long(a)
         self.abn.inc(a)
         a = self.utilities.abn_to_long(a)
-        b = self.normalize(b+1, self.get_default_bit_number())
+        b = self.utilities.normalize(b+1, self.utilities.get_default_bit_number())
         self.assertEqual(a, b)
 
     def decrementation_testframe(self, a):
@@ -91,15 +79,15 @@ class ArithmeticOperations(unittest.TestCase):
         b = self.utilities.abn_to_long(a)
         self.abn.dec(a)
         a = self.utilities.abn_to_long(a)
-        b = self.normalize(b-1, self.get_default_bit_number())
+        b = self.utilities.normalize(b-1, self.utilities.get_default_bit_number())
         self.assertEqual(a, b)
 
     def negation_testframe(self, a):
         a = self.abn.create_copy(a)
-        pa = - self.utilities.abn_to_signed_long(a, self.get_default_bit_number())
+        pa = - self.utilities.abn_to_signed_long(a, self.utilities.get_default_bit_number())
         self.abn.neg(a)
-        a = self.utilities.abn_to_signed_long(a, self.get_default_bit_number())
-        if pa == 1<<(self.get_default_bit_number() - 1):
+        a = self.utilities.abn_to_signed_long(a, self.utilities.get_default_bit_number())
+        if pa == 1<<(self.utilities.get_default_bit_number() - 1):
             pass
         else:
             self.assertEqual(a, pa)
@@ -121,31 +109,31 @@ class ArithmeticOperations(unittest.TestCase):
         c = self.abn.create(2*self.utilities.volume_of_test_numbers)
         self.abn.reset(c)
         self.abn.smul(c, a, b)
-        a = self.utilities.abn_to_signed_long(a, self.get_default_bit_number())
-        b = self.utilities.abn_to_signed_long(b, self.get_default_bit_number())
-        c = self.utilities.abn_to_signed_long(c, 2*self.get_default_bit_number())
-        temp = self.normalize(a*b, 2*self.get_default_bit_number())
-        c = self.normalize(c, 2*self.get_default_bit_number())
+        a = self.utilities.abn_to_signed_long(a, self.utilities.get_default_bit_number())
+        b = self.utilities.abn_to_signed_long(b, self.utilities.get_default_bit_number())
+        c = self.utilities.abn_to_signed_long(c, 2*self.utilities.get_default_bit_number())
+        temp = self.utilities.normalize(a*b, 2*self.utilities.get_default_bit_number())
+        c = self.utilities.normalize(c, 2*self.utilities.get_default_bit_number())
         self.assertEqual(temp, c)
 
     def is_positive_testframe(self, a):
         a = self.abn.create_copy(a)
         result = self.abn.is_positive(a)
-        a = self.utilities.abn_to_signed_long(a, self.get_default_bit_number())
+        a = self.utilities.abn_to_signed_long(a, self.utilities.get_default_bit_number())
         self.assertEqual(result, a>=0)
 
     def is_negative_testframe(self, a):
         a = self.abn.create_copy(a)
         result = self.abn.is_negative(a)
-        a = self.utilities.abn_to_signed_long(a, self.get_default_bit_number())
+        a = self.utilities.abn_to_signed_long(a, self.utilities.get_default_bit_number())
         self.assertEqual(result, a<0)
 
     def absolute_value_testframe(self, a):
         a = self.abn.create_copy(a)
-        pa = abs(self.utilities.abn_to_signed_long(a, self.get_default_bit_number()))
+        pa = abs(self.utilities.abn_to_signed_long(a, self.utilities.get_default_bit_number()))
         self.abn.abs(a)
-        a = self.utilities.abn_to_signed_long(a, self.get_default_bit_number())
-        if pa == 1<<(self.get_default_bit_number() - 1):
+        a = self.utilities.abn_to_signed_long(a, self.utilities.get_default_bit_number())
+        if pa == 1<<(self.utilities.get_default_bit_number() - 1):
             self.assertEqual(a,-pa)
         else:
             self.assertEqual(a,pa)
