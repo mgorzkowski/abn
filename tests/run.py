@@ -28,15 +28,14 @@ def printResults(results):
     print '\n'
     succesful = True
     for result in results:
-        result = unittest.TestResult()
         print result
         if not result.wasSuccessful():
             succesful = False
-    print '\n'
     if succesful:
         print colored('[Success]', 'green')
     else:
-        print '[Errors or fails occured]'
+        print colored('[Errors or fails occured]', 'red')
+    print '\n'
 
 if __name__ == '__main__':
     if os.path.exists('../bin/shared/libabn.so'):

@@ -39,6 +39,7 @@ clean:
 	@rm -rf $(OBJ)
 	@rm -rf $(BINDIR)
 	@rm -rf ./wrappers/*.pyc
+	@rm -fr ./tests/*/*.pyc
 	@echo 'Clean done'
 
 test: $(SHARED_BINDIR)/$(DNAME)
