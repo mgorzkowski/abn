@@ -1,2 +1,2 @@
-from artithmeticOperations import *
+from arithmeticOperations import *
 from bitOperations import *
