@@ -38,8 +38,10 @@ shared: $(SHARED_BINDIR)/$(DNAME)
 clean:
 	@rm -rf $(OBJ)
 	@rm -rf $(BINDIR)
-	@rm -rf ./wrappers/*.pyc
-	@rm -fr ./tests/*/*.pyc
+	@rm -rf ./wrappers/python/*.pyc
+	@rm -rf ./tests/*/*.pyc
+	@rm -rf ./tests/*.pyc
+
 	@echo 'Clean done'
 
 test: $(SHARED_BINDIR)/$(DNAME)
