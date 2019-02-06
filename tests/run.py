@@ -2,6 +2,7 @@
 import unittest
 import traceback
 import os
+import utilities
 from termcolor import colored
 
 import arithmeticOperations
@@ -41,7 +42,7 @@ if __name__ == '__main__':
     if os.path.exists('../bin/shared/libabn.so'):
         try:
             suiteDictionary = getSuitesDictionary()
-            results = runSuites(suiteDictionary)
+            results = runSuites(suiteDictionary, verbosity = 3)
             printResults(results)
         except:
             traceback.print_exc()

@@ -6,21 +6,9 @@ import unittest
 import ctypes
 
 from abn_wrapper import ABN
-from utilities import Utilities
+from utilities import *
 
-class Add_tests(unittest.TestCase):
-
-    def setUp(self):
-        try:
-            self.abn = ABN('../bin/shared/libabn.so')
-        except:
-            print "Cannot load share object. Make sure that libabn.so exists in the porper place and API is the same"
-            sys.exit(-1)
-        self.utilities = Utilities(self.abn)
-        self.numbers = tuple(self.utilities.get_test_numbers())
-
-    def tearDown(self):
-        self.utilities.free_test_numbers(self.numbers)
+class Add_tests(OperationTestCase):
 
     #Testframes
     def add_testframe(self, a, b):
