@@ -53,6 +53,7 @@ void abn_inc(abn_t* arg);
 void abn_dec(abn_t* arg);
 void abn_neg(abn_t* arg);
 void abn_mul(abn_t* result, abn_t* op1, abn_t* op2);
+void abn_mulu(abn_t* result, abn_t* op, abn_unit value);
 void abn_smul(abn_t* result, abn_t* op1, abn_t* op2);
 bool abn_is_negative(abn_t* arg);
 bool abn_is_positive(abn_t* arg);

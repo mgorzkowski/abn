@@ -22,7 +22,7 @@ class Add_unit_tests(OperationTestCase):
 
     def test_unit_addition(self):
         for i in range(0, len(self.numbers)):
-            for j in [0, 1, 2, (1<<self.abn.size_of_abn_unit)-2, (1<<self.abn.size_of_abn_unit)-1]:
+            for j in [0, 1, 2, (1<<(self.abn.size_of_abn_unit*8))-2, (1<<(self.abn.size_of_abn_unit*8))-1]:
                 self.add_unit_testframe(self.numbers[i], j)
 
     

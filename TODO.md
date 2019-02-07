@@ -14,7 +14,7 @@ If you read this sentence... um...  I'm happy about it.
     5) Release 0.1 version past all issues done,
     6) Fix make scripts (fix an output of 'make clean'- Now there is only make[1] entering and escaping), (done)
     7) Rename functions etc.,
-    8) Split tests for suits,
+    8) Split tests for suits (done),
     9) Refactoring of code and tests (++i instead i++)
 
 ##### Feature issues:

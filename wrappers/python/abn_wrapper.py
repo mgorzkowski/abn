@@ -74,6 +74,8 @@ class ABN:
 		self.lib.abn_neg.restype = None
 		self.lib.abn_mul.argtypes = [self.abn_t_p, self.abn_t_p, self.abn_t_p]
 		self.lib.abn_mul.restype = None
+		self.lib.abn_mulu.argtypes = [self.abn_t_p, self.abn_t_p, self.abn_unit]
+		self.lib.abn_mulu.restype = None
 		self.lib.abn_smul.argtypes = [self.abn_t_p, self.abn_t_p, self.abn_t_p]
 		self.lib.abn_smul.restype = None
 		self.lib.abn_is_negative.argtypes = [self.abn_t_p]
@@ -171,6 +173,9 @@ class ABN:
 
 	def mul(self, *params):
 		return self.lib.abn_mul(*params)
+
+	def mulu(self, *params):
+		return self.lib.abn_mulu(*params)
 
 	def smul(self, *params):
 		return self.lib.abn_smul(*params)

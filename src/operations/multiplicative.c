@@ -11,6 +11,7 @@
 // Functions prototypes
 static void abn_unit_mul(abn_t* result, abn_unit op1, abn_unit op2);
 static void abn_simple_mul_algorithm(abn_t* result, abn_t* op1, abn_t* op2);
+static void abn_mul_by_unit(abn_t* result, abn_t* op, abn_unit value);
 
 // Public functions
 
@@ -69,9 +70,21 @@ void abn_smul(abn_t* result, abn_t* op1, abn_t* op2)
 	}
 }
 
+void abn_mulu(abn_t* result, abn_t* op, abn_unit value)
+{
+	if(result->volume < op->volume)
+	{
+		abn_free(result);
+	}
+	else
+	{
+		abn_mul_by_unit(result, op, value);
+	}
+}
+
 // Private functions
 
-// Multiplies two anb_units and build anb_t type result
+// Multiplies two anb_units and build abn_t type result
 // It was assumed that volumes of both operands are equal to the volume of the result divided by 2.
 static void abn_unit_mul(abn_t* result, abn_unit op1, abn_unit op2)
 {
@@ -136,5 +149,25 @@ static void abn_simple_mul_algorithm(abn_t* result, abn_t* op1, abn_t* op2)
 			abn_shift_left(tmp, (i + j) * 8 * sizeof(abn_unit));
 			abn_add(result, tmp);
 		}
+	}
+}
+
+// Multiplies abn_t by abn_unit
+// It was assumed that volumes of both operands are equal to the volume of the result divided by 2. 
+static void abn_mul_by_unit(abn_t* result, abn_t* op, abn_unit value)
+{
+	abn_unit carry = 0;
+	static abn_t* tmp = NULL;
+	if (NULL == tmp)
+	{
+		tmp = abn_create(2);
+	}
+	abn_reset(tmp);
+	for (int i=0; i<op->volume; i++)
+	{
+		abn_unit_mul(tmp, op->chain[i], value);
+		abn_adu(tmp, carry);
+		carry = tmp->chain[1];
+		result->chain[i] = tmp->chain[0];
 	}
 }
