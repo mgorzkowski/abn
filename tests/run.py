@@ -5,11 +5,12 @@ import os
 import utilities
 from termcolor import colored
 
+import basicOperations
 import arithmeticOperations
 import bitwiseOperations
 
 def getSuitesDictionary():
-    testModules = [arithmeticOperations, bitwiseOperations]
+    testModules = [arithmeticOperations, bitwiseOperations, basicOperations]
     suites = {}
     for testModule in testModules:
         suites[testModule] = unittest.TestSuite()
@@ -18,19 +19,19 @@ def getSuitesDictionary():
 
 def runSuites(suiteDictionary, verbosity = 1):
     runner = unittest.TextTestRunner(verbosity=verbosity)
-    results = []
+    result_infos = []
     for module, suite in suiteDictionary.iteritems():
-        print '\nRunnig tests from ' + module.__name__ + ':'
+        print '\nRunnig tests from "' + module.__name__ + '":'
         result = runner.run(suite)
-        results.append(result)
-    return results
+        result_infos.append({'module': module, 'result': result})
+    return result_infos
 
-def printResults(results):
+def printResults(result_infos):
     print '\n'
     succesful = True
-    for result in results:
-        print result
-        if not result.wasSuccessful():
+    for result_info in result_infos:
+        print str(result_info['result']) + '\t--->\t' + result_info['module'].__name__
+        if not result_info['result'].wasSuccessful():
             succesful = False
     if succesful:
         print colored('[Success]', 'green')
@@ -42,8 +43,8 @@ if __name__ == '__main__':
     if os.path.exists('../bin/shared/libabn.so'):
         try:
             suiteDictionary = getSuitesDictionary()
-            results = runSuites(suiteDictionary, verbosity = 3)
-            printResults(results)
+            result_infos = runSuites(suiteDictionary, verbosity = 3)
+            printResults(result_infos)
         except:
             traceback.print_exc()
     else:
