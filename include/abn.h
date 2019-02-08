@@ -41,10 +41,10 @@ bool abn_is_empty(abn_t* arg);
 bool abn_are_equal(abn_t* op1, abn_t* op2);
 byte abn_get_byte(abn_t* arg, unsigned int whichOne);
 void abn_set_byte(abn_t* arg, byte value, unsigned int whichOne);
-char* abn_to_string(abn_t* arg);
-char* abn_unit_to_string(abn_unit arg);
 bool abn_is_negative(abn_t* arg);
 bool abn_is_positive(abn_t* arg);
+char* abn_to_string(abn_t* arg);
+char* abn_unit_to_string(abn_unit arg);
 
 // Arithmetic operations
 void abn_add(abn_t* op1, abn_t* op2);

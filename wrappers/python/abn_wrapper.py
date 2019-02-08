@@ -52,6 +52,10 @@ class ABN:
 		self.lib.abn_get_byte.restype = c_byte
 		self.lib.abn_set_byte.argtypes = [self.abn_t_p, c_byte, c_uint]
 		self.lib.abn_set_byte.restype = None
+		self.lib.abn_is_negative.argtypes = [self.abn_t_p]
+		self.lib.abn_is_negative.restype = c_bool
+		self.lib.abn_is_positive.argtypes = [self.abn_t_p]
+		self.lib.abn_is_positive.restype = c_bool
 		self.lib.abn_to_string.argtypes = [self.abn_t_p]
 		self.lib.abn_to_string.restype = c_char_p
 		self.lib.abn_unit_to_string.argtypes = [self.abn_unit]
@@ -78,10 +82,6 @@ class ABN:
 		self.lib.abn_mulu.restype = None
 		self.lib.abn_smul.argtypes = [self.abn_t_p, self.abn_t_p, self.abn_t_p]
 		self.lib.abn_smul.restype = None
-		self.lib.abn_is_negative.argtypes = [self.abn_t_p]
-		self.lib.abn_is_negative.restype = c_bool
-		self.lib.abn_is_positive.argtypes = [self.abn_t_p]
-		self.lib.abn_is_positive.restype = c_bool
 		self.lib.abn_abs.argtypes = [self.abn_t_p]
 		self.lib.abn_abs.restype = c_bool
 
