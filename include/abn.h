@@ -10,6 +10,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
 typedef unsigned char byte;
 
@@ -55,7 +56,7 @@ char* abn_to_string(abn_t* arg);
 char* abn_unit_to_string(abn_unit arg);
 
 // Arithmetic operations
-void abn_add(abn_t* op1, abn_t* op2);
+ABN_COMPLETION_CODE abn_add(abn_t* op1, abn_t* op2);
 void abn_adu(abn_t* op1, abn_unit value);
 void abn_sum(abn_t* result, abn_t* op1, abn_t* op2);
 void abn_sub(abn_t* op1, abn_t* op2);

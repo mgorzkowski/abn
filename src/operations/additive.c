@@ -16,17 +16,16 @@ static void abn_simple_add_abn_unit(abn_t* op1, abn_unit value);
 // Public functions
 
 // Adds op2 to op1 (op1 as a result)
-void abn_add(abn_t* op1, abn_t* op2)
+ABN_COMPLETION_CODE abn_add(abn_t* op1, abn_t* op2)
 {
-	if(op1->volume < op2->volume)
+	if (NULL == op1->chain || NULL == op2->chain || op1->volume < op2->volume)
 	{
-		// should be complition code!
-		abn_free(op1);
-		return;
+		return ABN_ERROR_ARGUMENT_INVALID;
 	}
 	else
 	{
 		abn_simple_add(op1, op2);
+		return ABN_SUCCESS;
 	}
 }
 

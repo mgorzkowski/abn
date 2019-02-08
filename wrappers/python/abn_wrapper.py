@@ -12,11 +12,6 @@ class _abn_t(Structure):
 	_fields_ = [("chain", POINTER(_abn_unit)),
 				("volume", c_uint)]
 
-# completition codes
-ABN_SUCCESS = 0
-ABN_ERROR = 0x80
-ABN_ERROR_ARGUMENT_INVALID = 0x81
-
 # pointers
 _abn_t_p = POINTER(_abn_t)
 _abn_unit_p = POINTER(_abn_unit)
@@ -37,6 +32,8 @@ class ABN:
 		self.abn_unit_p = _abn_unit_p
 		self.abn_t = _abn_t
 		self.abn_t_p = _abn_t_p
+		self.completion_code = c_int
+		self.completion_code_dictionary = {'SUCCESS': 0, 'ERROR': 0x80, 'ERROR_ARGUMENT_INVALID': 0x81}
 		self.size_of_abn_unit = sizeof(_abn_unit)
 
 		# Basic operations type settings
@@ -90,7 +87,7 @@ class ABN:
 		# Arithmetic operations type settings
 
 		self.lib.abn_add.argtypes = [self.abn_t_p, self.abn_t_p]
-		self.lib.abn_add.restype = None
+		self.lib.abn_add.restype = self.completion_code
 
 		self.lib.abn_adu.argtypes = [self.abn_t_p, self.abn_unit]
 		self.lib.abn_adu.restype = None
