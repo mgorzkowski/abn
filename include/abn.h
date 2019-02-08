@@ -43,6 +43,8 @@ byte abn_get_byte(abn_t* arg, unsigned int whichOne);
 void abn_set_byte(abn_t* arg, byte value, unsigned int whichOne);
 char* abn_to_string(abn_t* arg);
 char* abn_unit_to_string(abn_unit arg);
+bool abn_is_negative(abn_t* arg);
+bool abn_is_positive(abn_t* arg);
 
 // Arithmetic operations
 void abn_add(abn_t* op1, abn_t* op2);
@@ -55,8 +57,6 @@ void abn_neg(abn_t* arg);
 void abn_mul(abn_t* result, abn_t* op1, abn_t* op2);
 void abn_mulu(abn_t* result, abn_t* op, abn_unit value);
 void abn_smul(abn_t* result, abn_t* op1, abn_t* op2);
-bool abn_is_negative(abn_t* arg);
-bool abn_is_positive(abn_t* arg);
 bool abn_abs(abn_t* arg);
 
 // Bit operations

@@ -140,3 +140,25 @@ byte abn_get_byte(abn_t* arg, unsigned int whichOne)
 	unsigned int whichByteInUnit = whichOne % sizeof(abn_unit);
 	return (arg->chain[whichUnit] >> (8 * whichByteInUnit)) & 0xFF;
 }
+
+// Returns true if anb_t is positive number
+bool abn_is_positive(abn_t* arg)
+{
+	// nieczytelny warunek
+	//if( arg->chain[arg->volume-1] > ( ((abn_unit)1) << ( (8*sizeof(abn_unit)) - 1 ) ) )
+	if((arg->chain[arg->volume-1] & ((abn_unit)1<<(8*sizeof(abn_unit)-1))) > 0)
+	{
+		return false;
+	}
+	return true;
+}
+
+// Returns true if anb_t is negative number
+bool abn_is_negative(abn_t* arg)
+{
+	if(abn_is_positive(arg))
+	{
+		return false;
+	}
+	return true;
+}

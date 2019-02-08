@@ -107,30 +107,6 @@ void abn_neg(abn_t* arg)
 	abn_inc(arg);
 }
 
-// przesunąć do abn.c
-// Returns true if anb_t is positive number
-bool abn_is_positive(abn_t* arg)
-{
-	// nieczytelny warunek
-	//if( arg->chain[arg->volume-1] > ( ((abn_unit)1) << ( (8*sizeof(abn_unit)) - 1 ) ) )
-	if((arg->chain[arg->volume-1] & ((abn_unit)1<<(8*sizeof(abn_unit)-1))) > 0)
-	{
-		return false;
-	}
-	return true;
-}
-
-// przesunąć do abn.c
-// Returns true if anb_t is negative number
-bool abn_is_negative(abn_t* arg)
-{
-	if(abn_is_positive(arg))
-	{
-		return false;
-	}
-	return true;
-}
-
 // Turns the abn_t number to it's absolute value and return true if the number was negative before
 bool abn_abs(abn_t* arg)
 {
