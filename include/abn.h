@@ -29,6 +29,14 @@ typedef struct abn_t {
 	unsigned int volume;	// size in abn_units (in general not in bytes!)
 } abn_t;
 
+// Completion codes
+typedef enum ABN_COMPLETION_CODE
+{
+	ABN_SUCCESS,
+	ABN_ERROR = 0x80,
+	ABN_ERROR_ARGUMENT_INVALID
+} ABN_COMPLETION_CODE;
+
 // Basic operations
 abn_t* abn_create(unsigned int volume);
 abn_t* abn_create_copy(abn_t* arg);
