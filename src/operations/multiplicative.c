@@ -29,9 +29,9 @@ void abn_mul(abn_t* result, abn_t* op1, abn_t* op2)
 }
 
 // Multiplies two signed numbers
+// TODO: function shouldn't modify operands
 void abn_smul(abn_t* result, abn_t* op1, abn_t* op2)
 {
-	// TODO: powinno być '<= result->volume'
 	if(op1->volume != op2->volume || op1->volume * 2 != result->volume)
 	{
 		abn_free(result);
@@ -89,37 +89,35 @@ void abn_mulu(abn_t* result, abn_t* op, abn_unit value)
 static void abn_unit_mul(abn_t* result, abn_unit op1, abn_unit op2)
 {
 	static abn_t* tmp = NULL;
-	static abn_t* tmp2 = NULL;
-	if(tmp == NULL || tmp2 == NULL)
+	if(tmp == NULL)
 	{
 		tmp = abn_create(2);
-		tmp2 = abn_create(2);
 	}
-	abn_reset(tmp);
+	abn_reset(result);
 
 	abn_halfunit op1l = op1;
 	abn_halfunit op1h = ((abn_halfunit*)&op1)[1];
 	abn_halfunit op2l = op2;
 	abn_halfunit op2h = ((abn_halfunit*)&op2)[1];
 
-	tmp2->chain[0] = (abn_unit)op1l * (abn_unit)op2l;
-	tmp2->chain[1] = 0;
-	abn_add(tmp, tmp2);
+	tmp->chain[0] = (abn_unit)op1l * (abn_unit)op2l;
+	tmp->chain[1] = 0;
+	abn_add(result, tmp);
 
-	tmp2->chain[0] = (abn_unit)op1h * (abn_unit)op2l;
-	tmp2->chain[1] = 0;
-	abn_shift_left(tmp2, 8*sizeof(abn_halfunit));
-	abn_add(tmp, tmp2);
+	tmp->chain[0] = (abn_unit)op1h * (abn_unit)op2l;
+	tmp->chain[1] = 0;
+	abn_shift_left(tmp, 8*sizeof(abn_halfunit));
+	abn_add(result, tmp);
 
-	tmp2->chain[0] = (abn_unit)op1l * (abn_unit)op2h;
-	tmp2->chain[1] = 0;
-	abn_shift_left(tmp2, 8*sizeof(abn_halfunit));
-	abn_add(tmp, tmp2);
+	tmp->chain[0] = (abn_unit)op1l * (abn_unit)op2h;
+	tmp->chain[1] = 0;
+	abn_shift_left(tmp, 8*sizeof(abn_halfunit));
+	abn_add(result, tmp);
 
-	tmp2->chain[0] = (abn_unit)op1h * (abn_unit)op2h;
-	tmp2->chain[1] = 0;
-	abn_shift_left(tmp2, 8*sizeof(abn_unit));
-	abn_sum(result, tmp, tmp2);
+	tmp->chain[0] = (abn_unit)op1h * (abn_unit)op2h;
+	tmp->chain[1] = 0;
+	abn_shift_left(tmp, 8*sizeof(abn_unit));
+	abn_add(result, tmp);
 }
 
 // Simple multiplication algorithm

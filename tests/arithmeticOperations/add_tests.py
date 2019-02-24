@@ -17,9 +17,7 @@ class Add_tests(OperationTestCase):
         b = self.abn.create_copy(b)
         self.abn.copy(a, temp)
         pa = self.utilities.abn_to_long(a)
-        completion_code = self.abn.add(a, b)
-        self.assertEqual(completion_code, self.abn.completion_code_dictionary['SUCCESS'])
-
+        self.abn.add(a, b)
         a = self.utilities.abn_to_long(a)
         b = self.utilities.abn_to_long(b)
         self.assertEqual(pa+b, a)

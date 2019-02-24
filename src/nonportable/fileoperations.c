@@ -20,9 +20,10 @@ void abn_write_to_file(FILE* file, abn_t* number)
 	free(representation);
 }
 
-// Reads abn_t number from the file (hexadecimal format)
-abn_unit abn_read_from_file(FILE* file, abn_t* number)
+// Reads abn_t number from the file (hexadecimal format, big letters)
+void abn_read_from_file(FILE* file, abn_t* number, abn_unit bytes)
 {
-	return -1;
-	// TODO: implement this function
+	char* string = (char*)calloc(sizeof(char), 2*bytes+1);
+	fgets(string, 2*bytes+1, file);
+	abn_string_to_abn(string, number);
 }

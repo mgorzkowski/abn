@@ -6,7 +6,7 @@
 #
 
 CC=gcc
-CFLAGS=-Wall
+CFLAGS=-Wall -g
 ABN_LIB_DIR= -L../../bin/static/
 ABN_INCLUDE_DIR= -I../../include
 LIBS= -labn
@@ -17,7 +17,7 @@ all: ./bin/example
 
 .PHONEY: run
 run: ./bin/example
-	./bin/example
+	./bin/example ./number.bin
 
 ./bin/example: ./example.c
 	@mkdir -p bin/

@@ -8,4 +8,4 @@ from multiplication_by_unit_tests import *
 from negation_tests import *
 from sign_multiplication_tests import *
 from sub_tests import *
-from sum_tests import *
+from sub_unit_tests import *

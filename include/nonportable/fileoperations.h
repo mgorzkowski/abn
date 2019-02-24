@@ -15,6 +15,6 @@
 #include <stdio.h>
 
 void abn_write_to_file(FILE* file, abn_t* number);
-abn_unit abn_read_from_file(FILE* file, abn_t* number);
+void abn_read_from_file(FILE* file, abn_t* number, abn_unit bytes);
 
 #endif /* ABN_MISC_H */

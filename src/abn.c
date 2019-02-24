@@ -7,6 +7,7 @@
 
 #include "../include/abn.h"
 #include <stdlib.h>
+#include <string.h>
 
 const abn_unit ABN_UNIT_MAX = ((abn_unit)0) - 1;
 const abn_unit ABN_UNIT_MIN = (abn_unit)0;
@@ -23,6 +24,15 @@ abn_t* abn_create(unsigned int volume)
 	{
 		result->volume = volume;
 	}
+	return result;
+}
+
+// Creates abn_t from a string in hexadecimal format (without '0x' prefix)
+abn_t* abn_create_from_string(const char* string, abn_unit string_size)
+{
+	abn_unit number_size = string_size/2;
+	abn_t* result = abn_create(number_size/ABN_UNIT_SIZE);
+	abn_string_to_abn(string, result);
 	return result;
 }
 

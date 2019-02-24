@@ -16,9 +16,8 @@ void print_abn(abn_t* number)
 	fprintf(stdout, "\n");	
 }
 
-void example_func(void)
+void example_func(abn_t* number)
 {
-	abn_t* number = abn_create(4);
 	abn_reset(number);
 	print_abn(number);
 	abn_inc(number);
@@ -29,7 +28,20 @@ void example_func(void)
 	print_abn(number);
 }
 
-int main(void)
+int main(int argc, char** argv)
 {
-	example_func();	
+	const int Volume = 2;
+	if(argc != 2)
+	{
+		return -1;
+	}
+	FILE* number_file = fopen(argv[1], "r+b");
+	abn_t* number = abn_create(Volume);
+	abn_read_from_file(number_file, number, Volume*ABN_UNIT_SIZE);
+	print_abn(number);
+	abn_t * number2 = abn_create_from_string("FEDCBA9876543210", 16);
+	print_abn(number2);
+	abn_add(number, number2);
+	print_abn(number);
+	example_func(number);
 }
