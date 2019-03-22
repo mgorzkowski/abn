@@ -4,7 +4,6 @@
 
 If you think you can help me with bellow issues - do not hesitate and write me please :)
 If you think I could do something better let's discuss it :)
-If you read this sentence... um...  I'm happy about it.
 
 ##### Engennering issues:
     1) Add tests (Python), (done)
@@ -20,12 +19,11 @@ If you read this sentence... um...  I'm happy about it.
 ##### Feature issues:
     1) Add to libabn
         void abn_adu(abn_t* result, abn_unit value) (addunit) (done)
-        void abn_subunit(abn_t* result, abn_unit value)
-        void abn_mulunit(abn_t* result, abn_unit value)
-        void abn_smulunit(abn_t* result, abn_unit value)
+        void abn_subunit(abn_t* result, abn_unit value) (done)
+        void abn_mulunit(abn_t* result, abn_unit value) (done)
     2) Add assembly support for few architectures (x86, x64, ARM, maybe more) for few functions (for those what time or memory occupation aren't satisfying for me.) (?), (for ver 2.0)
-    3) Add Arduino support (maybe one-file-library?)
-    4) Add complition codes
-    5) Add create_from_string() function 
+    3) Add Arduino support (maybe one-file-library generator?)
+    4) Add complition codes and safe functions
+    5) Add create_from_string() function (done)
     6) Change create function. (Argument should be an amoud of bits - not a volume)
     7) Add define file for mnemonics

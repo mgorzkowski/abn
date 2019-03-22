@@ -52,6 +52,7 @@ typedef unsigned char byte;
 extern const abn_unit ABN_UNIT_MAX;
 extern const abn_unit ABN_UNIT_MIN;
 
+// TODO: rename whole functions and add mnemonics file
 #ifdef ABN_MNEMONICS
 #	include ""
 #endif /* ABN_MNEMONICS */
@@ -63,7 +64,7 @@ typedef struct abn_t {
 } abn_t;
 
 // TODO: 	Provide set of safe functions 
-//			that checks arguments and returns appropriate completion code 
+//		that checks arguments and returns appropriate completion code 
 // Completion codes
 typedef enum ABN_COMPLETION_CODE
 {
@@ -74,7 +75,7 @@ typedef enum ABN_COMPLETION_CODE
 
 // Standard operations
 abn_t* abn_create(unsigned int volume);
-abn_t* abn_create_from_string(const char* string, abn_unit string_size);
+abn_t* abn_create_from_string(const char* string);
 abn_t* abn_create_copy(abn_t* arg);
 abn_t* abn_create_empty(void);
 void abn_free(abn_t* arg);
@@ -89,8 +90,9 @@ void abn_set_byte(abn_t* arg, byte value, unsigned int whichOne);
 bool abn_are_equal(abn_t* arg_a, abn_t* arg_b);
 bool abn_is_negative(abn_t* arg);
 bool abn_is_positive(abn_t* arg);
-// TODO: is greater/less than (signed and unsigned)
-// TODO: is zero
+bool abn_is_zero(abn_t* arg);
+bool abn_is_greater(abn_t* arg_a, abn_t* arg_b);
+bool abn_is_less(abn_t* arg_a, abn_t* arg_b);
 
 // String operations
 char* abn_to_string(abn_t* arg);

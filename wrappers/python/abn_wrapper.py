@@ -10,7 +10,7 @@ _abn_unit = c_uint32
 # main type of ABN library
 class _abn_t(Structure):
 	_fields_ = [("chain", POINTER(_abn_unit)),
-				("volume", c_uint)]
+		("volume", c_uint)]
 
 # pointers
 _abn_t_p = POINTER(_abn_t)
@@ -44,6 +44,9 @@ class ABN:
 		self.lib.abn_create_copy.argtypes = [self.abn_t_p]
 		self.lib.abn_create_copy.restype = self.abn_t_p
 
+		self.lib.abn_create_from_string.argtypes = [c_char_p]
+		self.lib.abn_create_from_string.restype = self.abn_t_p
+
 		self.lib.abn_create_empty.argtypes = None
 		self.lib.abn_create_empty.restype = self.abn_t_p
 
@@ -76,6 +79,15 @@ class ABN:
 
 		self.lib.abn_is_positive.argtypes = [self.abn_t_p]
 		self.lib.abn_is_positive.restype = c_bool
+
+		self.lib.abn_is_zero.argtypes = [self.abn_t_p]
+		self.lib.abn_is_zero.restype = c_bool
+
+		self.lib.abn_is_greater.argtypes = [self.abn_t_p, self.abn_t_p]
+		self.lib.abn_is_greater.restype = c_bool
+		
+		self.lib.abn_is_less.argtypes = [self.abn_t_p, self.abn_t_p]
+		self.lib.abn_is_less.restype = c_bool
 
 		self.lib.abn_to_string.argtypes = [self.abn_t_p]
 		self.lib.abn_to_string.restype = c_char_p
@@ -161,6 +173,9 @@ class ABN:
 	def create_copy(self, *params):
 		return self.lib.abn_create_copy(*params)
 
+	def create_from_string(self, *params):
+		return self.lib.abn_create_from_string(*params)
+
 	def create_empty(self, *params):
 		return self.lib.abn_create_empty(*params)
 
@@ -193,6 +208,21 @@ class ABN:
 
 	def unit_to_string(self, *params):
 		return self.lib.abn_unit_to_string(*params)
+
+	def is_negative(self, *params):
+		return self.lib.abn_is_negative(*params)
+
+	def is_positive(self, *params):
+		return self.lib.abn_is_positive(*params)
+
+	def is_zero(self, *params):
+		return self.lib.abn_is_zero(*params)
+
+	def is_greater(self, *params):
+		return self.lib.abn_is_greater(*params)
+
+	def is_less(self, *params):
+		return self.lib.abn_is_less(*params)
  
 	# Wrap functions of arithmetic operations
 
@@ -225,12 +255,6 @@ class ABN:
 
 	def smul(self, *params):
 		return self.lib.abn_smul(*params)
-
-	def is_negative(self, *params):
-		return self.lib.abn_is_negative(*params)
-
-	def is_positive(self, *params):
-		return self.lib.abn_is_positive(*params)
 
 	def abs(self, *params):
 		return self.lib.abn_abs(*params)
