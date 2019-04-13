@@ -21,7 +21,7 @@ SRC=\
 	$(wildcard src/nonportable/*.c)
 OBJ=$(SRC:.c=.o)
 
-.PHOENY: all shared static clean test
+.PHONY: all shared static clean test
 
 all: $(STATIC_BINDIR)/$(SNAME) $(SHARED_BINDIR)/$(DNAME)
 	@rm -rf $(OBJ)
