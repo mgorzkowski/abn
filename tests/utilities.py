@@ -10,7 +10,7 @@ class OperationTestCase(unittest.TestCase):
         try:
             self.abn = ABN('../bin/shared/libabn.so')
         except:
-            print "Cannot load share object. Make sure that libabn.so exists in the porper place and API is the same"
+            print("Cannot load share object. Make sure that libabn.so exists in the porper place and API is the same")
             sys.exit(-1)
         self.utilities = Utilities(self.abn)
         self.numbers = tuple(self.utilities.get_test_numbers())
@@ -53,7 +53,7 @@ class Utilities:
 
     def print_numbers(self, numberSet):
         for i in numberSet:
-            print str(self.abn_to_long(i))
+            print(str(self.abn_to_long(i)))
 
     def get_default_bit_number(self):
         return 8 * self.abn.size_of_abn_unit * self.volume_of_test_numbers

@@ -174,7 +174,8 @@ class ABN:
 		return self.lib.abn_create_copy(*params)
 
 	def create_from_string(self, *params):
-		return self.lib.abn_create_from_string(*params)
+		newParams = (params[0].encode('ascii'),)
+		return self.lib.abn_create_from_string(*newParams)
 
 	def create_empty(self, *params):
 		return self.lib.abn_create_empty(*params)
@@ -204,10 +205,14 @@ class ABN:
 		return self.lib.abn_set_byte(*params)
 
 	def to_string(self, *params):
-		return self.lib.abn_to_string(*params)
+		retval = ""
+		for byte in self.lib.abn_to_string(*params):
+			retval += chr(byte)
+		return retval
 
 	def unit_to_string(self, *params):
-		return self.lib.abn_unit_to_string(*params)
+		retval = chr(self.lib.abn_unit_to_string(*params))
+		return retval
 
 	def is_negative(self, *params):
 		return self.lib.abn_is_negative(*params)
