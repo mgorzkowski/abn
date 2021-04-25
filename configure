@@ -1,5 +1,4 @@
 #!/bin/bash
 
-# Add checking python2.7 is already installed
-
+# ATODO: Add all necessary software
 pip install termcolor
