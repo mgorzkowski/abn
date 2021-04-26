@@ -1,5 +1,5 @@
 #!/bin/bash
 
-# Add checking python2.7 is already installed
+# Add checking python3 is already installed
 
 pip install termcolor
