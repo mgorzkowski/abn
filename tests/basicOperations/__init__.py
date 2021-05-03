@@ -1,2 +1,3 @@
-from is_negative_tests import *
-from is_positive_tests import *
+from . import is_negative_tests
+from . import is_positive_tests
+from . import is_zero_tests

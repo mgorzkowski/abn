@@ -10,12 +10,7 @@ _abn_unit = c_uint32
 # main type of ABN library
 class _abn_t(Structure):
 	_fields_ = [("chain", POINTER(_abn_unit)),
-				("volume", c_uint)]
-
-# completition codes
-ABN_SUCCESS = 0
-ABN_ERROR = 0x80
-ABN_ERROR_ARGUMENT_INVALID = 0x81
+		("volume", c_uint)]
 
 # pointers
 _abn_t_p = POINTER(_abn_t)
@@ -37,6 +32,8 @@ class ABN:
 		self.abn_unit_p = _abn_unit_p
 		self.abn_t = _abn_t
 		self.abn_t_p = _abn_t_p
+		self.completion_code = c_int
+		self.completion_code_dictionary = {'SUCCESS': 0, 'ERROR': 0x80, 'ERROR_ARGUMENT_INVALID': 0x81}
 		self.size_of_abn_unit = sizeof(_abn_unit)
 
 		# Basic operations type settings
@@ -46,6 +43,9 @@ class ABN:
 
 		self.lib.abn_create_copy.argtypes = [self.abn_t_p]
 		self.lib.abn_create_copy.restype = self.abn_t_p
+
+		self.lib.abn_create_from_string.argtypes = [c_char_p]
+		self.lib.abn_create_from_string.restype = self.abn_t_p
 
 		self.lib.abn_create_empty.argtypes = None
 		self.lib.abn_create_empty.restype = self.abn_t_p
@@ -80,6 +80,15 @@ class ABN:
 		self.lib.abn_is_positive.argtypes = [self.abn_t_p]
 		self.lib.abn_is_positive.restype = c_bool
 
+		self.lib.abn_is_zero.argtypes = [self.abn_t_p]
+		self.lib.abn_is_zero.restype = c_bool
+
+		self.lib.abn_is_greater.argtypes = [self.abn_t_p, self.abn_t_p]
+		self.lib.abn_is_greater.restype = c_bool
+		
+		self.lib.abn_is_less.argtypes = [self.abn_t_p, self.abn_t_p]
+		self.lib.abn_is_less.restype = c_bool
+
 		self.lib.abn_to_string.argtypes = [self.abn_t_p]
 		self.lib.abn_to_string.restype = c_char_p
 
@@ -95,11 +104,11 @@ class ABN:
 		self.lib.abn_adu.argtypes = [self.abn_t_p, self.abn_unit]
 		self.lib.abn_adu.restype = None
 
-		self.lib.abn_sum.argtypes = [self.abn_t_p, self.abn_t_p, self.abn_t_p]
-		self.lib.abn_sum.restype = None
-
 		self.lib.abn_sub.argtypes = [self.abn_t_p, self.abn_t_p]
 		self.lib.abn_sub.restype = None
+
+		self.lib.abn_subu.argtypes = [self.abn_t_p, self.abn_unit]
+		self.lib.abn_subu.restype = None
 
 		self.lib.abn_inc.argtypes = [self.abn_t_p]
 		self.lib.abn_inc.restype = None
@@ -164,6 +173,10 @@ class ABN:
 	def create_copy(self, *params):
 		return self.lib.abn_create_copy(*params)
 
+	def create_from_string(self, *params):
+		newParams = (params[0].encode('ascii'),)
+		return self.lib.abn_create_from_string(*newParams)
+
 	def create_empty(self, *params):
 		return self.lib.abn_create_empty(*params)
 
@@ -192,10 +205,29 @@ class ABN:
 		return self.lib.abn_set_byte(*params)
 
 	def to_string(self, *params):
-		return self.lib.abn_to_string(*params)
+		retval = ""
+		for byte in self.lib.abn_to_string(*params):
+			retval += chr(byte)
+		return retval
 
 	def unit_to_string(self, *params):
-		return self.lib.abn_unit_to_string(*params)
+		retval = chr(self.lib.abn_unit_to_string(*params))
+		return retval
+
+	def is_negative(self, *params):
+		return self.lib.abn_is_negative(*params)
+
+	def is_positive(self, *params):
+		return self.lib.abn_is_positive(*params)
+
+	def is_zero(self, *params):
+		return self.lib.abn_is_zero(*params)
+
+	def is_greater(self, *params):
+		return self.lib.abn_is_greater(*params)
+
+	def is_less(self, *params):
+		return self.lib.abn_is_less(*params)
  
 	# Wrap functions of arithmetic operations
 
@@ -205,11 +237,11 @@ class ABN:
 	def adu(self, *params):
 		return self.lib.abn_adu(*params)
 
-	def sum(self, *params):
-		return self.lib.abn_sum(*params)
-
 	def sub(self, *params):
 		return self.lib.abn_sub(*params)
+
+	def subu(self, *params):
+		return self.lib.abn_subu(*params)
 
 	def inc(self, *params):
 		return self.lib.abn_inc(*params)
@@ -228,12 +260,6 @@ class ABN:
 
 	def smul(self, *params):
 		return self.lib.abn_smul(*params)
-
-	def is_negative(self, *params):
-		return self.lib.abn_is_negative(*params)
-
-	def is_positive(self, *params):
-		return self.lib.abn_is_positive(*params)
 
 	def abs(self, *params):
 		return self.lib.abn_abs(*params)

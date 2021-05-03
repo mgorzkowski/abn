@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2018 Maciej Gorzkowski
+// Copyright (c) 2018-2021 Maciej Gorzkowski
 //
 // This file is licensed under the MIT License.
 // Full license text is available in 'LICENSE'.
@@ -9,9 +9,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-// Functions prototypes
+// private functions prototypes
 static char hex_sign_to_char(byte arg);
 static char* byte_to_string(byte arg);
+static byte byte_from_string(const char* string);
 
 // Public functions
 
@@ -47,6 +48,16 @@ char* abn_to_string(abn_t* arg)
 	return result;
 }
 
+void abn_string_to_abn(const char* string, abn_t* arg)
+{
+	int bytes = arg->volume * ABN_UNIT_SIZE;
+	for (int i=0; i<bytes; i++)
+	{
+		byte tmp = byte_from_string(&(string[2*i]));
+		abn_set_byte(arg, tmp, bytes-i-1);
+	}
+}
+
 // Private functions
 
 // Returns char '0'-'F' for a nibble
@@ -66,4 +77,12 @@ static char* byte_to_string(byte arg)
 		result[2] = '\0';
 	}
 	return result;
+}
+
+// Returns byte from the string
+static byte byte_from_string(const char* string)
+{
+	byte lv = string[0]<='9' ? string[0]-'0' : string[0]-'A'+10;
+	byte rv = string[1]<='9' ? string[1]-'0' : string[1]-'A'+10;
+	return lv * 16 + rv;
 }

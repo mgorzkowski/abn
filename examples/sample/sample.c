@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2018 Maciej Gorzkowski
+// Copyright (c) 2018-2021 Maciej Gorzkowski
 //
 // This file is licensed under the MIT License.
 // Full license text is available in 'LICENSE'.
@@ -7,18 +7,18 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "abn.h"
-#include "nonportable/fileoperations.h"
 
-void print_abn(abn_t* number)
+#include "abn.h"
+#include "extra/fileoperations.h"
+
+static void print_abn(abn_t* number)
 {
 	abn_write_to_file(stdout, number);
-	fprintf(stdout, "\n");	
+	fprintf(stdout, "\n");
 }
 
-void example_func(void)
+static void example_func(abn_t* number)
 {
-	abn_t* number = abn_create(4);
 	abn_reset(number);
 	print_abn(number);
 	abn_inc(number);
@@ -29,7 +29,11 @@ void example_func(void)
 	print_abn(number);
 }
 
-int main(void)
+int main(int argc, char** argv)
 {
-	example_func();	
+	abn_t* number = abn_create_from_string("FEDCBA9876543210");
+	print_abn(number);
+	printf("----------------\n");
+	example_func(number);
+	return 0;
 }

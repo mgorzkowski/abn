@@ -8,5 +8,9 @@
 # Unusefull files
 *.gch
 *.pyc
+
+# Project files
 *.project
 *.cproject
+.vscode
+

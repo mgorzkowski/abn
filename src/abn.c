@@ -7,6 +7,7 @@
 
 #include "../include/abn.h"
 #include <stdlib.h>
+#include <string.h>
 
 const abn_unit ABN_UNIT_MAX = ((abn_unit)0) - 1;
 const abn_unit ABN_UNIT_MIN = (abn_unit)0;
@@ -23,6 +24,15 @@ abn_t* abn_create(unsigned int volume)
 	{
 		result->volume = volume;
 	}
+	return result;
+}
+
+// Creates abn_t from a string in hexadecimal format (without '0x' prefix)
+abn_t* abn_create_from_string(const char* string)
+{
+	abn_unit number_size = strlen(string)/2;
+	abn_t* result = abn_create(number_size/ABN_UNIT_SIZE);
+	abn_string_to_abn(string, result);
 	return result;
 }
 
@@ -161,4 +171,43 @@ bool abn_is_negative(abn_t* arg)
 		return false;
 	}
 	return true;
+}
+
+// Return true if arg is equal zero
+bool abn_is_zero(abn_t* arg)
+{
+	for (int i=0; i<arg->volume; i++) {
+		if (arg->chain[i] != 0) {
+			return false;
+		}
+	}
+	return true;
+}
+
+// Returns true if arg_a > arg_b (unsigned)
+// It was assumed that volumes of both operands are equal
+bool abn_is_greater(abn_t* arg_a, abn_t* arg_b)
+{
+	for (int i=0; i<arg_a->volume; i++) {
+		if(arg_a->chain[i] > arg_b->chain[i]) {
+			return true;
+		} else if (arg_a->chain[i] < arg_b->chain[i]) {
+			return false;
+		}
+	}
+	return false;
+}
+
+// Returns true if arg_a < arg_b (unsigned)
+// It was assumed that volumes of both operands are equal
+bool abn_is_less(abn_t* arg_a, abn_t* arg_b)
+{
+	for (int i=0; i<arg_a->volume; i++) {
+		if(arg_a->chain[i] < arg_b->chain[i]) {
+			return true;
+		} else if (arg_a->chain[i] > arg_b->chain[i]) {
+			return false;
+		}
+	}
+	return false;
 }
