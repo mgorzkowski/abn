@@ -13,20 +13,21 @@ Proven architectures:
 ## How to use?
 
 ### Get abn library:
->git clone https://github.com/mgorzkowski/abn.git
->cd ./abn   
+> git clone https://github.com/mgorzkowski/abn.git  
+> cd ./abn   
 
 ### Prepare environment variables:
->source ./env.sh
+> source ./env.sh
 
 ### Use ready to use container with prepared software (optional):
-> docker_it.sh launch  
-> docker_it.sh shell
+> docker-it launch  
+> docker-it shell
+> source ./env.sh
 
 ### Building library:
->mkdir -p build & cd build  
->cmake -GNinja ..  
->ninja
+> mkdir -p build & cd build  
+> cmake -GNinja ..  
+> ninja
 
 Now, in 'build' directory you can find both libraries:
 - libabn-static.a
@@ -37,11 +38,11 @@ You can use different dictionary but please use 'build' directory because this n
 ## Example project:
 In the 'example' directory there is a 'sample' example of ABN usage. This is a series of some operations.  
 To build and run example project type:
->cd examples/sample
->setup.sh
->mkdir -p build && cd build
->cmake -GNinja ..
->ninja
+> cd examples/sample
+> setup.sh
+> mkdir -p build && cd build
+> cmake -GNinja ..
+> ninja
 
 ## How to adjust abn library to your project
 The ABN library works on abn_unit, which is the basic type the calculations are porformed on.

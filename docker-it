@@ -2,7 +2,7 @@
 
 # Simple wrapper for docker that use only one container and provide handy way to attach to started container
 
-script_name="docker_it.sh"
+script_name="docker-it"
 
 container_name="abn-container"
 image_name="abn-image"
@@ -104,8 +104,7 @@ main() {
 			fi
 			# create a container if needed
 			if [[ -z $all ]]; then
-				## mg
-				docker create -t -v $(pwd):$destination_path --name $container_name $image_name > /dev/null
+				docker create -t -v $ABN_ROOT:$destination_path --name $container_name $image_name > /dev/null
 				[[ $? == 0 ]] || die "Docker container create failed."
 			fi
 			# start stopped or just created container

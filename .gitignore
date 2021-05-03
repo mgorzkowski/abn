@@ -1,4 +1,6 @@
 # Compiled code
+build/
+example/sample/build/
 *.o
 *.so
 *.a
