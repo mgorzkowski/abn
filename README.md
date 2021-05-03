@@ -1,18 +1,31 @@
 # ABN
 
-ABN - Arbitrary-Bit Number. This library allows simple mathematical operations (like addition, multiplication, bit operations etc) on big natural numbers. ABN library is designed with multiplatform in mind. ABN library can be used with architectures like: x86, ARM (STM32, Raspberry Pi), AVR (Arduino) and more. (not been proven yet)
+ABN - Arbitrary-Bit Number. This library allows simple mathematical operations like addition, multiplication, bit operations on big natural numbers. It's not a standard implementation of big number - numbers are not expansible, which mins that you have to define size first (eg. 256, 4096 or 4294967296 bit).
 
-# Warning! this library works but it is under development
+ABN library is designed with multiplatform in mind. ABN library can be used with architectures like: x86, ARM (STM32, Raspberry Pi), AVR (Arduino) and more.
+
+Proven architectures:
+- x86
+- x64
+- AArch64 (64bit ARM)
+- ARM
 
 ## How to use?
 
-### Getting abn library:
+### Get abn library:
 First of all, you need the build your instance of ABN library. It's static linked library (libabn.a)
->git clone https://github.com/mgorzkowski/abn.git  
->cd ./abn  
+>git clone https://github.com/mgorzkowski/abn.git
+>cd ./abn   
+
+### Prepare environment variables:
+>source ./env.sh
+
+### Use ready to use container with prepared environment (optional):
+> docker_it.sh launch  
+> docker_it.sh shell
 
 ### Building library:
->mkdir -p ./build & cd build  
+>mkdir -p build & cd build  
 >cmake -GNinja ..  
 >ninja
 
@@ -20,29 +33,25 @@ Now, in 'buld/' directory you can find both libraries:
 - libabn-static.a
 - libabn-shared.so
 
-You can use different dictionary but use 'build' directory because this name is required by test runner.
+You can use different dictionary but please use 'build' directory because this name is required by test runner.
 
 ### Example project:
-In the 'example' directory there is a 'simple_c_example' example of ABN usage. This is a series of various operations. Firstly, make sure that your ABN library are built, which means 'libabn.a' file exists in 'bin/libabn.a' - see 'Building library' paragraph. To build and run example project type:
->cd examples/simple_c_example  
->make run
+In the 'example' directory there is a 'sample' example of ABN usage. This is a series of various operations. To build and run example project type:
+>cd examples/sample
+>setup.sh
+>mkdir -b build
+>cmake -GNinja ..
+>ninja
 
-### Using ABN with own project:
-If you already have project that can use ABN library compile source files with libabn.a library in this way:
->gcc program.c -I<_path/to/the/directory/containing/headers/_> -L<_path/to/the/directory/containing/libabn.a/_> -labn_static -o program
+### How to adjust abn library to your project
+The abn library works on abn_unit, which is the basic type the calculations are porformed on.
+The abn_unit has ABN_UNIT_BITSIZE size (8, 16, 32, 64, 128 or 256). By default it is set to 32.
+To change it modify the ABN_UNIT_BITSIZE definition.
 
-## Additional informations:
+The bigger size theoretically gives the shortest execution time.
 
-### How to make ABN library useful in your embedded project?
-All you should to do is compile library with proper abn_unit and abn_halfunit type. They're defined in include/abn.h. Abn_unit type should be defined as the widest integer type your compiler knows and abn_halfunit should be defined as two times smaller
-e.g.
->typedef uint32_t abn_unit;  
->typedef uint16_t abn_halfunit;
+### Extra header files limitations:
+Some functions cannot be used on some platforms without porting some another functions. Examples of such functions may be file operations. On standard OS (like Windows or Linux) it works and doesn't require additional work. Look at src/extra/README.md
 
-The widest type, the shortest execution time. :)
-
-### Non portable header file:
-ABN library contains non-portable functions also. (abn/nonportable.h) Functions from this header file are unnecessary to perform calculations. Non-portable header file contains functions that are specific only for part of systems (e.g. they allows file operations). This can help you read or write your number to the file. You can use non-portable header file functions when you use system that supports standard I/O. This kind of functions are used in example/simple too.
-
-#### Have fun! :smile:
-If you have noticed something inappropriate or something what I can improve please send to me a message. :mailbox: dhmaciek@gmail.com
+#### Have fun!
+If you have noticed something inappropriate or something what I can improve please let me know   :mailbox: dhmaciek@gmail.com
