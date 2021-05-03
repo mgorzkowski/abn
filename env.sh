@@ -1,3 +1,4 @@
 #!/bin/bash
 
-export PATH=$PATH:$(pwd)
+export ABN_ROOT=$(pwd)
+export PATH=$PATH:$ABN_ROOT
