@@ -1,5 +1,0 @@
-#!/bin/bash
-
-# Add checking python3 is already installed
-
-pip install termcolor

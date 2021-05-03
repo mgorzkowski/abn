@@ -2,7 +2,7 @@
 
 ## I hope first release will be in May (ABN ver. 1.0)
 
-If you think you can help me with bellow issues - do not hesitate and write me please :)
+If you think you can help me with bellow issues - do not hesitate and mail me please :)
 If you think I could do something better let's discuss it :)
 
 ##### Engennering issues:

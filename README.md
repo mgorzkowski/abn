@@ -6,13 +6,21 @@ ABN - Arbitrary-Bit Number. This library allows simple mathematical operations (
 
 ## How to use?
 
-### Building library:
+### Getting abn library:
 First of all, you need the build your instance of ABN library. It's static linked library (libabn.a)
 >git clone https://github.com/mgorzkowski/abn.git  
 >cd ./abn  
->make
 
-Now, in the 'bin/' directory you can find the libabn.a file that contains all necessary functions.
+### Building library:
+>mkdir -p ./build & cd build  
+>cmake -GNinja ..  
+>ninja
+
+Now, in 'buld/' directory you can find both libraries:
+- libabn-static.a
+- libabn-shared.so
+
+You can use different dictionary but use 'build' directory because this name is required by test runner.
 
 ### Example project:
 In the 'example' directory there is a 'simple_c_example' example of ABN usage. This is a series of various operations. Firstly, make sure that your ABN library are built, which means 'libabn.a' file exists in 'bin/libabn.a' - see 'Building library' paragraph. To build and run example project type:
@@ -21,7 +29,7 @@ In the 'example' directory there is a 'simple_c_example' example of ABN usage. T
 
 ### Using ABN with own project:
 If you already have project that can use ABN library compile source files with libabn.a library in this way:
->gcc program.c -I<_path/to/the/directory/containing/headers/_> -L<_path/to/the/directory/containing/libabn.a/_> -labn -o program
+>gcc program.c -I<_path/to/the/directory/containing/headers/_> -L<_path/to/the/directory/containing/libabn.a/_> -labn_static -o program
 
 ## Additional informations:
 

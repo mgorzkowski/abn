@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2018 Maciej Gorzkowski
+// Copyright (c) 2018-2021 Maciej Gorzkowski
 //
 // This file is licensed under the MIT License.
 // Full license text is available in 'LICENSE'.
@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-// Functions prototypes
+// private functions prototypes
 static char hex_sign_to_char(byte arg);
 static char* byte_to_string(byte arg);
 static byte byte_from_string(const char* string);

@@ -4,11 +4,13 @@ sys.path.append('../wrappers/python')
 from abn_wrapper import ABN
 import unittest
 
+abn_shared_object_path = '../build/libabn-shared.so'
+
 class OperationTestCase(unittest.TestCase):
 
     def setUp(self):
         try:
-            self.abn = ABN('../bin/shared/libabn.so')
+            self.abn = ABN(abn_shared_object_path)
         except:
             print("Cannot load share object. Make sure that libabn.so exists in the porper place and API is the same")
             sys.exit(-1)

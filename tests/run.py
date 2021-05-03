@@ -10,7 +10,7 @@ import basicOperations
 import arithmeticOperations
 import bitwiseOperations
 
-mainSuiteModules = [arithmeticOperations, bitwiseOperations, basicOperations]
+main_suite_modules = [arithmeticOperations, bitwiseOperations, basicOperations]
 
 def addTestsFromModuleAndSubmodules(suite, module):
     suite.addTests(unittest.TestLoader().loadTestsFromModule(module))
@@ -20,7 +20,7 @@ def addTestsFromModuleAndSubmodules(suite, module):
 
 def getSuitesDictionary():
     suites = {}
-    for testModule in mainSuiteModules:
+    for testModule in main_suite_modules:
         suites[testModule] = unittest.TestSuite()
         addTestsFromModuleAndSubmodules(suites[testModule], testModule)
     return suites
@@ -52,7 +52,7 @@ def printResults(result_infos):
     print('\n')
 
 if __name__ == '__main__':
-    if os.path.exists('../bin/shared/libabn.so'):
+    if os.path.exists(utilities.abn_shared_object_path):
         try:
             suiteDictionary = getSuitesDictionary()
             result_infos = runSuites(suiteDictionary, verbosity = 3)

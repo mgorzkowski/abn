@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2018 Maciej Gorzkowski
+// Copyright (c) 2018-2021 Maciej Gorzkowski
 //
 // This file is licensed under the MIT License.
 // Full license text is available in 'LICENSE'.
@@ -7,7 +7,7 @@
 
 #include "../../include/abn.h"
 
-// Backend functions prototypes
+// private functions prototypes
 static void abn_simple_add(abn_t* op1, abn_t* op2);
 static void abn_simple_sub(abn_t* op1, abn_t* op2);
 static void abn_simple_add_abn_unit(abn_t* op1, abn_unit value);

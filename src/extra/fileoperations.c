@@ -1,8 +1,13 @@
 //
-// Copyright (c) 2018 Maciej Gorzkowski
+// Copyright (c) 2018-2021 Maciej Gorzkowski
 //
 // This file is licensed under the MIT License.
 // Full license text is available in 'LICENSE'.
+//
+
+//
+// THIS FILE CONTAINS FUNCTIONS THAT MAY REQUIRE ADDITIONAL PORTING CODE.
+// FOR MORE INFORMATION LOOK AT src/extra/README.md
 //
 
 #include "../../include/abn.h"

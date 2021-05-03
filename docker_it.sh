@@ -3,7 +3,12 @@
 # Simple wrapper for docker that use only one container and provide handy way to attach to started container
 
 script_name="docker_it.sh"
-image_name="abn-docker"
+
+container_name="abn-container"
+image_name="abn-image"
+
+destination_path="/var/local/abn"
+
 
 usage() {
 	echo "Usage: $script_name (clean | launch | shell | destroy | status | help)"
@@ -12,9 +17,9 @@ usage() {
 help() {
 	echo "Simple wrapper for docker that use only one container and provide handy way to attach to started container."
 	echo ""	
-	usage
+	echo "Usage: $script_name (clean | launch | shell | destroy | status | help)"
 	echo ""	
-	echo "clean   - remove existing docker container and the image."
+	echo "clean   - remove existing docker container, and the image."
 	echo "launch  - launch new container."
 	echo "shell   - open new interactive terminal in the launched container."
 	echo "destroy - destroy the container."
@@ -39,28 +44,25 @@ die() {
 	exit 1
 }
 
+
+# tutaj zakładamy że każdy kontener stworziny z obrazu abn jest zarządzany przez ten skrypt
+# zamiast tego można szukać nadaną nazwę kontenera - container_name
 get_all_containers() {
-	local result=$(docker container ls -a | grep $image_name | awk '{print $1}')
-	[[ $(echo $result | wc -w) < 2 ]] || die "There are more than one container $image_name. You are in a vague state. Consider running $script_name clean."
+	local result=$(docker container ls -a | grep $container_name | awk '{print $1}')
+	[[ $(echo $result | wc -w) < 2 ]] || die "There are more than one container $container_name. Docker is in a vague state. Consider running $script_name clean."
 	echo $result
 }
 
 get_running_containers() {
-	local result=$(docker container ls -f "status=running" | grep $image_name | awk '{print $1}')
-	[[ $(echo $result | wc -w) < 2 ]] || die "There are more than one container $image_name. You are in a vague state. Consider running $script_name clean."
+	local result=$(docker container ls -f "status=running" | grep $container_name | awk '{print $1}')
+	[[ $(echo $result | wc -w) < 2 ]] || die "There are more than one container $container_name. Docker is in a vague state. Consider running $script_name clean."
 	echo $result
 }
 
-destory_containers() {
-	if [[ ! -z $all ]]; then
-		if [[ ! -z $running ]]; then
-			docker stop $running --time 0 > /dev/null
-			[[ $? == 0 ]] || die "Docker container stop failed."
-		fi
-		docker rm $all > /dev/null
-		[[ $? == 0 ]] || die "Docker container remove failed."
-		echo "Container(s) destroyed."
-	fi
+get_images() {
+	local result=$(docker image ls -a | grep $image_name | awk '{print $1}')
+	[[ $(echo $result | wc -w) < 2 ]] || die "There are more than one image $image_name. Docker is in a vague state. Consider running $script_name clean."
+	echo $result
 }
 
 main() {
@@ -69,7 +71,7 @@ main() {
 	local subcommand=$1
 	local all=$(get_all_containers)
 	local running=$(get_running_containers)
-	local images=$(docker image ls -a | grep $image_name | awk '{print $1}')
+	local images=$(get_images)
 
 	case $subcommand in
 		clean)
@@ -91,6 +93,7 @@ main() {
 			fi
 			echo "Cleaning done."
 			;;
+
 		launch)
 			# check if container is currently running
 			[[ -z $running ]] || die "There is a working container $running. Destroy it first."
@@ -101,7 +104,8 @@ main() {
 			fi
 			# create a container if needed
 			if [[ -z $all ]]; then
-				docker create -t -v abn:/var/local/abn $image_name > /dev/null
+				## mg
+				docker create -t -v $(pwd):$destination_path --name $container_name $image_name > /dev/null
 				[[ $? == 0 ]] || die "Docker container create failed."
 			fi
 			# start stopped or just created container
@@ -109,6 +113,7 @@ main() {
 			[[ $? == 0 ]] || die "Docker container start failed."
 			echo "Container launched: $(get_running_containers)" 
 			;;
+
 		shell)
 			# cannot to atach to not running container
 			[[ ! -z $running ]] || die "There is no running container here."
@@ -118,6 +123,7 @@ main() {
 			docker exec -it $running /bin/bash
 			[[ $? == 0 ]] || die "Docker execution in the container failed."
 			;;
+
 		destroy)
 			[[ ! -z $running ]] || die "There is no working container here."
 			# container cleaning
@@ -131,6 +137,7 @@ main() {
 				echo "Container destroyed."
 			fi
 			;;
+
 		status)
 			# image information
 			if [[ ! -z $images ]]; then
@@ -151,9 +158,11 @@ main() {
 				echo "There is no available images nor containers."
 			fi
 			;;
+
 		help)
 			help
-			;;	
+			;;
+	
 		*)
 			usage
 			die "Wrong argument. Check subcommand list."

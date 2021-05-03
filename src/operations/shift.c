@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2018 Maciej Gorzkowski
+// Copyright (c) 2018-2021 Maciej Gorzkowski
 //
 // This file is licensed under the MIT License.
 // Full license text is available in 'LICENSE'.
@@ -7,7 +7,7 @@
 
 #include "../../include/abn.h"
 
-// Functions prototypes
+// private functions prototypes
 static void abn_short_shift_left(abn_t* arg, unsigned int distance);
 static void abn_short_shift_right(abn_t* arg, unsigned int distance);
 static void abn_long_shift_left(abn_t* arg, unsigned int distance);

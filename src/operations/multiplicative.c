@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2018 Maciej Gorzkowski
+// Copyright (c) 2018-2021 Maciej Gorzkowski
 //
 // This file is licensed under the MIT License.
 // Full license text is available in 'LICENSE'.
@@ -8,7 +8,7 @@
 #include "../../include/abn.h"
 #include <stdlib.h>
 
-// Functions prototypes
+// private functions prototypes
 static void abn_unit_mul(abn_t* result, abn_unit op1, abn_unit op2);
 static void abn_simple_mul_algorithm(abn_t* result, abn_t* op1, abn_t* op2);
 static void abn_mul_by_unit(abn_t* result, abn_t* op, abn_unit value);
