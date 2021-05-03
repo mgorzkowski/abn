@@ -8,7 +8,6 @@ Proven architectures:
 - x86
 - x64
 - AArch64 (64bit ARM)
-- ARM
 
 ## How to use?
 
@@ -20,8 +19,8 @@ Proven architectures:
 > source ./env.sh
 
 ### Use ready to use container with prepared software (optional):
-> docker-it launch  
-> docker-it shell
+> dockerize-it launch  
+> dockerize-it shell
 > source ./env.sh
 
 ### Building library:
@@ -44,7 +43,7 @@ To build and run example project type:
 > cmake -GNinja ..
 > ninja
 
-## How to adjust abn library to your project
+## How to adjust abn library to your project:
 The ABN library works on abn_unit, which is the basic type the calculations are porformed on.
 The abn_unit has ABN_UNIT_BITSIZE size (8, 16, 32, 64, 128 or 256). By default it is set to 32.
 To change it modify the ABN_UNIT_BITSIZE definition.
@@ -55,4 +54,5 @@ The bigger size theoretically gives the shortest execution time.
 Some functions cannot be used on some platforms without porting some another functions. Examples of such functions may be file operations. On standard OS (like Windows or Linux) it works and doesn't require additional work. Look at src/extra/README.md
 
 #### Have fun!
-If you have noticed something inappropriate or something what can be improved please let me know.   :mailbox: dhmaciek@gmail.com
+If you have noticed something inappropriate or something what can be improved please let me know.  
+:mailbox: dhmaciek@gmail.com

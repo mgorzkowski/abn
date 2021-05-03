@@ -1,0 +1,59 @@
+#!/bin/bash
+
+script_name="uncrustify-it"
+
+usage() {
+	echo "Usage: $script_name (format | check | help)"
+}
+
+help() {
+	echo "Simple wrapper for uncrustify that provide most useful function on the whole project"
+	echo ""	
+	echo "Usage: $script_name (format | check | help)"
+    echo ""	
+	echo "format - format whole project accordingly to the uncrustify.cfg config file."
+	echo "check  - check if the whole project is formated properly."
+    echo "help   - show this help information set."
+    echo ""
+}
+
+die() {
+	echo >&2 "$script_name: $@"
+	exit 1
+}
+
+get_source_files() {
+    local result=$(find $ABN_ROOT -regextype posix-extended -iregex ".*(\.c|\.h)") 
+    [[ $(echo $result | wc -w) > 0 ]] || die "Cannot to find any file to check."
+    echo $result
+}
+
+main() {
+	# input validation and locals set
+	[[ "$#" == 1 ]] || ! usage || die "Choose subcommand."
+	local subcommand=$1
+    local files=$(get_source_files)
+
+    case $subcommand in
+        format)
+            uncrustify -c $ABN_ROOT/tools/uncrustify.cfg --no-backup $files
+            [[ $? == 0 ]] || die "Something went wrong."
+            ;;
+
+        check)
+            uncrustify -c $ABN_ROOT/tools/uncrustify.cfg --check $files
+            [[ $? == 0 ]] || die "Files doesn't meet requrements."
+            ;;
+
+        help)
+            help
+            ;;
+        
+        *)
+            usage
+            die "Wrong argument. Check subcommand list."
+    esac
+}
+
+# main function call
+main $@

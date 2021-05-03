@@ -2,13 +2,12 @@
 
 # Simple wrapper for docker that use only one container and provide handy way to attach to started container
 
-script_name="docker-it"
+script_name="dockerize-it"
 
 container_name="abn-container"
 image_name="abn-image"
 
 destination_path="/var/local/abn"
-
 
 usage() {
 	echo "Usage: $script_name (clean | launch | shell | destroy | status | help)"
@@ -44,9 +43,8 @@ die() {
 	exit 1
 }
 
-
-# tutaj zakładamy że każdy kontener stworziny z obrazu abn jest zarządzany przez ten skrypt
-# zamiast tego można szukać nadaną nazwę kontenera - container_name
+# TODO: Here we are assuming that every container which is created from the images is managed by this script
+#		Instead of this let's check name of the container (container_name variable)
 get_all_containers() {
 	local result=$(docker container ls -a | grep $container_name | awk '{print $1}')
 	[[ $(echo $result | wc -w) < 2 ]] || die "There are more than one container $container_name. Docker is in a vague state. Consider running $script_name clean."
@@ -95,6 +93,7 @@ main() {
 			;;
 
 		launch)
+			# TODO: select Dockerfile and its path (currently there is no way to run this script from eg. tools/ directory)
 			# check if container is currently running
 			[[ -z $running ]] || die "There is a working container $running. Destroy it first."
 			# build a docker image if needed
@@ -117,7 +116,7 @@ main() {
 			# cannot to atach to not running container
 			[[ ! -z $running ]] || die "There is no running container here."
 			echo ""
-			echo "To escape press Ctrl+P Ctrl+Q."
+			echo "To escape press Ctrl+D."
 			# open bash in new interactive terminal
 			docker exec -it $running /bin/bash
 			[[ $? == 0 ]] || die "Docker execution in the container failed."

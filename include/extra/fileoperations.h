@@ -16,7 +16,7 @@
 #include "../abn.h"
 #include <stdio.h>
 
-void abn_write_to_file(FILE* file, abn_t* number);
-void abn_read_from_file(FILE* file, abn_t* number, abn_unit bytes);
+void abn_write_to_file(FILE *file, abn_t *number);
+void abn_read_from_file(FILE *file, abn_t *number, abn_unit bytes);
 
 #endif /* ABN_EXTRA_FILEOPERATIONS_H */
