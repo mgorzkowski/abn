@@ -13,7 +13,6 @@ Proven architectures:
 ## How to use?
 
 ### Get abn library:
-First of all, you need the build your instance of ABN library. It's static linked library (libabn.a)
 >git clone https://github.com/mgorzkowski/abn.git
 >cd ./abn   
 
@@ -36,10 +35,11 @@ Now, in 'buld/' directory you can find both libraries:
 You can use different dictionary but please use 'build' directory because this name is required by test runner.
 
 ### Example project:
-In the 'example' directory there is a 'sample' example of ABN usage. This is a series of various operations. To build and run example project type:
+In the 'example' directory there is a 'sample' example of ABN usage. This is a series of some operations.  
+To build and run example project type:
 >cd examples/sample
 >setup.sh
->mkdir -b build
+>mkdir -p build && cd build
 >cmake -GNinja ..
 >ninja
 
