@@ -4,7 +4,7 @@ script_name="setup.sh"
 
 die() {
     echo >&2 "$script_name: $@"
-	exit 1
+    exit 1
 }
 
 
