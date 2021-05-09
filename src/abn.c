@@ -6,199 +6,435 @@
 //
 
 #include "../include/abn.h"
+#include "abn_private.h"
 #include <stdlib.h>
 #include <string.h>
-
-const abn_unit ABN_UNIT_MAX = ((abn_unit)0) - 1;
-const abn_unit ABN_UNIT_MIN = (abn_unit)0;
+#include <assert.h>
 
 // Public functions
 
-// Creates abn_t
-abn_t *abn_create(unsigned int volume)
-{
-    abn_t *result = (abn_t *)malloc(sizeof(abn_t));
+// Creation operations
 
-    result->volume = 0;
-    result->chain = (abn_unit *)malloc(volume * sizeof(abn_unit));
-    if (result->chain != NULL) {
-        result->volume = volume;
+// to documentation: bitsize should be aligned to sizeof(abn_unit)
+abn_t abn_create(abn_unit *buffer, abn_unit bitsize)
+{
+    bitsize = ABN_MINIMAL_VALID_BITSIZE(bitsize);
+    abn_t result = {
+        .chain = buffer,
+        .bitsize = bitsize,
+        .has_owned_buffer = false,
+    };
+    return result;
+}
+
+// to documentation: buffer_size is bytes,
+abn_t abn_create_from_string(abn_unit *buffer, abn_unit buffer_size, const char *string)
+{
+    abn_unit string_length = strlen(string);
+    // one byte is encoded by 2 characters
+    if (string_length > buffer_size * 2) {
+        // size of given buffer is not sufficient
+        return abn_create_empty();
     }
+
+    // one character encodes 4 bits
+    abn_t result = abn_create(buffer, string_length * 4);
+    abn_string_to_abn(string, &result);
+
     return result;
 }
 
-// Creates abn_t from a string in hexadecimal format (without '0x' prefix)
-abn_t *abn_create_from_string(const char *string)
+// to documentation: buffer_size is bytes,
+abn_t abn_create_copy(abn_unit *buffer, abn_unit buffer_size, abn_t prototype)
 {
-    abn_unit number_size = strlen(string) / 2;
-    abn_t *result = abn_create(number_size / ABN_UNIT_SIZE);
-
-    abn_string_to_abn(string, result);
-    return result;
-}
-
-// Creates abn_t based on antoher abn_t
-abn_t *abn_create_copy(abn_t *arg)
-{
-    abn_t *result = abn_create(arg->volume);
-
-    abn_clone(result, arg);
-    return result;
-}
-
-// TODO: consider of having this
-// Creates an empty abn_t number
-abn_t *abn_create_empty(void)
-{
-    abn_t *result = (abn_t *)malloc(sizeof(abn_t));
-
-    result->chain = NULL;
-    result->volume = 0;
-    return result;
-}
-
-// Terminates the abn_t number
-void abn_free(abn_t *arg)
-{
-    if (arg->chain != NULL) {
-        free(arg->chain);
+    if (prototype.bitsize > buffer_size * 8) {
+        // size of given buffer is not sufficient
+        return abn_create_empty();
     }
-    free(arg);
+
+    abn_t result = abn_create(buffer, prototype.bitsize);
+    if (ABN_SUCCESS != abn_copy(result, prototype)) {
+        // should never happen
+        result = abn_create_empty();
+    }
+
+    return result;
 }
 
-// Return true if the abn_t number is empty
-bool abn_is_empty(abn_t *arg)
+abn_t abn_create_empty(void)
 {
-    if (arg->chain == NULL && arg->volume == 0) {
+    abn_t result = {};
+    result.chain = NULL;
+    result.bitsize = 0;
+    result.has_owned_buffer = false;
+    return result;
+}
+
+// to documentation: bitsize should be aligned to sizeof(abn_unit)
+abn_t abn_alloc(abn_unit bitsize)
+{
+    bitsize = ABN_MINIMAL_VALID_BITSIZE(bitsize);
+    abn_t result = abn_create_empty();
+    const abn_unit volume = bitsize / ABN_UNIT_BITSIZE;
+    void *buffer = malloc(volume * sizeof(abn_unit));
+    if (NULL != buffer) {
+        result.bitsize = bitsize;
+        result.chain = (abn_unit *)buffer;
+        result.has_owned_buffer = true;
+    }
+
+    return result;
+}
+
+// to documentation: it is have to be said that string shuold be null terminated
+abn_t abn_alloc_from_string(const char *string)
+{
+    assert(strlen(string) <= ABN_STRING_LENGTH_MAX);
+
+    // one character encodes 4 bits
+    abn_unit bitsize = strlen(string) * 4;
+    abn_t result = abn_alloc(bitsize);
+    abn_string_to_abn(string, &result);
+
+    return result;
+}
+
+abn_t abn_alloc_copy(abn_t prototype)
+{
+    if (abn_is_empty(prototype)) {
+        return prototype;
+    } else {
+        abn_t result = abn_alloc(prototype.bitsize);
+        if (!abn_is_empty(result)) {
+            abn_copy(result, prototype);
+        }
+        return result;
+    }
+}
+
+void abn_free(abn_t *number)
+{
+    if (true == number->has_owned_buffer && NULL != number->chain) {
+        free(number->chain);
+    }
+    *number = abn_create_empty();
+}
+
+// Standard operations
+
+// Return true if given number is empty
+bool abn_is_empty(abn_t number)
+{
+    if (number.chain == NULL || number.bitsize == 0) {
         return false;
     } else {
         return true;
     }
 }
 
-// Return true if abn_t numbers are equal
-bool abn_are_equal(abn_t *op1, abn_t *op2)
+// Reset the abn_t number
+void abn_reset(abn_t number)
 {
-    if (op1->volume != op2->volume) {
+    for (int i = 0; i < GET_VOLUME(number); i++) {
+        number.chain[i] = 0;
+    }
+}
+
+// Return true if numbers are indentical (are equal and has the same bitsize)
+bool abn_are_identical(abn_t number_1, abn_t number_2)
+{
+    if (number_1.bitsize != number_2.bitsize) {
         return false;
     }
-    for (int i = 0; i < op1->volume; i++) {
-        if (op1->chain[i] != op2->chain[i]) {
+    for (int i = 0; i < GET_VOLUME(number_1); i++) {
+        if (number_1.chain[i] != number_2.chain[i]) {
             return false;
         }
     }
     return true;
 }
 
-// Resets the abn_t number
-void abn_reset(abn_t *arg)
+// Copy value from source to destination
+ABN_COMPLETION_CODE abn_copy(abn_t destination, abn_t source)
 {
-    for (int i = 0; i < arg->volume; i++) {
-        arg->chain[i] = 0;
+    if (destination.bitsize < source.bitsize) {
+        return ABN_ERROR_ARGUMENT_INVALID;
     }
+    for (int i = 0; i < GET_VOLUME(source); i++) {
+        destination.chain[i] = source.chain[i];
+    }
+    for (int i = GET_VOLUME(source); i < GET_VOLUME(destination); i++) {
+        destination.chain[i] = 0;
+    }
+    return ABN_SUCCESS;
 }
 
-// Creates a clone of abn_t number
-void abn_clone(abn_t *destination, abn_t *source)
+// Get desired byte
+ABN_COMPLETION_CODE abn_get_byte(byte *result, abn_t number, unsigned int which_one)
 {
-    if (destination->volume != source->volume) {
-        abn_free(destination);
-        destination = abn_create(source->volume);
+    if (which_one >= number.bitsize/8) {
+        return ABN_ERROR_ARGUMENT_INVALID;
     }
-    for (int i = 0; i < source->volume; i++) {
-        destination->chain[i] = source->chain[i];
-    }
+
+    unsigned int which_unit = which_one / sizeof(abn_unit);
+    unsigned int which_byte_in_unit = which_one % sizeof(abn_unit);
+
+    byte *ptr = (byte *)&number.chain[which_unit] + which_byte_in_unit;
+    *result = *ptr;
+
+    return ABN_SUCCESS;
 }
 
-// Copies value from source to destination
-void abn_copy(abn_t *destination, abn_t *source)
+// Set desired byte
+ABN_COMPLETION_CODE abn_set_byte(abn_t number, byte value, unsigned int which_one)
 {
-    if (destination->volume < source->volume) {
-        abn_free(destination);
-        destination = abn_create(source->volume);
+    if (which_one >= number.bitsize/8) {
+        return ABN_ERROR_ARGUMENT_INVALID;
     }
-    for (int i = 0; i < source->volume; i++) {
-        destination->chain[i] = source->chain[i];
-    }
-    for (int i = source->volume; i < destination->volume; i++) {
-        destination->chain[i] = 0;
-    }
+
+    unsigned int which_unit = which_one / sizeof(abn_unit);
+    unsigned int which_byte_in_unit = which_one % sizeof(abn_unit);
+
+    byte *ptr = (byte *)&number.chain[which_unit] + which_byte_in_unit;
+    *ptr = value;
+
+    return ABN_SUCCESS;
 }
 
-// Setting particular byte
-void abn_set_byte(abn_t *arg, byte value, unsigned int whichOne)
+// Get desired bit
+ABN_COMPLETION_CODE abn_get_bit(byte *result, abn_t number, unsigned int which_one)
 {
-    unsigned int whichUnit = whichOne / sizeof(abn_unit);
-    unsigned int whichByteInUnit = whichOne % sizeof(abn_unit);
-
-    arg->chain[whichUnit] &= ~((abn_unit)0xFF << 8 * whichByteInUnit);
-    arg->chain[whichUnit] |= value << 8 * whichByteInUnit;
-}
-
-// Getting particular byte
-byte abn_get_byte(abn_t *arg, unsigned int whichOne)
-{
-    unsigned int whichUnit = whichOne / sizeof(abn_unit);
-    unsigned int whichByteInUnit = whichOne % sizeof(abn_unit);
-
-    return (arg->chain[whichUnit] >> (8 * whichByteInUnit)) & 0xFF;
-}
-
-// Returns true if anb_t is positive number
-bool abn_is_positive(abn_t *arg)
-{
-    // TODO: unreadable if statement
-    // if( arg->chain[arg->volume-1] > ( ((abn_unit)1) << ( (8*sizeof(abn_unit)) - 1 ) ) )
-    if ((arg->chain[arg->volume - 1] & ((abn_unit)1 << (8 * sizeof(abn_unit) - 1))) > 0) {
-        return false;
+    if (which_one >= number.bitsize) {
+        return ABN_ERROR_ARGUMENT_INVALID;
     }
-    return true;
+
+    unsigned int which_unit = which_one / sizeof(abn_unit);
+    unsigned int which_byte_in_unit = which_one % sizeof(abn_unit);
+    unsigned int which_bit_in_byte = which_one % 8;
+
+    byte *ptr = (byte *)&number.chain[which_unit] + which_byte_in_unit;
+    *result = 0x01 & (*ptr >> which_bit_in_byte);
+
+    return ABN_SUCCESS;
 }
 
-// Returns true if anb_t is negative number
-bool abn_is_negative(abn_t *arg)
+// Set desired bit
+ABN_COMPLETION_CODE abn_set_bit(abn_t number, byte value, unsigned int which_one)
 {
-    if (abn_is_positive(arg)) {
-        return false;
+    if (which_one >= number.bitsize || value >= 2) {
+        return ABN_ERROR_ARGUMENT_INVALID;
     }
-    return true;
+
+    unsigned int which_unit = which_one / sizeof(abn_unit);
+    unsigned int which_byte_in_unit = which_one % sizeof(abn_unit);
+    unsigned int which_bit_in_byte = which_one % 8;
+
+    byte *ptr = (byte *)&number.chain[which_unit] + which_byte_in_unit;
+
+    if (1 == value) {
+        // set bit
+        *ptr |= (0x01 << which_bit_in_byte);
+    } else {
+        // reset bit
+        *ptr &= ~(0x01 << which_bit_in_byte);
+    }
+
+    return ABN_SUCCESS;
 }
 
-// Return true if arg is equal zero
-bool abn_is_zero(abn_t *arg)
+// Basic math operations
+
+// Return true if given numbers are equal
+bool abn_are_equal(abn_t number_1, abn_t number_2)
 {
-    for (int i = 0; i < arg->volume; i++) {
-        if (arg->chain[i] != 0) {
+    // swap to make sure that bitsize of number_1 <= bitsize of number_2
+    abn_t temp = abn_create_empty();
+    if (number_1.bitsize > number_2.bitsize) {
+        temp = number_1;
+        number_1 = number_2;
+        number_2 = temp;
+    }
+
+    for (int i = 0; i < GET_VOLUME(number_1); i++) {
+        if (number_1.chain[i] != number_2.chain[i]) {
+            return false;
+        }
+    }
+
+    for (int i = GET_VOLUME(number_1); i < GET_VOLUME(number_2); i++) {
+        if (0 != number_2.chain[i]) {
             return false;
         }
     }
     return true;
 }
 
-// Returns true if arg_a > arg_b (unsigned)
-// It was assumed that volumes of both operands are equal
-bool abn_is_greater(abn_t *arg_a, abn_t *arg_b)
+// Return true if given number is positive
+bool abn_is_positive(abn_t number)
 {
-    for (int i = 0; i < arg_a->volume; i++) {
-        if (arg_a->chain[i] > arg_b->chain[i]) {
-            return true;
-        } else if (arg_a->chain[i] < arg_b->chain[i]) {
-            return false;
-        }
+    // zero is not positive number
+    if (!abn_is_negative(number) && !abn_is_zero(number)) {
+        return true;
     }
     return false;
 }
 
-// Returns true if arg_a < arg_b (unsigned)
-// It was assumed that volumes of both operands are equal
-bool abn_is_less(abn_t *arg_a, abn_t *arg_b)
+// Return true if given number is negative
+bool abn_is_negative(abn_t number)
 {
-    for (int i = 0; i < arg_a->volume; i++) {
-        if (arg_a->chain[i] < arg_b->chain[i]) {
-            return true;
-        } else if (arg_a->chain[i] > arg_b->chain[i]) {
+    if (1 == GET_MOST_SIGNIFICANT_BIT(number)) {
+        return true;
+    }
+    return false;
+}
+
+// Return true if given number is equal zero
+bool abn_is_zero(abn_t number)
+{
+    for (int i = 0; i < GET_VOLUME(number); i++) {
+        if (number.chain[i] != 0) {
             return false;
         }
     }
-    return false;
+    return true;
+}
+
+// TODO: change order of operations
+// Return true if number_1 > number_2 (unsigned)
+bool abn_is_above(abn_t number_1, abn_t number_2)
+{
+    abn_unit common_volume = MIN(GET_VOLUME(number_1), GET_VOLUME(number_2));
+    bool result = false;
+
+    // compare numbers in range [0..common_volume]
+    for (int i = common_volume-1; i >= 0; i--) {
+        if (number_1.chain[i] > number_2.chain[i]) {
+            result = true;
+            break;
+        } else if (number_1.chain[i] < number_2.chain[i]) {
+            result = false;
+            break;
+        }
+    }
+
+    // there are tree ways:
+    if (number_1.bitsize > number_2.bitsize) {
+        // 1) if number_1[common_volume..volume] != 0
+        //    then result is set to false
+        //    else previous result value is valid
+        for (int i = common_volume; i<GET_VOLUME(number_1); i++) {
+            if (number_1.chain[i] != 0) {
+                result = true;
+                break;
+            }
+        }
+    } else if (number_1.bitsize < number_2.bitsize) {
+        // 2) if number_2[common_volume..volume] != 0
+        //    then result is set to false
+        //    else previous result value is valid
+        for (int i = common_volume; i<GET_VOLUME(number_2); i++) {
+            if (number_2.chain[i] != 0) {
+                result = false;
+                break;
+            }
+        }
+    } else {
+        // 3) do nothing - previous value is valid anyway
+        ;
+    }
+
+    return result;
+}
+
+// TODO: change order of operations
+// Return true if number_1 < number_2 (unsigned)
+bool abn_is_below(abn_t number_1, abn_t number_2)
+{
+    abn_unit common_volume = MIN(GET_VOLUME(number_1), GET_VOLUME(number_2));
+    bool result = false;
+
+    // compare numbers in range [0..common_volume]
+    for (int i = common_volume-1; i >= 0; i--) {
+        if (number_1.chain[i] < number_2.chain[i]) {
+            result = true;
+            break;
+        } else if (number_1.chain[i] > number_2.chain[i]) {
+            result = false;
+            break;
+        }
+    }
+
+    // there are tree ways:
+    if (number_1.bitsize > number_2.bitsize) {
+        // 1) if number_1[common_volume..volume] != 0
+        //    then result is set to false
+        //    else previous result value is valid
+        for (int i = common_volume; i<GET_VOLUME(number_1); i++) {
+            if (number_1.chain[i] != 0) {
+                result = false;
+                break;
+            }
+        }
+    } else if (number_1.bitsize < number_2.bitsize) {
+        // 2) if number_2[common_volume..volume] != 0
+        //    then result is set to false
+        //    else previous result value is valid
+        for (int i = common_volume; i<GET_VOLUME(number_2); i++) {
+            if (number_2.chain[i] != 0) {
+                result = true;
+                break;
+            }
+        }
+    } else {
+        // 3) do nothing - previous value is valid anyway
+        ;
+    }
+}
+
+// Return true if number_1 > number_2 (signed)
+bool abn_is_greater(abn_t number_1, abn_t number_2)
+{
+    bool result = false;
+    bool is_number_1_negative = abn_is_negative(number_1);
+    bool is_number_2_negative = abn_is_negative(number_2);
+
+    if (is_number_1_negative && is_number_1_negative) {
+        // both are negative
+        result = abn_is_below(number_1, number_2);
+    } else if (!is_number_1_negative && !is_number_2_negative) {
+        // both are not negative
+        result = abn_is_above(number_1, number_2);
+    } else if (is_number_1_negative && !is_number_2_negative) {
+        // only number_1 is negative
+        result = false;
+    } else if (!is_number_1_negative && is_number_2_negative) {
+        // only number_2 is negative
+        result = true;
+    }
+
+    return result;
+}
+
+// Return true if number_1 < number_2 (signed)
+bool abn_is_less(abn_t number_1, abn_t number_2)
+{
+    bool result = false;
+    bool is_number_1_negative = abn_is_negative(number_1);
+    bool is_number_2_negative = abn_is_negative(number_2);
+
+    if (is_number_1_negative && is_number_1_negative) {
+        // both are negative
+        result = abn_is_above(number_1, number_2);
+    } else if (!is_number_1_negative && !is_number_2_negative) {
+        // both are not negative
+        result = abn_is_below(number_1, number_2);
+    } else if (is_number_1_negative && !is_number_2_negative) {
+        // only number_1 is negative
+        result = true;
+    } else if (!is_number_1_negative && is_number_2_negative) {
+        // only number_2 is negative
+        result = false;
+    }
+
+    return result;
 }

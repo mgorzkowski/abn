@@ -50,7 +50,7 @@ char *abn_to_string(abn_t *arg)
 
 void abn_string_to_abn(const char *string, abn_t *arg)
 {
-    int bytes = arg->volume * ABN_UNIT_SIZE;
+    int bytes = arg->volume * sizeof(abn_unit);
 
     for (int i = 0; i < bytes; i++) {
         byte tmp = byte_from_string(&(string[2 * i]));
