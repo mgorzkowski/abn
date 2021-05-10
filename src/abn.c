@@ -299,96 +299,73 @@ bool abn_is_zero(abn_t number)
     return true;
 }
 
-// TODO: change order of operations
 // Return true if number_1 > number_2 (unsigned)
 bool abn_is_above(abn_t number_1, abn_t number_2)
 {
+    // this is a volume that is common for both numbers
     abn_unit common_volume = MIN(GET_VOLUME(number_1), GET_VOLUME(number_2));
-    bool result = false;
+
+    // there are tree ways:
+    if (number_1.bitsize > number_2.bitsize) {
+        // if number_1[common_volume..volume] != 0 then result is set to false
+        for (int i = common_volume; i<GET_VOLUME(number_1); i++) {
+            if (number_1.chain[i] != 0) {
+                return true;
+            }
+        }
+    } else if (number_1.bitsize < number_2.bitsize) {
+        // if number_2[common_volume..volume] != 0 then result is set to false
+        for (int i = common_volume; i<GET_VOLUME(number_2); i++) {
+            if (number_2.chain[i] != 0) {
+                return false;
+            }
+        }
+    }
 
     // compare numbers in range [0..common_volume]
     for (int i = common_volume-1; i >= 0; i--) {
         if (number_1.chain[i] > number_2.chain[i]) {
-            result = true;
-            break;
+            return true;
         } else if (number_1.chain[i] < number_2.chain[i]) {
-            result = false;
-            break;
+            return false;
         }
     }
 
-    // there are tree ways:
-    if (number_1.bitsize > number_2.bitsize) {
-        // 1) if number_1[common_volume..volume] != 0
-        //    then result is set to false
-        //    else previous result value is valid
-        for (int i = common_volume; i<GET_VOLUME(number_1); i++) {
-            if (number_1.chain[i] != 0) {
-                result = true;
-                break;
-            }
-        }
-    } else if (number_1.bitsize < number_2.bitsize) {
-        // 2) if number_2[common_volume..volume] != 0
-        //    then result is set to false
-        //    else previous result value is valid
-        for (int i = common_volume; i<GET_VOLUME(number_2); i++) {
-            if (number_2.chain[i] != 0) {
-                result = false;
-                break;
-            }
-        }
-    } else {
-        // 3) do nothing - previous value is valid anyway
-        ;
-    }
-
-    return result;
+    return false;
 }
 
-// TODO: change order of operations
 // Return true if number_1 < number_2 (unsigned)
 bool abn_is_below(abn_t number_1, abn_t number_2)
 {
+    // this is a volume that is common for both numbers
     abn_unit common_volume = MIN(GET_VOLUME(number_1), GET_VOLUME(number_2));
-    bool result = false;
+
+    if (number_1.bitsize > number_2.bitsize) {
+        // if number_1[common_volume..volume] != 0 then result is set to false
+        for (int i = common_volume; i<GET_VOLUME(number_1); i++) {
+            if (number_1.chain[i] != 0) {
+                return false;
+            }
+        }
+    } else if (number_1.bitsize < number_2.bitsize) {
+        // if number_2[common_volume..volume] != 0 then result is set to false
+        for (int i = common_volume; i<GET_VOLUME(number_2); i++) {
+            if (number_2.chain[i] != 0) {
+                return true;
+            }
+        }
+    }
 
     // compare numbers in range [0..common_volume]
     for (int i = common_volume-1; i >= 0; i--) {
         if (number_1.chain[i] < number_2.chain[i]) {
-            result = true;
-            break;
+            return true;
         } else if (number_1.chain[i] > number_2.chain[i]) {
-            result = false;
-            break;
+            return false;
         }
     }
 
-    // there are tree ways:
-    if (number_1.bitsize > number_2.bitsize) {
-        // 1) if number_1[common_volume..volume] != 0
-        //    then result is set to false
-        //    else previous result value is valid
-        for (int i = common_volume; i<GET_VOLUME(number_1); i++) {
-            if (number_1.chain[i] != 0) {
-                result = false;
-                break;
-            }
-        }
-    } else if (number_1.bitsize < number_2.bitsize) {
-        // 2) if number_2[common_volume..volume] != 0
-        //    then result is set to false
-        //    else previous result value is valid
-        for (int i = common_volume; i<GET_VOLUME(number_2); i++) {
-            if (number_2.chain[i] != 0) {
-                result = true;
-                break;
-            }
-        }
-    } else {
-        // 3) do nothing - previous value is valid anyway
-        ;
-    }
+    return false;
 }
 
 // Return true if number_1 > number_2 (signed)
